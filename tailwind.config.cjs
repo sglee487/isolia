@@ -5,7 +5,11 @@ module.exports = {
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        gothica1: ["GothicA1", "sans-serif"],
+      }
+    },
   },
   plugins: [],
 }
