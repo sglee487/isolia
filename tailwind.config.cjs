@@ -7,7 +7,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        gothica1: ["GothicA1", "sans-serif"],
+        gothica1: ["GothicA1", "malgun gothic"],
+        naverNeo: ["NaverNeo", "malgun gothic"],
       }
     },
   },

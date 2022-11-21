@@ -15,7 +15,7 @@
           </router-link>
           <div>
             <ul class="flex flex-wrap justify-between items-center">
-              <li class="mr-4 font-gothica1 font-bold font- space-x-2">
+              <li class="mr-4 space-x-2">
                 <router-link to="/">게시판</router-link>
                 <router-link to="/calculator">의료계산기</router-link>
               </li>
@@ -33,8 +33,12 @@
   </div>
 </template>
 
-<style scoped>
+<style>
 header {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'gothica1';
+}
+
+#app {
+  font-family: 'naverNeo';
 }
 </style>
