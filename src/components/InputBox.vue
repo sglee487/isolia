@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { computed } from '@vue/reactivity'
 const props = defineProps<{
   modelValue: string | number

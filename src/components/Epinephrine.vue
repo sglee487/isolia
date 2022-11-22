@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+import { useCalculateStore } from '@/stores/calculateStore'
+
 import InputBox from './InputBox.vue'
 import ButtonBox from './ButtonBox.vue'
+
+const calculateHistory = useCalculateStore()
 
 var dose = ref<number>(0.0)
 var weight = ref<number>(0.0)
@@ -12,12 +16,19 @@ var result = ref<number>(0.0)
 
 
 const save = () => {
-	if (dose.value == 0.0 || weight.value == 0.0 || drug.value == 0.0) {
-		alert("값을 입력해주세요.")
-		return
+	// if (dose.value == 0.0 || weight.value == 0.0 || drug.value == 0.0) {
+	// 	alert("값을 입력해주세요.")
+	// 	return
+	// }
+	// afterShuffleIV.value = dose.value * 1000 / weight.value
+	// result.value = afterShuffleIV.value * drug.value
+	const result = {
+		dose: dose.value,
+		weight: weight.value,
+		drug: drug.value,
+		afterShuffleIV: afterShuffleIV.value
 	}
-	afterShuffleIV.value = dose.value * 1000 / weight.value
-	result.value = afterShuffleIV.value * drug.value
+	calculateHistory.addResult(result)
 }
 
 </script>

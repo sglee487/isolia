@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref, watch } from 'vue'
 
-import Epinephrine from '../components/Epinephrine.vue'
+import { useCalculateStore } from '@/stores/calculateStore'
+
+import Epinephrine from '@/components/Epinephrine.vue'
 
 const CalculatorTypes = {
 	Epinephrine: 'epinephrine'
 }
 
 const instance = getCurrentInstance()
+const calculateHistory = useCalculateStore()
 
 const props = defineProps<{
 	name: string | null
@@ -63,6 +66,9 @@ watch(() => instance?.proxy?.$route.params.name, async (name) => {
 				</li>
 				<li>
 					저장2
+				</li>
+				<li>
+					{{ calculateHistory.results }}
 				</li>
 			</ul>
 		</div>
