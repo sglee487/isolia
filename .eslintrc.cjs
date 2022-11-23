@@ -12,12 +12,14 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
-    parser: '@typescript-eslint/parser',
+    parser: '@typescript-eslint/parser'
   },
   plugins: [
     'vue',
     '@typescript-eslint'
   ],
   rules: {
+    'no-tabs': ['error', { allowIndentationTabs: true }],
+    indent: 'off'
   }
 }
