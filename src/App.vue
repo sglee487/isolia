@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import ButtonBox from './components/ButtonBox.vue'
+
+</script>
+
 <template>
   <div>
     <header>
@@ -21,9 +26,9 @@
             </ul>
           </div>
           <div class="space-x-2">
-            <a href="https://tistory-nari.tistory.com" target="_blank">
-              <img src="./assets/vue.svg" class="w-9 p-1 inline-block hover:bg-gray-400 rounded-md" />
-            </a>
+            <router-link to="/login">
+              <ButtonBox color="red">로그인</ButtonBox>
+            </router-link>
           </div>
         </div>
       </nav>

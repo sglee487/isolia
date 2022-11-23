@@ -4,10 +4,12 @@ import { createPinia } from 'pinia'
 import './style.css'
 import App from './App.vue'
 import Home from './pages/Home.vue'
+import LoginPage from './pages/LoginPage.vue'
 import CalculatorPage from './pages/CalculatorPage.vue'
 
 const routes = [
   { path: '/', component: Home },
+  { path: '/login', component: LoginPage },
   {
     path: '/calculator/',
     component: CalculatorPage,

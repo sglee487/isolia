@@ -45,7 +45,7 @@ const save = () => {
 			주입 속도는 {{ (dose * afterShuffleIV * weight / drug).toFixed(2) }} 입니다.
 		</div>
 		<div class="p-4">
-			<ButtonBox @click="save">저장</ButtonBox>
+			<ButtonBox @click="save" color="blue">저장</ButtonBox>
 		</div>
 	</div>
 </template>

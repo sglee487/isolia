@@ -5,7 +5,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <button class="bg-blue-100 hover:bg-blue-200">
+  <button :class="[`bg-${props.color ?? 'blue'}-100 hover:bg-${props.color ?? 'blue'}-200`]" class="p-2 rounded-lg">
     <slot />
   </button>
 </template>
