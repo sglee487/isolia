@@ -16,6 +16,14 @@ const drug = ref<number>(0.0)
 const afterShuffleIV = ref<number>(0.0)
 const result = ref<number>(0.0)
 
+const reset = () => {
+	dose.value = 0.0
+	weight.value = 0.0
+	drug.value = 0.0
+	afterShuffleIV.value = 0.0
+	result.value = 0.0
+}
+
 const save = () => {
 	// if (dose.value == 0.0 || weight.value == 0.0 || drug.value == 0.0) {
 	// 	alert("값을 입력해주세요.")
@@ -38,6 +46,14 @@ const save = () => {
 
 <template>
 	<div class="flex flex-col">
+		<div class="pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
+			<div class="text-2xl">
+				Epinephrine Rate
+			</div>
+			<div class="text-xl">
+				에피네프린 속도
+			</div>
+		</div>
 		<div class="space-y-4">
 			<InputBox label="주입용량단위(mcg/kg/min)" v-model="dose" />
 			<InputBox label="체중(kg)" v-model="weight" />
@@ -48,7 +64,7 @@ const save = () => {
 			주입 속도는 {{ (dose * afterShuffleIV * weight / drug).toFixed(2) }} 입니다.
 		</div>
 		<div class="py-4 flex space-x-1">
-			<ButtonBox class="text-sm w-32" @click="save" color="red">초기화</ButtonBox>
+			<ButtonBox class="text-sm w-32" @click="reset" color="red">초기화</ButtonBox>
 			<ButtonBox class="w-full" @click="save" color="orange">저장</ButtonBox>
 		</div>
 	</div>

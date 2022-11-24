@@ -26,7 +26,6 @@ if (props.name) {
 
 // @ts-ignore-next-line
 watch(() => instance?.proxy?.$route.params.name, async (name) => {
-	console.log(name)
 	if (!name) {
 		calculatorType.value = null
 	} else if (name === 'epinephrine') {

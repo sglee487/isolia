@@ -8,15 +8,15 @@ const instance = getCurrentInstance()
 
 const email = ref<string>()
 const password = ref<string>()
+const passwordConfirm = ref<string>()
 
 const login = () => {
 
 }
 
-const register = () => {
-  instance?.proxy?.$router.push('/register')
+const toLogin = () => {
+  instance?.proxy?.$router.push('/login')
 }
-
 </script>
 
 <template>
@@ -24,15 +24,16 @@ const register = () => {
     <div class="flex flex-col w-1/3">
       <div
         class="text-2xl pt-4 pb-10 font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
-        로그인
+        회원가입
       </div>
       <div class="space-y-4">
         <InputBox label="이메일" v-model="email" />
         <InputBox label="비밀번호" v-model="password" />
+        <InputBox label="비밀번호 확인" v-model="passwordConfirm" />
       </div>
       <div class="py-4 flex space-x-1">
-        <ButtonBox class="text-sm w-32" @click="register" color="red">회원가입</ButtonBox>
-        <ButtonBox class="w-full" @click="login" color="orange">로그인</ButtonBox>
+        <ButtonBox class="text-sm w-32" @click="toLogin" color="red">뒤로</ButtonBox>
+        <ButtonBox class="w-full" @click="login" color="orange">가입하기</ButtonBox>
       </div>
     </div>
   </div>

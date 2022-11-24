@@ -5,11 +5,13 @@ import './style.css'
 import App from './App.vue'
 import HomePage from './pages/HomePage.vue'
 import LoginPage from './pages/LoginPage.vue'
+import RegisterPage from './pages/RegisterPage.vue'
 import CalculatorPage from './pages/CalculatorPage.vue'
 
 const routes = [
   { path: '/', component: HomePage },
   { path: '/login', component: LoginPage },
+  { path: '/register', component: RegisterPage },
   {
     path: '/calculator/',
     component: CalculatorPage,
