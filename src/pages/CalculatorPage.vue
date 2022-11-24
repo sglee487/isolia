@@ -3,7 +3,7 @@ import { getCurrentInstance, ref, watch } from 'vue'
 
 import { useCalculateStore } from '@/stores/calculateStore'
 
-import Epinephrine from '@/components/Epinephrine.vue'
+import Epinephrine from '@/calculations/EpinephrineRate.vue'
 
 const CalculatorTypes = {
 	Epinephrine: 'epinephrine'
@@ -16,7 +16,7 @@ const props = defineProps<{
 	name: string | null
 }>()
 
-var calculatorType = ref<any>()
+const calculatorType = ref<any>()
 
 if (props.name) {
 	if (props.name === 'epinephrine') {
@@ -24,13 +24,12 @@ if (props.name) {
 	}
 }
 
-//@ts-ignore-next-line
+// @ts-ignore-next-line
 watch(() => instance?.proxy?.$route.params.name, async (name) => {
 	console.log(name)
 	if (!name) {
 		calculatorType.value = null
-	}
-	else if (name === 'epinephrine') {
+	} else if (name === 'epinephrine') {
 		calculatorType.value = CalculatorTypes.Epinephrine
 	}
 })
@@ -60,17 +59,29 @@ watch(() => instance?.proxy?.$route.params.name, async (name) => {
 					이것은 계산기 메인 페이지이다.
 				</div>
 			</div>
-			<ul class="flex flex-col items-center">
-				<li>
-					저장1
-				</li>
-				<li>
-					저장2
-				</li>
-				<li>
-					{{ calculateHistory.results }}
-				</li>
-			</ul>
+			<div class="flex-inital flex flex-col px-2 border border-red-700 space-y-2">
+				<ul v-for="result in calculateHistory.results" :key="result['id']">
+					<li>
+						<div class="flex flex-col items-start">
+							<div>
+								type: {{ result['type'] }}
+							</div>
+							<div>
+								주입용량단위(mcg/kg/min): {{ result['dose'] }}
+							</div>
+							<div>
+								{{ result['weight'] }}
+							</div>
+							<div>
+								{{ result['drug'] }}
+							</div>
+							<div>
+								{{ result['afterShuffleIV'] }}
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
 		</div>
 	</div>
 </template>

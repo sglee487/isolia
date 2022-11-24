@@ -3,12 +3,12 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import { createPinia } from 'pinia'
 import './style.css'
 import App from './App.vue'
-import Home from './pages/Home.vue'
+import HomePage from './pages/HomePage.vue'
 import LoginPage from './pages/LoginPage.vue'
 import CalculatorPage from './pages/CalculatorPage.vue'
 
 const routes = [
-  { path: '/', component: Home },
+  { path: '/', component: HomePage },
   { path: '/login', component: LoginPage },
   {
     path: '/calculator/',
