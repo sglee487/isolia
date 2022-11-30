@@ -1,9 +1,19 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+
 import ButtonBox from './components/ButtonBox.vue'
 
 import { useUserStore } from '@/stores/userStore'
 
+import { UserIcon } from '@heroicons/vue/24/outline'
+
 const user = useUserStore()
+
+const logout = () => {
+  user.logout()
+}
+
+var profileModal = ref<boolean>(false)
 
 </script>
 
@@ -29,10 +39,29 @@ const user = useUserStore()
               </li>
             </ul>
           </div>
-          <div class="space-x-2">
-            <router-link to="/login">
+          <div class="border border-red-500">
+            <vue-final-modal v-model="profileModal" :hide-overlay="true">
+              Modal Content Here
+            </vue-final-modal>
+            <button @click="profileModal = true">Open Modal</button>
+          </div>
+          <div class="flex space-x-2 w-36 justify-end">
+            <router-link to="/login" v-if="!user.is_logined()">
               <ButtonBox color="red">로그인</ButtonBox>
             </router-link>
+            <div v-else class="flex flex-row space-x-2 items-center">
+              <span class="font-medium">{{ user.data.display_name }}</span>
+              <UserIcon class="w-12" />
+              <ButtonBox>
+                <vue-final-modal>
+                  오픈모달
+                </vue-final-modal>
+              </ButtonBox>
+              <!-- <UserIcon /> -->
+              <!-- <div class="font-bold">{{ user.data.display_name }}</div>
+              <div class="">{{ user.data.email }}</div> -->
+              <!-- <ButtonBox color="red" @click="logout">로그아웃</ButtonBox> -->
+            </div>
           </div>
         </div>
       </nav>

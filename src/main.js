@@ -10,6 +10,7 @@ import CalculatorPage from './pages/CalculatorPage.vue'
 
 import VueToast from 'vue-toast-notification'
 import 'vue-toast-notification/dist/theme-default.css'
+import { vfmPlugin } from 'vue-final-modal'
 
 const routes = [
   { path: '/', component: HomePage },
@@ -38,4 +39,4 @@ const router = createRouter({
 
 const pinia = createPinia()
 
-createApp(App).use(router).use(pinia).use(VueToast).mount('#app')
+createApp(App).use(router).use(pinia).use(VueToast).use(vfmPlugin).mount('#app')

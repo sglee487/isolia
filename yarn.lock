@@ -128,6 +128,11 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
+"@heroicons/vue@^2.0.13":
+  version "2.0.13"
+  resolved "https://registry.yarnpkg.com/@heroicons/vue/-/vue-2.0.13.tgz#974c52abf8dab70e7d2a3a93d7fdadff4a0e9ec2"
+  integrity sha512-vVCVF02+rNKXEmanVNnmktJlxCbOn0qVFP1gfZPn4bcBIwPX3h9AVHGCkwly+IWDEME8w5oooG0KRd2hhSe/HQ==
+
 "@humanwhocodes/config-array@^0.11.6":
   version "0.11.7"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.11.7.tgz#38aec044c6c828f6ed51d5d7ae3d9b9faf6dbb0f"
@@ -2340,6 +2345,11 @@ vue-eslint-parser@^9.0.1:
     esquery "^1.4.0"
     lodash "^4.17.21"
     semver "^7.3.6"
+
+vue-final-modal@3:
+  version "3.4.11"
+  resolved "https://registry.yarnpkg.com/vue-final-modal/-/vue-final-modal-3.4.11.tgz#5a7cb31fad5bff0f51e4db167ae9309f404f20a1"
+  integrity sha512-tKBM4hcUo16rUGa/UaYMlut11cRfxMZnahz9u+mAoSk8mQNdnm9FHzOeHIcUxNHvMC/YyVBlOHi+2GqOVO8zig==
 
 vue-router@4:
   version "4.1.6"
