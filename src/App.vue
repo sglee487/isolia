@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import ButtonBox from './components/ButtonBox.vue'
 
+import { useUserStore } from '@/stores/userStore'
+
+const user = useUserStore()
+
 </script>
 
 <template>
@@ -33,6 +37,9 @@ import ButtonBox from './components/ButtonBox.vue'
         </div>
       </nav>
     </header>
+    <div>
+      {{ user }}
+    </div>
     <router-view />
   </div>
 </template>

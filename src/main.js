@@ -8,6 +8,9 @@ import LoginPage from './pages/LoginPage.vue'
 import RegisterPage from './pages/RegisterPage.vue'
 import CalculatorPage from './pages/CalculatorPage.vue'
 
+import VueToast from 'vue-toast-notification'
+import 'vue-toast-notification/dist/theme-default.css'
+
 const routes = [
   { path: '/', component: HomePage },
   { path: '/login', component: LoginPage },
@@ -35,4 +38,4 @@ const router = createRouter({
 
 const pinia = createPinia()
 
-createApp(App).use(router).use(pinia).mount('#app')
+createApp(App).use(router).use(pinia).use(VueToast).mount('#app')
