@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
+
+import { refreshToken } from '@/apis/user'
 
 import ButtonBox from './components/ButtonBox.vue'
 
@@ -45,6 +47,21 @@ const modalRoutes = [
 ]
 
 const isOpenMobileMenu = ref<boolean>(false)
+
+onBeforeMount(async () => {
+  if (!user.isLogined()) {
+    return
+  }
+  const response = await refreshToken(user.data.token)
+  user.login(
+    response.data.token,
+    response.data.login_type,
+    response.data.email,
+    response.data.display_name,
+    response.data.role === 'admin'
+  )
+})
+
 </script>
 
 <template>
@@ -52,7 +69,7 @@ const isOpenMobileMenu = ref<boolean>(false)
     <header>
       <nav class="border-b border-gray-300">
         <div class="h-16 ml-4 flex justify-between items-center">
-          <a href="/" class="hidden md:inline-block p-1 cursor-pointer rounded-md">
+          <router-link to="/" class="hidden md:inline-block p-1 cursor-pointer rounded-md">
             <div class="flex flex-row space-x-2 items-center">
               <img src="./assets/line-chart.png" class="w-10 p-1 inline-block rounded-md" />
               <h1
@@ -60,14 +77,14 @@ const isOpenMobileMenu = ref<boolean>(false)
                 Isolia
               </h1>
             </div>
-          </a>
+          </router-link>
           <button class="md:hidden inline-block p-1 cursor-pointer rounded-md">
             <Bars3Icon class="w-6 h-6 text-orange-600" @click="isOpenMobileMenu = !isOpenMobileMenu" />
           </button>
           <div class="hidden md:flex flex-grow justify-start items-center ml-5">
             <div class="font-bold">
-              <router-link v-for="route in navRoutes" :key="route.to" :to="route.to"
-                class="px-5 py-2 hover:border-b-2 border-orange-400">
+              <router-link id="menu" v-for="route in navRoutes" :key="route.to" :to="route.to"
+                class="px-5 py-2 hover:border-b-2 border-orange-200">
                 {{ route.name }}
               </router-link>
             </div>
@@ -75,15 +92,15 @@ const isOpenMobileMenu = ref<boolean>(false)
           <div v-if="isOpenMobileMenu" class="md:hidden block absolute top-16 left-0 w-full bg-gray-100 shadow-md">
             <div class="flex flex-col font-bold">
               <router-link v-for="route in navRoutes" :key="route.to" :to="route.to" @click="isOpenMobileMenu = false"
-                class="px-5 py-2 hover:bg-orange-400 hover:text-white">
+                class="px-5 py-2 hover:bg-orange-200 hover:text-white">
                 {{ route.name }}
               </router-link>
             </div>
           </div>
           <div class="flex justify-end">
-            <a href="/login" v-if="!user.isLogined()" class="px-4">
+            <router-link to="/login" v-if="!user.isLogined()" class="px-4">
               <ButtonBox color="orange" size="sm">로그인</ButtonBox>
-            </a>
+            </router-link>
             <div v-else class="flex flex-row h-16 px-4 items-center cursor-pointer hover:bg-orange-400 hover:text-white"
               @click="profileModal = true">
               <UserIcon class="w-6 h-6 'inline-block mr-2" />
@@ -114,11 +131,12 @@ const isOpenMobileMenu = ref<boolean>(false)
           </div>
         </div>
         <div v-for="route in modalRoutes" :key="route.to" class="py-2 ">
-          <a :href="route.to" class="p-3 hover:bg-orange-400 hover:text-white cursor-pointer block">
+          <router-link :to="route.to" class="p-3 hover:bg-orange-400 hover:text-white cursor-pointer block"
+            @click="profileModal = false">
             <component :is="route.icon" class="w-5 h-5 inline-block">
             </component>
             {{ route.name }}
-          </a>
+          </router-link>
         </div>
       </div>
     </vue-final-modal>
@@ -146,15 +164,15 @@ header {
   height: calc(100% - 4.05rem);
 }
 
-.router-link-active,
-.router-link-exact-active {
+#menu.router-link-active,
+#menu.router-link-exact-active {
   border-bottom: 2px solid rgb(251 146 60);
 }
 
 @media (max-width: 768px) {
 
-  .router-link-active,
-  .router-link-exact-active {
+  #menu.router-link-active,
+  #menu.router-link-exact-active #menu {
     color: white;
     background-color: rgb(251 146 60);
   }

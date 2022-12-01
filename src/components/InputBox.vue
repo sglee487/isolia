@@ -25,7 +25,7 @@ const value = computed<string | number>({
 <template>
   <div class="grid grid-cols-1 items-center">
     <label
-      class="text-sm font-bold inline-block bg-gradient-to-r from-orange-300 to-yellow-300 border ring-1 ring-orange-300 text-orange-600 rounded-t-lg p-2.5"
+      class="text-sm font-bold inline-block bg-gradient-to-r from-yellow-300 to-orange-300 border ring-1 ring-orange-300 text-orange-600 rounded-t-lg p-2.5"
       v-if="props.label">
       {{ props.label }}
     </label>

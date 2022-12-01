@@ -42,6 +42,15 @@ const loginUser = async (loginType: string, email: string, password?: string) =>
   return response
 }
 
+const refreshToken = async (userToken: string) => {
+  const response = await axios.get(`${SERVER_URL}/token/`, {
+    headers: {
+      Authorization: `Bearer ${userToken}`,
+    }
+  })
+  return response
+}
+
 const updateUser = async (user: any, name: string, password: string, newPassword: string) => {
   const data = {
     'email': user.data.email,
@@ -58,4 +67,4 @@ const updateUser = async (user: any, name: string, password: string, newPassword
   return response
 }
 
-export { registerUser, loginUser, updateUser }
+export { registerUser, loginUser, refreshToken, updateUser }
