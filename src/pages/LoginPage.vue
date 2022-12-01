@@ -56,29 +56,32 @@ const register = () => {
 </script>
 
 <template>
-  <div class="grid place-items-center">
-    <div class="flex flex-col w-1/3 pb-4">
-      <div
-        class="text-2xl pt-4 pb-10 font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
-        로그인
+  <div>
+    <div class="w-96 p-10">
+      <div class="flex flex-col pb-4">
+        <div
+          class="text-2xl pt-4 pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
+          로그인
+        </div>
+        <div class="space-y-4">
+          <InputBox label="이메일" v-model="email" id="inputEmail" @keyup.enter="login" />
+          <InputBox label="비밀번호" v-model="password" id="inputPassword" type="password" @keyup.enter="login" />
+        </div>
+        <div class="py-4 flex space-x-1">
+          <ButtonBox class="text-sm w-32" @click="register" color="red">회원가입</ButtonBox>
+          <ButtonBox class="w-full" @click="login" color="orange">로그인</ButtonBox>
+        </div>
       </div>
-      <div class="space-y-4">
-        <InputBox label="이메일" v-model="email" id="inputEmail" @keyup.enter="login" />
-        <InputBox label="비밀번호" v-model="password" id="inputPassword" type="password" @keyup.enter="login" />
-      </div>
-      <div class="py-4 flex space-x-1">
-        <ButtonBox class="text-sm w-32" @click="register" color="red">회원가입</ButtonBox>
-        <ButtonBox class="w-full" @click="login" color="orange">로그인</ButtonBox>
-      </div>
-    </div>
-    <div class="flex flex-col w-1/3 pb-8">
-      <div
-        class="text-xl pt-4 pb-10 font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
-        간편 로그인
-      </div>
-      <div class="flex flex-wrap">
+      <div class="flex flex-col pb-8">
+        <div
+          class="text-2xl pt-4 pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
+          간편 로그인
+        </div>
+        <div class="flex flex-wrap">
 
+        </div>
       </div>
     </div>
   </div>
+
 </template>

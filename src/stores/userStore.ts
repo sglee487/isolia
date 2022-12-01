@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 
+// @ts-ignore
 export const useUserStore = defineStore('user', {
   state: () => {
     interface user {
@@ -19,9 +20,8 @@ export const useUserStore = defineStore('user', {
       }
     }
   },
-
   actions: {
-    is_logined() {
+    isLogined() {
       return this.data.token !== null
     },
     login(token: string, loginType: string, email: string, display_name: string, isAdmin: boolean, isAutoLogin: boolean = false) {
@@ -38,5 +38,6 @@ export const useUserStore = defineStore('user', {
       this.data.display_name = null
       this.data.isAdmin = false
     }
-  }
+  },
+  persist: true,
 })

@@ -60,7 +60,7 @@ const save = () => {
 			<InputBox label="약물의 용량(mg)" v-model="drug" />
 			<InputBox label="혼합 후 수액량(ml)" v-model="afterShuffleIV" />
 		</div>
-		<div class="p-4">
+		<div class="p-4 text-center">
 			주입 속도는 {{ (dose * afterShuffleIV * weight / drug).toFixed(2) }} 입니다.
 		</div>
 		<div class="py-4 flex space-x-1">

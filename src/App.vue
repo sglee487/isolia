@@ -5,58 +5,65 @@ import ButtonBox from './components/ButtonBox.vue'
 
 import { useUserStore } from '@/stores/userStore'
 
-import { UserIcon } from '@heroicons/vue/24/outline'
+import { CalculatorIcon, ClipboardDocumentIcon, UserIcon, ArrowLeftOnRectangleIcon } from '@heroicons/vue/24/outline'
 
 const user = useUserStore()
 
-const logout = () => {
-  user.logout()
-}
+const profileModal = ref<boolean>(false)
 
-var profileModal = ref<boolean>(false)
+const navRoutes = [
+  {
+    to: '/',
+    name: '게시판',
+    icon: ClipboardDocumentIcon
+  },
+  {
+    to: '/calculator',
+    name: '의료계산기',
+    icon: CalculatorIcon
+  }
+]
+
+const modalRoutes = [
+  {
+    to: '/logout',
+    name: 'Logout',
+    icon: ArrowLeftOnRectangleIcon
+  }
+]
 
 </script>
 
 <template>
-  <div>
+  <div class="h-full relative">
     <header>
-      <nav class="px-4 py-2.5 max-w-screen-xl">
-        <div class="py-2.5 flex flex-wrap justify-between items-center mx-auto">
-          <router-link to="/" class="p-1 cursor-pointer rounded-md">
-            <div class="flex flex-row space-x-2">
-              <img src="./assets/line-chart.png" class="w-10 p-1 inline-bloc rounded-md" />
+      <nav class="border-b border-gray-300">
+        <div class="h-16 ml-4 flex justify-between items-center">
+          <a href="/" class="p-1 cursor-pointer rounded-md">
+            <div class="flex flex-row space-x-2 items-center">
+              <img src="./assets/line-chart.png" class="w-10 p-1 inline-block rounded-md" />
               <h1
                 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
                 Isolia
               </h1>
             </div>
-          </router-link>
-          <div>
-            <ul class="flex flex-wrap justify-between items-center">
-              <li class="mr-4 space-x-2 font-bold">
-                <router-link to="/">게시판</router-link>
-                <router-link to="/calculator">의료계산기</router-link>
-              </li>
-            </ul>
+          </a>
+          <div class="flex flex-grow justify-start items-center ml-5">
+            <div class="font-bold">
+              <router-link v-for="route in navRoutes" :key="route.to" :to="route.to"
+                class="px-5 py-2 hover:border-b-2 border-orange-400">
+                {{ route.name }}
+              </router-link>
+            </div>
           </div>
-          <div class="border border-red-500">
-            <vue-final-modal v-model="profileModal" :hide-overlay="true">
-              Modal Content Here
-            </vue-final-modal>
-            <button @click="profileModal = true">Open Modal</button>
-          </div>
-          <div class="flex space-x-2 w-36 justify-end">
-            <router-link to="/login" v-if="!user.is_logined()">
-              <ButtonBox color="red">로그인</ButtonBox>
-            </router-link>
-            <div v-else class="flex flex-row space-x-2 items-center">
+          <div class="flex justify-end">
+            <a href="/login" v-if="!user.isLogined()" class="px-4">
+              <ButtonBox color="orange" size="sm">로그인</ButtonBox>
+            </a>
+            <div v-else class="flex flex-row h-16 px-4 items-center cursor-pointer hover:bg-orange-400 hover:text-white"
+              @click="profileModal = true">
+              <UserIcon class="w-6 h-6 'inline-block mr-2" />
               <span class="font-medium">{{ user.data.display_name }}</span>
-              <UserIcon class="w-12" />
-              <ButtonBox>
-                <vue-final-modal>
-                  오픈모달
-                </vue-final-modal>
-              </ButtonBox>
               <!-- <UserIcon /> -->
               <!-- <div class="font-bold">{{ user.data.display_name }}</div>
               <div class="">{{ user.data.email }}</div> -->
@@ -66,19 +73,57 @@ var profileModal = ref<boolean>(false)
         </div>
       </nav>
     </header>
-    <div>
-      {{ user }}
+
+    <div class="h-content flex justify-center">
+      <router-view />
     </div>
-    <router-view />
+
+    <vue-final-modal v-model="profileModal" :hide-overlay="true">
+      <div
+        class="mb-12 w-64 bg-[#f0f0f0] rounded-xl mx-2 divide-y divide-gray-300 shadow-md absolute right-3 top-20 max-w-xs">
+        <div class="flex flex-row gap-2 p-5 items-start">
+          <UserIcon class="w-12 h-12" />
+          <div class="flex flex-col">
+            <span class="font-medium text-ellipsis">{{ user.data.display_name }}</span>
+            <span class="text-sm text-ellipsis">{{ user.data.email }}</span>
+            <span class="text-sm py-2">계정관리 링크~</span>
+          </div>
+        </div>
+        <div v-for="route in modalRoutes" :key="route.to" class="py-2 ">
+          <a :href="route.to" class="p-3 hover:bg-orange-400 hover:text-white cursor-pointer block">
+            <component :is="route.icon" class="w-5 h-5 inline-block">
+            </component>
+            {{ route.name }}
+          </a>
+        </div>
+      </div>
+    </vue-final-modal>
   </div>
 </template>
 
 <style>
+html,
+body,
+#app {
+  height: 100%;
+}
+
 header {
   font-family: 'gothica1';
 }
 
 #app {
   font-family: 'naverNeo';
+}
+</style>
+
+<style scoped>
+.h-content {
+  height: calc(100% - 4.05rem);
+}
+
+.router-link-active,
+.router-link-exact-active {
+  border-bottom: 2px solid rgb(251 146 60);
 }
 </style>
