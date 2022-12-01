@@ -1,5 +1,5 @@
 <template>
   <div class="flex justify-center">
-    나는 홈이야
+    ※ 게시판 기능 추가 예정입니다.
   </div>
 </template>

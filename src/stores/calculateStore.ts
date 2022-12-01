@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 
+// @ts-ignore
 export const useCalculateStore = defineStore('history', {
     state: () => {
         return {
@@ -9,7 +10,11 @@ export const useCalculateStore = defineStore('history', {
 
     actions: {
         addResult(result) {
-            this.results.push(result)
+            this.results.unshift(result)
+        },
+        removeResult(index) {
+            this.results.splice(index, 1)
         }
-    }
+    },
+    persist: true,
 })

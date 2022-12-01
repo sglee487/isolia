@@ -32,12 +32,22 @@ const save = () => {
 	// afterShuffleIV.value = dose.value * 1000 / weight.value
 	// result.value = afterShuffleIV.value * drug.value
 	const result = {
-		id: short.generate(),
-		type: 'epinephrine',
-		dose: dose.value,
-		weight: weight.value,
-		drug: drug.value,
-		afterShuffleIV: afterShuffleIV.value
+		createdAt: new Date().toLocaleDateString('ko-KR', {
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric',
+			hour: 'numeric',
+			minute: 'numeric',
+			second: 'numeric'
+		}),
+		type: 'Epinephrine',
+		input: {
+			dose: dose.value,
+			weight: weight.value,
+			drug: drug.value,
+			afterShuffleIV: afterShuffleIV.value,
+		},
+		output: (dose.value * afterShuffleIV.value * weight.value / drug.value).toFixed(2)
 	}
 	calculateHistory.addResult(result)
 }

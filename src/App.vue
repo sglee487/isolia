@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+import { Bars3Icon } from '@heroicons/vue/24/outline'
+
 import ButtonBox from './components/ButtonBox.vue'
 
 import { useUserStore } from '@/stores/userStore'
@@ -32,6 +34,7 @@ const modalRoutes = [
   }
 ]
 
+const isOpenMobileMenu = ref<boolean>(false)
 </script>
 
 <template>
@@ -39,7 +42,7 @@ const modalRoutes = [
     <header>
       <nav class="border-b border-gray-300">
         <div class="h-16 ml-4 flex justify-between items-center">
-          <a href="/" class="p-1 cursor-pointer rounded-md">
+          <a href="/" class="hidden md:inline-block p-1 cursor-pointer rounded-md">
             <div class="flex flex-row space-x-2 items-center">
               <img src="./assets/line-chart.png" class="w-10 p-1 inline-block rounded-md" />
               <h1
@@ -48,10 +51,21 @@ const modalRoutes = [
               </h1>
             </div>
           </a>
-          <div class="flex flex-grow justify-start items-center ml-5">
+          <button class="md:hidden inline-block p-1 cursor-pointer rounded-md">
+            <Bars3Icon class="w-6 h-6 text-orange-600" @click="isOpenMobileMenu = !isOpenMobileMenu" />
+          </button>
+          <div class="hidden md:flex flex-grow justify-start items-center ml-5">
             <div class="font-bold">
               <router-link v-for="route in navRoutes" :key="route.to" :to="route.to"
                 class="px-5 py-2 hover:border-b-2 border-orange-400">
+                {{ route.name }}
+              </router-link>
+            </div>
+          </div>
+          <div v-if="isOpenMobileMenu" class="md:hidden block absolute top-16 left-0 w-full bg-gray-100 shadow-md">
+            <div class="flex flex-col font-bold">
+              <router-link v-for="route in navRoutes" :key="route.to" :to="route.to" @click="isOpenMobileMenu = false"
+                class="px-5 py-2 hover:bg-orange-400 hover:text-white">
                 {{ route.name }}
               </router-link>
             </div>
@@ -125,5 +139,14 @@ header {
 .router-link-active,
 .router-link-exact-active {
   border-bottom: 2px solid rgb(251 146 60);
+}
+
+@media (max-width: 768px) {
+
+  .router-link-active,
+  .router-link-exact-active {
+    color: white;
+    background-color: rgb(251 146 60);
+  }
 }
 </style>
