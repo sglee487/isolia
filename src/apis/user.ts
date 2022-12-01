@@ -42,4 +42,20 @@ const loginUser = async (loginType: string, email: string, password?: string) =>
   return response
 }
 
-export { registerUser, loginUser }
+const updateUser = async (user: any, name: string, password: string, newPassword: string) => {
+  const data = {
+    'email': user.data.email,
+    'display_name': name,
+    'password': password,
+    'new_password': newPassword
+  }
+
+  const response = await axios.patch(`${SERVER_URL}/user/`, data, {
+    headers: {
+      Authorization: `Bearer ${user.data.token}`
+    }
+  })
+  return response
+}
+
+export { registerUser, loginUser, updateUser }

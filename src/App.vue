@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import { Bars3Icon } from '@heroicons/vue/24/outline'
-
 import ButtonBox from './components/ButtonBox.vue'
 
 import { useUserStore } from '@/stores/userStore'
 
-import { CalculatorIcon, ClipboardDocumentIcon, UserIcon, ArrowLeftOnRectangleIcon } from '@heroicons/vue/24/outline'
+import {
+  ArrowLeftOnRectangleIcon,
+  Bars3Icon,
+  CalculatorIcon,
+  ClipboardDocumentIcon,
+  UserIcon,
+  CogIcon
+} from '@heroicons/vue/24/outline'
 
 const user = useUserStore()
 
@@ -27,6 +32,11 @@ const navRoutes = [
 ]
 
 const modalRoutes = [
+  {
+    to: '/user/edit',
+    name: 'My Account',
+    icon: CogIcon
+  },
   {
     to: '/logout',
     name: 'Logout',
@@ -100,7 +110,7 @@ const isOpenMobileMenu = ref<boolean>(false)
           <div class="flex flex-col">
             <span class="font-medium text-ellipsis">{{ user.data.display_name }}</span>
             <span class="text-sm text-ellipsis">{{ user.data.email }}</span>
-            <span class="text-sm py-2">계정관리 링크~</span>
+            <!-- <span class="text-sm py-2">계정관리 링크~</span> -->
           </div>
         </div>
         <div v-for="route in modalRoutes" :key="route.to" class="py-2 ">

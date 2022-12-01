@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 import { useCalculateStore } from '@/stores/calculateStore'
 
-import short from 'short-uuid'
-
 import InputBox from '@/components/InputBox.vue'
 import ButtonBox from '@/components/ButtonBox.vue'
+import { Result } from 'postcss';
 
 const calculateHistory = useCalculateStore()
 
@@ -14,23 +13,20 @@ const dose = ref<number>(0.0)
 const weight = ref<number>(0.0)
 const drug = ref<number>(0.0)
 const afterShuffleIV = ref<number>(0.0)
-const result = ref<number>(0.0)
+const calculated = ref<number>(0.0)
 
 const reset = () => {
 	dose.value = 0.0
 	weight.value = 0.0
 	drug.value = 0.0
 	afterShuffleIV.value = 0.0
-	result.value = 0.0
+	calculated.value = 0.0
 }
 
 const save = () => {
-	// if (dose.value == 0.0 || weight.value == 0.0 || drug.value == 0.0) {
-	// 	alert("값을 입력해주세요.")
-	// 	return
-	// }
-	// afterShuffleIV.value = dose.value * 1000 / weight.value
-	// result.value = afterShuffleIV.value * drug.value
+	if (calculated.value === 0.0) {
+		return
+	}
 	const result = {
 		createdAt: new Date().toLocaleDateString('ko-KR', {
 			year: 'numeric',
@@ -45,12 +41,44 @@ const save = () => {
 			dose: dose.value,
 			weight: weight.value,
 			drug: drug.value,
-			afterShuffleIV: afterShuffleIV.value,
+			afterShuffleIV: afterShuffleIV.value
 		},
-		output: (dose.value * afterShuffleIV.value * weight.value / drug.value).toFixed(2)
+		output: calculated.value.toFixed(2)
 	}
 	calculateHistory.addResult(result)
 }
+
+watch(() => dose.value, async () => {
+	if (drug.value !== 0) {
+		calculated.value = dose.value * afterShuffleIV.value * weight.value / drug.value
+	} else {
+		calculated.value = 0
+	}
+})
+
+watch(() => weight.value, async () => {
+	if (drug.value !== 0) {
+		calculated.value = dose.value * afterShuffleIV.value * weight.value / drug.value
+	} else {
+		calculated.value = 0
+	}
+})
+
+watch(() => drug.value, async () => {
+	if (drug.value !== 0) {
+		calculated.value = dose.value * afterShuffleIV.value * weight.value / drug.value
+	} else {
+		calculated.value = 0
+	}
+})
+
+watch(() => afterShuffleIV.value, async () => {
+	if (drug.value !== 0) {
+		calculated.value = dose.value * afterShuffleIV.value * weight.value / drug.value
+	} else {
+		calculated.value = 0
+	}
+})
 
 </script>
 
@@ -71,7 +99,11 @@ const save = () => {
 			<InputBox label="혼합 후 수액량(ml)" v-model="afterShuffleIV" />
 		</div>
 		<div class="p-4 text-center">
-			주입 속도는 {{ (dose * afterShuffleIV * weight / drug).toFixed(2) }} 입니다.
+			주입 속도는
+			<span class="font-bold text-orange-600">
+				{{ calculated.toFixed(2) }}
+			</span>
+			<small>cc/hr</small> 입니다.
 		</div>
 		<div class="py-4 flex space-x-1">
 			<ButtonBox class="text-sm w-32" @click="reset" color="red">초기화</ButtonBox>

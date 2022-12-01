@@ -72,7 +72,7 @@ const units = {
 			</div>
 		</div>
 		<hr class="block md:hidden border-gray-300">
-		<div class="flex flex-col w-full md:w-64 border-l border-gray-300 overflow-visible md:overflow-y-auto">
+		<div class="flex flex-col w-full md:w-72 border-l border-gray-300 overflow-visible md:overflow-y-auto">
 			<ul v-for="(result, index) in calculateHistory.results" :key="index">
 				<li class="block text-center p-5 border-b border-gray-300">
 					<div class="flex flex-row justify-between items-start">
@@ -108,7 +108,7 @@ const units = {
 								</div>
 							</div>
 						</div>
-						<TrashIcon class="w-6 text-red-400 cursor-pointer" @click="calculateHistory.removeResult(index)" />
+						<TrashIcon class="w-5 h-5 text-red-400 cursor-pointer" @click="calculateHistory.removeResult(index)" />
 					</div>
 				</li>
 			</ul>

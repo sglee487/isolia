@@ -22,13 +22,13 @@ const register = async () => {
     return
   }
 
-  if (!password.value.match(/^.*(?=.{8,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/)) {
+  if (!password.value.match(/^.*(?=.{8,255})(?=.*[0-9])(?=.*[a-zA-Z]).*$/)) {
     useAnimateElement(document.getElementById('inputPassword') as HTMLElement)
     instance?.proxy?.$toast.error('패스워드 형식이 올바르지 않습니다.')
     return
   }
 
-  if (!passwordConfirm.value.match(/^.*(?=.{8,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/)) {
+  if (!passwordConfirm.value.match(/^.*(?=.{8,255})(?=.*[0-9])(?=.*[a-zA-Z]).*$/)) {
     useAnimateElement(document.getElementById('inputPasswordConfirm') as HTMLElement)
     instance?.proxy?.$toast.error('패스워드 형식이 올바르지 않습니다.')
     return

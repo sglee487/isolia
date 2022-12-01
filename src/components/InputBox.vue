@@ -5,6 +5,8 @@ const props = defineProps<{
   label?: string
   type?: string
   placeholder?: string
+  readonly?: boolean
+  disabled?: boolean
 }>()
 
 const emit = defineEmits(['update:modelValue'])
@@ -29,7 +31,10 @@ const value = computed<string | number>({
     </label>
     <input
       class="inline-block bg-gray-50 border ring-orange-300 text-gray-900 text-sm rounded-b-lg ring-1 outline-none focus:ring-orange-400 p-2.5"
-      v-model="value" :type="props.type" :placeholder="props.placeholder">
+      :class="[
+        props.disabled ? 'bg-gray-200' : ''
+      ]" v-model="value" :type="props.type" :placeholder="props.placeholder" :readonly="props.readonly"
+      :disabled="props.disabled">
     <slot />
   </div>
 </template>

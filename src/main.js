@@ -12,6 +12,7 @@ import LoginPage from './pages/LoginPage.vue'
 import LogoutPage from './pages/LogoutPage.vue'
 import RegisterPage from './pages/RegisterPage.vue'
 import CalculatorPage from './pages/CalculatorPage.vue'
+import AccountSettingPage from './pages/AccountSettingPage.vue'
 
 import './style.css'
 import 'vue-toast-notification/dist/theme-default.css'
@@ -20,6 +21,7 @@ const routes = [
   { path: '/', component: HomePage },
   { path: '/login', component: LoginPage },
   { path: '/logout', component: LogoutPage },
+  { path: '/user/edit', component: AccountSettingPage },
   { path: '/register', component: RegisterPage },
   {
     path: '/calculator',
