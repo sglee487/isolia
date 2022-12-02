@@ -5,7 +5,6 @@ import { useCalculateStore } from '@/stores/calculateStore'
 
 import InputBox from '@/components/InputBox.vue'
 import ButtonBox from '@/components/ButtonBox.vue'
-import { Result } from 'postcss';
 
 const calculateHistory = useCalculateStore()
 
@@ -15,12 +14,21 @@ const drug = ref<number>(0.0)
 const afterShuffleIV = ref<number>(0.0)
 const calculated = ref<number>(0.0)
 
+const testfocus = ref(null)
+
+const doseFocus = ref(null)
+
 const reset = () => {
 	dose.value = 0.0
 	weight.value = 0.0
 	drug.value = 0.0
 	afterShuffleIV.value = 0.0
 	calculated.value = 0.0
+
+	console.log(testfocus.value)
+	testfocus.value.focus()
+	console.log(doseFocus.value)
+	// doseFocus.value.focus()
 }
 
 const save = () => {
@@ -83,6 +91,7 @@ watch(() => afterShuffleIV.value, async () => {
 </script>
 
 <template>
+	<input type="text" ref="testfocus">
 	<div class="flex flex-col">
 		<div class="pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
 			<div class="text-2xl">
@@ -93,10 +102,10 @@ watch(() => afterShuffleIV.value, async () => {
 			</div>
 		</div>
 		<div class="space-y-4">
-			<InputBox label="주입용량단위(mcg/kg/min)" v-model="dose" />
-			<InputBox label="체중(kg)" v-model="weight" />
-			<InputBox label="약물의 용량(mg)" v-model="drug" />
-			<InputBox label="혼합 후 수액량(ml)" v-model="afterShuffleIV" />
+			<InputBox label="주입용량단위(mcg/kg/min)" v-model="dose" type="number" @keyup.enter="save" ref="doseFocus" />
+			<InputBox label="체중(kg)" v-model="weight" type="number" @keyup.enter="save" />
+			<InputBox label="약물의 용량(mg)" v-model="drug" type="number" @keyup.enter="save" />
+			<InputBox label="혼합 후 수액량(ml)" v-model="afterShuffleIV" type="number" @keyup.enter="save" />
 		</div>
 		<div class="p-4 text-center">
 			주입 속도는

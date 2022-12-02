@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 const props = defineProps<{
   modelValue: string | number | undefined
+  ref?: any
   label?: string
   type?: string
   placeholder?: string
@@ -9,7 +10,7 @@ const props = defineProps<{
   disabled?: boolean
 }>()
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'update:refValue'])
 
 const value = computed<string | number>({
   get() {
@@ -17,6 +18,15 @@ const value = computed<string | number>({
   },
   set(value) {
     emit('update:modelValue', value)
+  }
+})
+
+const ref = computed({
+  get() {
+    return props.ref
+  },
+  set(value) {
+    emit('update:refValue', value)
   }
 })
 
@@ -33,7 +43,7 @@ const value = computed<string | number>({
       class="inline-block bg-gray-50 border ring-orange-300 text-gray-900 text-sm rounded-b-lg ring-1 outline-none focus:ring-orange-400 p-2.5"
       :class="[
         props.disabled ? 'bg-gray-200' : ''
-      ]" v-model="value" :type="props.type" :placeholder="props.placeholder" :readonly="props.readonly"
+      ]" v-model="value" :ref="ref" :type="props.type" :placeholder="props.placeholder" :readonly="props.readonly"
       :disabled="props.disabled">
     <slot />
   </div>
