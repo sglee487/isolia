@@ -1633,6 +1633,11 @@ json5@^1.0.1:
   dependencies:
     minimist "^1.2.0"
 
+jwt-decode@^3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-3.1.2.tgz#3fb319f3675a2df0c2895c8f5e9fa4b67b04ed59"
+  integrity sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==
+
 levn@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/levn/-/levn-0.4.1.tgz#ae4562c007473b932a6200d403268dd2fffc6ade"
@@ -2367,6 +2372,11 @@ vue-toast-notification@3:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/vue-toast-notification/-/vue-toast-notification-3.0.4.tgz#dfd6ff37daa99be18f13c3e56dc0074fe3f3cdbe"
   integrity sha512-rEhLtcKg8SVdBpdN7PrNst5nmY8dw0j3NkNImqurhlGurqR/QDKoou0t2PuCReEOCTKqHvfLCle2I3kwQWDWDQ==
+
+vue3-google-signin@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/vue3-google-signin/-/vue3-google-signin-1.2.1.tgz#7074fe2ed85689359998bb002181c0386d40b2ca"
+  integrity sha512-6MqDxMhZhb2Ow+AybKB2wqhOX+Egr6yDsn8ZY7Q/RGAMsQL9xy+btTbcAaIjOymFTLWXxhooZfF0yHgv8+6WHQ==
 
 vue@^3.2.41:
   version "3.2.45"

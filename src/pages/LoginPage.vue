@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref } from 'vue'
+import jwt_decode from "jwt-decode"
 
 import InputBox from '@/components/InputBox.vue'
 import ButtonBox from '@/components/ButtonBox.vue'
@@ -9,6 +10,45 @@ import useAnimateElement from '@/composables/AnimateElement'
 import { useUserStore } from '@/stores/userStore'
 
 import { loginUser } from '@/apis/user'
+
+import {
+  GoogleSignInButton,
+  type CredentialResponse
+} from 'vue3-google-signin'
+
+// handle success event
+const handleLoginSuccess = async (response: CredentialResponse) => {
+  console.log(response)
+  const { credential } = response
+  console.log('Access Token', credential)
+  // console.log(jwt.decode(credential))
+  const googleUser = jwt_decode(credential)
+  console.log(googleUser)
+  console.log(googleUser.email)
+  try {
+    const response = await loginUser('google', googleUser.email)
+    if (response.status === 200) {
+      instance?.proxy?.$toast.success('로그인에 성공하였습니다.')
+      instance?.proxy?.$router.push('/')
+      user.login(
+        response.data.token,
+        response.data.login_type,
+        response.data.email,
+        response.data.display_name,
+        response.data.role === 'admin'
+      )
+      return
+    }
+    instance?.proxy?.$toast.error(response.data.detail)
+  } catch (error) {
+    instance?.proxy?.$toast.error(error.response.data.detail)
+  }
+}
+
+// handle an error event
+const handleLoginError = () => {
+  console.error('Login failed')
+}
 
 const instance = getCurrentInstance()
 const user = useUserStore()
@@ -78,7 +118,7 @@ const register = () => {
           간편 로그인
         </div>
         <div class="flex flex-wrap">
-
+          <GoogleSignInButton @success="handleLoginSuccess" @error="handleLoginError"></GoogleSignInButton>
         </div>
       </div>
     </div>

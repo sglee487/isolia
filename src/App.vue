@@ -52,14 +52,16 @@ onBeforeMount(async () => {
   if (!user.isLogined()) {
     return
   }
-  const response = await refreshToken(user.data.token)
-  user.login(
-    response.data.token,
-    response.data.login_type,
-    response.data.email,
-    response.data.display_name,
-    response.data.role === 'admin'
-  )
+  if (user.data.login_type === 'email') {
+    const response = await refreshToken(user.data.token)
+    user.login(
+      response.data.token,
+      response.data.login_type,
+      response.data.email,
+      response.data.display_name,
+      response.data.role === 'admin'
+    )
+  }
 })
 
 </script>

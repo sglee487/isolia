@@ -5,6 +5,7 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 import VueToast from 'vue-toast-notification'
 import { vfmPlugin } from 'vue-final-modal'
+import GoogleSignInPlugin from 'vue3-google-signin'
 
 import App from './App.vue'
 import HomePage from './pages/HomePage.vue'
@@ -43,4 +44,6 @@ const router = createRouter({
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 
-createApp(App).use(router).use(pinia).use(VueToast).use(vfmPlugin).mount('#app')
+createApp(App).use(router).use(pinia).use(VueToast).use(vfmPlugin).use(GoogleSignInPlugin, {
+  clientId: ''
+}).mount('#app')
