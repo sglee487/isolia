@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 const props = defineProps<{
   modelValue: string | number | undefined
-  ref?: any
+  inputId?: string
   label?: string
   type?: string
   placeholder?: string
@@ -21,15 +21,6 @@ const value = computed<string | number>({
   }
 })
 
-const ref = computed({
-  get() {
-    return props.ref
-  },
-  set(value) {
-    emit('update:refValue', value)
-  }
-})
-
 </script>
 
 <template>
@@ -43,8 +34,8 @@ const ref = computed({
       class="inline-block bg-gray-50 border ring-orange-300 text-gray-900 text-sm rounded-b-lg ring-1 outline-none focus:ring-orange-400 p-2.5"
       :class="[
         props.disabled ? 'bg-gray-200' : ''
-      ]" v-model="value" :ref="ref" :type="props.type" :placeholder="props.placeholder" :readonly="props.readonly"
-      :disabled="props.disabled">
+      ]" v-model="value" :id="props.inputId" :type="props.type" :placeholder="props.placeholder"
+      :readonly="props.readonly" :disabled="props.disabled">
     <slot />
   </div>
 </template>
