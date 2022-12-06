@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref } from 'vue'
-import jwt_decode from "jwt-decode"
 
 import InputBox from '@/components/InputBox.vue'
 import ButtonBox from '@/components/ButtonBox.vue'
@@ -18,15 +17,9 @@ import {
 
 // handle success event
 const handleLoginSuccess = async (response: CredentialResponse) => {
-  console.log(response)
   const { credential } = response
-  console.log('Access Token', credential)
-  // console.log(jwt.decode(credential))
-  const googleUser = jwt_decode(credential)
-  console.log(googleUser)
-  console.log(googleUser.email)
   try {
-    const response = await loginUser('google', googleUser.email)
+    const response = await loginUser('google', null, null, credential)
     if (response.status === 200) {
       instance?.proxy?.$toast.success('로그인에 성공하였습니다.')
       instance?.proxy?.$router.push('/')
@@ -70,7 +63,7 @@ const login = async () => {
   }
 
   try {
-    const response = await loginUser('email', email.value, password.value)
+    const response = await loginUser('email', email.value, password.value, null)
     if (response.status === 200) {
       instance?.proxy?.$toast.success('로그인에 성공하였습니다.')
       instance?.proxy?.$router.push('/')

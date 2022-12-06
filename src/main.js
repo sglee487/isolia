@@ -45,5 +45,5 @@ const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 
 createApp(App).use(router).use(pinia).use(VueToast).use(vfmPlugin).use(GoogleSignInPlugin, {
-  clientId: ''
+  clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID
 }).mount('#app')

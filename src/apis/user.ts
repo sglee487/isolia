@@ -24,14 +24,12 @@ const registerUser = async (loginType: string, username: string, email: string, 
   return response
 }
 
-const loginUser = async (loginType: string, email: string, password?: string) => {
+const loginUser = async (loginType: string, email: string, password: string, snsToken: string) => {
   const data = {
     'login_type': loginType,
     'email': email,
-  }
-
-  if (password) {
-    data['password'] = password
+    'password': password,
+    'sns_token': snsToken
   }
 
   const response = await axios.post(`${SERVER_URL}/login/`, data, {
