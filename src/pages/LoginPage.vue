@@ -92,6 +92,9 @@ const register = () => {
   <div>
     <div class="w-96 p-10">
       <div class="flex flex-col pb-4">
+        <div class="text-xl font-bold text-red-500">
+          ※ 아직 구현중입니다. <br />로그인 / 회원가입은 추천하지 않습니다.
+        </div>
         <div
           class="text-2xl pt-4 pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
           로그인

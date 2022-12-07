@@ -3,17 +3,26 @@ import { getCurrentInstance, ref } from 'vue'
 
 import { registerUser } from '@/apis/user'
 
+import {
+  ArrowPathRoundedSquareIcon
+} from '@heroicons/vue/24/outline'
+
 import InputBox from '@/components/InputBox.vue'
 import ButtonBox from '@/components/ButtonBox.vue'
 
 import useAnimateElement from '@/composables/AnimateElement'
+import { getGenerateRandomName } from '@/utils/generateName'
 
 const instance = getCurrentInstance()
 
-const username = ref<string>('')
+const displayName = ref<string>('')
 const email = ref<string>('')
 const password = ref<string>('')
 const passwordConfirm = ref<string>('')
+
+const generateRandomName = () => {
+  displayName.value = getGenerateRandomName()
+}
 
 const register = async () => {
   if (!email.value.match(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/)) {
@@ -41,7 +50,7 @@ const register = async () => {
     return
   }
   try {
-    const response = await registerUser('email', username.value, email.value, password.value)
+    const response = await registerUser('email', displayName.value, email.value, password.value)
     if (response.status === 201) {
       instance?.proxy?.$toast.success('회원가입에 성공하였습니다.')
       instance?.proxy?.$router.push('/login')
@@ -57,31 +66,36 @@ const register = async () => {
 const toLogin = () => {
   instance?.proxy?.$router.push('/login')
 }
+
+generateRandomName()
 </script>
 
 <template>
-  <div class="grid place-items-center">
-    <div class="flex flex-col w-1/3">
-      <div
-        class="text-2xl pt-4 pb-10 font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
-        회원가입
+  <div class="w-96 p-10 flex flex-col">
+    <div
+      class="text-2xl pt-4 pb-10 font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
+      회원가입
+    </div>
+    <div class="space-y-4">
+      <div class="relative">
+        <InputBox class="w-full" label="별명" v-model="displayName" @keyup.enter="register" />
+        <ArrowPathRoundedSquareIcon
+          class="absolute w-8 bottom-1 right-1 cursor-pointer p-1 text-orange-600 text-sm font-bold"
+          @click="generateRandomName" />
       </div>
-      <div class="space-y-4">
-        <InputBox label="이름" v-model="username" @keyup.enter="register" />
-        <InputBox label="이메일" v-model="email" @keyup.enter="register" id="inputEmail" />
-        <InputBox label="비밀번호" v-model="password" @keyup.enter="register" type="password" id="inputPassword">
-          <div class="flex flex-col pt-1">
-            <span class="text-xs text-gray-500">8자 이상 20자 이하</span>
-            <span class="text-xs text-gray-500">영문, 숫자 포함</span>
-          </div>
-        </InputBox>
-        <InputBox label="비밀번호 확인" v-model="passwordConfirm" @keyup.enter="register" type="password"
-          id="inputPasswordConfirm" />
-      </div>
-      <div class="py-4 flex space-x-1">
-        <ButtonBox class="text-sm w-32" @click="toLogin" color="red">뒤로</ButtonBox>
-        <ButtonBox class="w-full" @click="register" color="orange">가입하기</ButtonBox>
-      </div>
+      <InputBox label="이메일" v-model="email" @keyup.enter="register" id="inputEmail" />
+      <InputBox label="비밀번호" v-model="password" @keyup.enter="register" type="password" id="inputPassword">
+        <div class="flex flex-col pt-1">
+          <span class="text-xs text-gray-500">8자 이상 20자 이하</span>
+          <span class="text-xs text-gray-500">영문, 숫자 포함</span>
+        </div>
+      </InputBox>
+      <InputBox label="비밀번호 확인" v-model="passwordConfirm" @keyup.enter="register" type="password"
+        id="inputPasswordConfirm" />
+    </div>
+    <div class="py-4 flex space-x-1">
+      <ButtonBox class="text-sm w-32" @click="toLogin" color="red">뒤로</ButtonBox>
+      <ButtonBox class="w-full" @click="register" color="orange">가입하기</ButtonBox>
     </div>
   </div>
 </template>
