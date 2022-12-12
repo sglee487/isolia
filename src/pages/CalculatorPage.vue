@@ -6,7 +6,7 @@ import { useCalculateStore } from '@/stores/calculateStore'
 import Epinephrine from '@/calculations/EpinephrineRate.vue'
 import BMI from '@/calculations/BMI.vue'
 
-import { TrashIcon } from '@heroicons/vue/24/outline'
+import { ChevronLeftIcon } from '@heroicons/vue/24/outline'
 
 const CalculatorTypes = {
 	Epinephrine: 'epinephrine',
@@ -22,8 +22,6 @@ const routerParams = instance.proxy.$route.params
 
 if (Object.keys(routerParams).includes('name')) {
 	calculatorType.value = routerParams.name
-} else {
-	instance.proxy.$router.push(`/calculator/${CalculatorTypes.Epinephrine}`)
 }
 
 watch(() => instance.proxy.$route.params.name, async (name) => {
@@ -64,69 +62,91 @@ const units = {
 </script>
 
 <template>
-	<div class="flex flex-col md:flex-row justify-between w-full">
-		<ul
-			class="h-full hidden md:flex flex-col items-center w-64 border-r border-gray-300 text-xl font-bold overflow-y-auto">
-			<li v-for="route in routes" :key="route.to" class="w-full">
-				<router-link :to="route.to" class="block text-center py-2 hover:bg-orange-400 hover:text-white">
-					{{ route.name }}
-					<br>
-					<small>{{ route.nameKo }}</small>
-					<br>
-					<small class="text-sm">({{ route.detailUnits }})</small>
-				</router-link>
-			</li>
-		</ul>
-		<div class="w-full md:w-1/3 font-naverNeo p-10">
-			<div v-if="calculatorType">
-				<Epinephrine v-if="calculatorType === CalculatorTypes.Epinephrine" />
-				<BMI v-if="calculatorType === CalculatorTypes.BMI" />
-			</div>
-			<div v-else>
-				현재 에피네프린(Epinephrine) 계산기만 제공하고 있습니다.
-			</div>
-		</div>
-		<hr class="block md:hidden border-gray-300">
-		<div class="flex flex-col w-full md:w-80 border-l border-gray-300 overflow-visible md:overflow-y-auto">
-			<ul v-for="(result, index) in calculateHistory.results" :key="index">
-				<li class="block text-center p-5 border-b border-gray-300">
-					<div class="flex flex-col items-start">
-						<div class="flex flex-row w-full justify-between">
-							<div class="text-xs font-bold text-gray-600 pt-1">
-								{{ result['createdAt'] }}
-							</div>
-							<TrashIcon class="w-5 h-5 text-red-400 cursor-pointer" @click="calculateHistory.removeResult(index)" />
-						</div>
-						<hr class="h-1">
-						<div class="font-bold text-orange-600">
-							{{ result['type'] }}
-						</div>
-						<div v-for="(value, key) in result.input" :key="key" class="flex items-center">
-							<div class="text-sm text-left font-bold w-28">
-								{{ labels[key] }}
-							</div>
-							<div class="text-left mr-1">
-								{{ value }}
-							</div>
-							<div class="text-xs">
-								{{ units[key] }}
-							</div>
-						</div>
-						<hr class="border-0 h-2">
-						<div class="flex items-center">
-							<div class="text-sm text-left text-orange-600 font-bold w-28 ">
-								{{ result.output.label }}
-							</div>
-							<div class="text-left mr-1">
-								{{ result.output.value }}
-							</div>
-							<div class="text-xs">
-								{{ result.output.unit }}
-							</div>
-						</div>
-					</div>
+	<div class="flex flex-col w-full h-full">
+		<router-link v-if="calculatorType !== undefined" to="/calculator"
+			class="md:hidden w-8 h-8 ml-2 mt-2 flex-none absolute bg-[#f0f0f0] rounded-md">
+			<ChevronLeftIcon class="text-orange-400 cursor-pointer" />
+		</router-link>
+		<div class="flex flex-col md:flex-row justify-between w-full h-full">
+			<ul
+				class="h-full hidden md:flex flex-col items-center w-64 border-r border-gray-300 text-xl font-bold overflow-y-auto">
+				<li v-for="route in routes" :key="route.to" class="w-full">
+					<router-link :to="route.to" class="block text-center py-2 hover:bg-orange-400 hover:text-white">
+						{{ route.name }}
+						<br>
+						<small>{{ route.nameKo }}</small>
+						<br>
+						<small class="text-sm">({{ route.detailUnits }})</small>
+					</router-link>
 				</li>
 			</ul>
+			<div class="w-full md:w-1/3 font-naverNeo pt-4 pr-10 md:p-10">
+				<div v-if="calculatorType" class="pl-10">
+					<Epinephrine v-if="calculatorType === CalculatorTypes.Epinephrine" />
+					<BMI v-if="calculatorType === CalculatorTypes.BMI" />
+				</div>
+				<div v-else class="flex flex-col pl-8 pb-2">
+					<div class="md:hidden">
+						<ul class="grid grid-cols-2 gap-4 justify-items-center mb-2">
+							<li v-for="route in routes" :key="route.to" class="w-full">
+								<router-link :to="route.to"
+									class="block text-center py-2 hover:bg-orange-500 hover:text-white rounded-xl bg-orange-300">
+									{{ route.name }}
+									<br>
+									<small>{{ route.nameKo }}</small>
+									<br>
+									<small class="text-sm">({{ route.detailUnits }})</small>
+								</router-link>
+							</li>
+						</ul>
+					</div>
+					<div>
+						※ 추가하고 싶으신 계산기가 있다면, 건의게시판을 이용해주세요.
+					</div>
+				</div>
+			</div>
+			<hr class="block md:hidden border-gray-300">
+			<div class="flex flex-col w-full md:w-80 border-l border-gray-300 overflow-visible md:overflow-y-auto">
+				<ul v-for="(result, index) in calculateHistory.results" :key="index">
+					<li class="block text-center p-5 border-b border-gray-300">
+						<div class="flex flex-col items-start">
+							<div class="flex flex-row w-full justify-between">
+								<div class="text-xs font-bold text-gray-600 pt-1">
+									{{ result['createdAt'] }}
+								</div>
+								<TrashIcon class="w-5 h-5 text-red-400 cursor-pointer" @click="calculateHistory.removeResult(index)" />
+							</div>
+							<hr class="h-1">
+							<div class="font-bold text-orange-600">
+								{{ result['type'] }}
+							</div>
+							<div v-for="(value, key) in result.input" :key="key" class="flex items-center">
+								<div class="text-sm text-left font-bold w-28">
+									{{ labels[key] }}
+								</div>
+								<div class="text-left mr-1">
+									{{ value }}
+								</div>
+								<div class="text-xs">
+									{{ units[key] }}
+								</div>
+							</div>
+							<hr class="border-0 h-2">
+							<div class="flex items-center">
+								<div class="text-sm text-left text-orange-600 font-bold w-28 ">
+									{{ result.output.label }}
+								</div>
+								<div class="text-left mr-1">
+									{{ result.output.value }}
+								</div>
+								<div class="text-xs">
+									{{ result.output.unit }}
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
 		</div>
 	</div>
 </template>

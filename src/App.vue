@@ -91,7 +91,7 @@ onBeforeMount(async () => {
               </router-link>
             </div>
           </div>
-          <div v-if="isOpenMobileMenu" class="md:hidden block absolute top-16 left-0 w-full bg-gray-100 shadow-md">
+          <div v-if="isOpenMobileMenu" class="z-10 md:hidden block absolute top-16 left-0 w-full bg-gray-100 shadow-md">
             <div class="flex flex-col font-bold">
               <router-link v-for="route in navRoutes" :key="route.to" :to="route.to" @click="isOpenMobileMenu = false"
                 class="px-5 py-2 hover:bg-orange-200 hover:text-white">
