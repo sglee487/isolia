@@ -44,7 +44,11 @@ const save = () => {
 			drug: drug.value,
 			afterShuffleIV: afterShuffleIV.value
 		},
-		output: calculated.value.toFixed(2)
+		output: {
+			label: '주입속도',
+			value: calculated.value.toFixed(2),
+			unit: 'mcg/kg/min'
+		}
 	}
 	calculateHistory.addResult(result)
 }
