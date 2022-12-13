@@ -22,7 +22,7 @@ const profileModal = ref<boolean>(false)
 
 const navRoutes = [
   {
-    to: '/',
+    to: '/board',
     name: '게시판',
     icon: ClipboardDocumentIcon
   },
@@ -99,12 +99,15 @@ onBeforeMount(async () => {
               </router-link>
             </div>
           </div>
-          <div class="md:hidden flex flex-row space-x-2 items-center">
-            <img src="./assets/line-chart.png" class="w-10 p-1 inline-block rounded-md" />
-            <h1 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
-              Isolia
-            </h1>
-          </div>
+          <router-link to="/">
+            <div class="md:hidden flex flex-row space-x-2 items-center">
+              <img src="./assets/line-chart.png" class="w-10 p-1 inline-block rounded-md" />
+              <h1
+                class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
+                Isolia
+              </h1>
+            </div>
+          </router-link>
           <div class="flex justify-end">
             <router-link to="/login" v-if="!user.isLogined()" class="px-4">
               <ButtonBox color="orange" size="sm">로그인</ButtonBox>
