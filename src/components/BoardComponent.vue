@@ -1,23 +1,34 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref, watch } from 'vue'
 
+import ButtonBox from '@/components/ButtonBox.vue'
+
+import { useUserStore } from '@/stores/userStore'
+import { getBoardList } from '@/apis/board'
+
+
 const props = defineProps<{
   boardName: string
 }>()
+
+const user = useUserStore()
 
 const instance = getCurrentInstance()
 const routerParams = instance.proxy.$route.params
 const posts = ref<any[]>([])
 
 if (Object.keys(routerParams).includes('name')) {
-  // boardType.value = routerParams.name
-  console.log(routerParams)
+  const boardType = routerParams.name as string
+  getBoardList(boardType).then((response) => {
+    posts.value = response.data
+  })
 }
 
-watch(() => instance.proxy.$route.params.name, async (name) => {
-  // boardType.value = name
-  console.log(name)
-})
+// watch(() => instance.proxy.$route.params.name, async (name) => {
+//   console.log(name)
+//   const response = await getBoardList(name)
+//   console.log(response)
+// })
 
 </script>
 
@@ -38,6 +49,9 @@ watch(() => instance.proxy.$route.params.name, async (name) => {
       <div v-else>
         게시물이 없습니다.
       </div>
+      <router-link to="/board/notice/write">
+        <ButtonBox color="orange">글쓰기</ButtonBox>
+      </router-link>
     </div>
   </div>
 </template>

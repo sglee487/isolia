@@ -13,6 +13,8 @@ import LoginPage from './pages/LoginPage.vue'
 import LogoutPage from './pages/LogoutPage.vue'
 import RegisterPage from './pages/RegisterPage.vue'
 import BoardPage from './pages/BoardPage.vue'
+import WritePage from './pages/WritePage.vue'
+import ViewPage from './pages/ViewPage.vue'
 import CalculatorPage from './pages/CalculatorPage.vue'
 import AccountSettingPage from './pages/AccountSettingPage.vue'
 
@@ -31,7 +33,16 @@ const routes = [
     children: [
       {
         path: ':name',
-        component: BoardPage
+        component: BoardPage,
+        children: [
+          {
+            path: 'write',
+            component: WritePage
+          },
+          {
+            path: 'view',
+            component: ViewPage
+          }]
       }
     ]
   },
