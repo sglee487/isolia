@@ -43,11 +43,12 @@ const changeMode = (mode: string) => {
 
 <template>
   <div>
-    <div class="text-2xl content-start">
+    <div
+      class="text-2xl font-bold content-start pt-4 pb-8 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
       {{ props.boardName }}
     </div>
     <WriteComponent v-if="pageMode === 'write'" />
-    <div v-else class="flex flex-col">
+    <div v-else class="flex flex-col space-y-4">
       <ul v-if="posts.length > 0" class="grid grid-cols-2 gap-4 justify-items-center mb-2">
         <li v-for="post in posts" :key="post.id" class="w-full">
           <router-link :to="`/board/${post.id}`"
@@ -59,7 +60,9 @@ const changeMode = (mode: string) => {
       <div v-else>
         게시물이 없습니다.
       </div>
-      <ButtonBox color="orange" @click="changeMode('write')">글쓰기</ButtonBox>
+      <div class="flex justify-end">
+        <ButtonBox class="w-28 content-end" color="orange" @click="changeMode('write')">글쓰기</ButtonBox>
+      </div>
     </div>
   </div>
 </template>
