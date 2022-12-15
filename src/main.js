@@ -7,6 +7,8 @@ import VueToast from 'vue-toast-notification'
 import { vfmPlugin } from 'vue-final-modal'
 import GoogleSignInPlugin from 'vue3-google-signin'
 
+import { useUserStore } from '@/stores/userStore'
+
 import App from './App.vue'
 import HomePage from './pages/HomePage.vue'
 import LoginPage from './pages/LoginPage.vue'
@@ -61,6 +63,14 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+router.beforeEach((to) => {
+  const user = useUserStore()
+
+  // if (to.name === 'User' && user.data.token === null) {
+  //   return '/'
+  // }
 })
 
 const pinia = createPinia()
