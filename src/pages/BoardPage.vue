@@ -44,15 +44,17 @@ const routes = [
 </script>
 
 <template>
-  <BoardComponent class="w-full h-full" v-if="boardType" :boardName="BoardNames[boardType]" />
-  <div v-else>
-    <ul class="grid grid-cols-2 gap-4 justify-items-center mb-2">
-      <li v-for="route in routes" :key="route.to" class="w-full">
-        <router-link :to="route.to"
-          class="block text-center py-2 hover:bg-orange-500 hover:text-white rounded-xl bg-orange-300">
-          {{ route.name }}
-        </router-link>
-      </li>
-    </ul>
+  <div class="w-2/3 h-full content-center">
+    <BoardComponent class="content-center" v-if="boardType" :boardName="BoardNames[boardType]" />
+    <div v-else>
+      <ul class="grid grid-cols-2 gap-4 justify-items-center mb-2">
+        <li v-for="route in routes" :key="route.to" class="w-full">
+          <router-link :to="route.to"
+            class="block text-center py-2 hover:bg-orange-500 hover:text-white rounded-xl bg-orange-300">
+            {{ route.name }}
+          </router-link>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
