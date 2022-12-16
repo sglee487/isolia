@@ -45,7 +45,7 @@ const routes = [
 
 <template>
   <div class="w-2/3 h-full content-center">
-    <BoardComponent class="content-center" v-if="boardType" :boardName="BoardNames[boardType]" />
+    <BoardComponent class="h-full content-center" v-if="boardType" :boardName="BoardNames[boardType]" />
     <div v-else>
       <ul class="grid grid-cols-2 gap-4 justify-items-center mb-2">
         <li v-for="route in routes" :key="route.to" class="w-full">

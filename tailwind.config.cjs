@@ -25,6 +25,9 @@ module.exports = {
       fontFamily: {
         gothica1: ['GothicA1', 'malgun gothic'],
         naverNeo: ['NaverNeo', 'malgun gothic']
+      },
+      minHeight: {
+        '4/5': '80%'
       }
     }
   },

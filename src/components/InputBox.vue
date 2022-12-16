@@ -33,6 +33,7 @@ const value = computed<string | number>({
     <input
       class="inline-block bg-gray-50 border ring-orange-300 text-gray-900 text-sm rounded-b-lg ring-1 outline-none focus:ring-orange-400 p-2.5"
       :class="[
+        props.label ? 'rounded-t-none' : 'rounded-t-lg',
         props.disabled ? 'bg-gray-200' : ''
       ]" v-model="value" :id="props.inputId" :type="props.type" :placeholder="props.placeholder"
       :readonly="props.readonly" :disabled="props.disabled">
