@@ -23,15 +23,12 @@ const goBack = () => {
 </script>
 
 <template>
-  <div class="w-full space-y-10">
-    <div class="flex flex-col">
-      <InputBox class="flex-none font-bold pb-4" v-model="title" placeholder="제목을 입력하세요" />
-      <QuillEditor class="min-h-[80%]" theme="snow" />
+  <div class="flex flex-col">
+    <InputBox class="flex-none font-bold pb-4" v-model="title" placeholder="제목을 입력하세요" />
+    <QuillEditor class="min-h-[50vh]" theme="snow" />
+    <div class="flex-none flex flex-row justify-evenly content-center place-items-center pt-8">
+      <ButtonBox class="w-14 text-xs h-8" @click="goBack" color="gray" size="sm">취소</ButtonBox>
+      <ButtonBox class="w-24" color="orange">작성</ButtonBox>
     </div>
-    <div class="flex flex-row justify-evenly">
-      <ButtonBox @click="goBack" color="gray" size="sm">취소</ButtonBox>
-      <ButtonBox class="w-44" color="orange" size="sm">작성</ButtonBox>
-    </div>
-
   </div>
 </template>

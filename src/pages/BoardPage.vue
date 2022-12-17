@@ -2,7 +2,8 @@
 import { getCurrentInstance, ref, watch } from 'vue'
 
 import BoardComponent from '@/components/BoardComponent.vue'
-
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
 // eslint-disable-next-line no-unused-vars
 const BoardTypes = {
   notice: 'notice',
@@ -44,8 +45,8 @@ const routes = [
 </script>
 
 <template>
-  <div class="w-2/3 h-full content-center">
-    <BoardComponent class="h-full content-center" v-if="boardType" :boardName="BoardNames[boardType]" />
+  <div class="w-2/3">
+    <BoardComponent v-if="boardType" :boardName="BoardNames[boardType]" />
     <div v-else>
       <ul class="grid grid-cols-2 gap-4 justify-items-center mb-2">
         <li v-for="route in routes" :key="route.to" class="w-full">
