@@ -14,4 +14,19 @@ const getBoardList = async (boardType: string) => {
   return response
 }
 
-export { getBoardList }
+const postBoard = async (boardType: string, boardTitle: string, boardContent: string, userToken: string) => {
+
+  const response = await axios.post(`${SERVER_URL}/board/${boardType}`,
+    {
+      title: boardTitle,
+      content: boardContent
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${userToken}`
+      }
+    })
+  return response
+}
+
+export { getBoardList, postBoard }

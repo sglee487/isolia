@@ -8,16 +8,28 @@ import { useUserStore } from '@/stores/userStore'
 import InputBox from '@/components/InputBox.vue'
 import ButtonBox from '@/components/ButtonBox.vue'
 
+import { postBoard } from '@/apis/board'
+
 const instance = getCurrentInstance()
+const routerParams = instance.proxy.$route.params
+const boardType = routerParams.name as string
 const user = useUserStore()
 
 const title = ref<string>('')
 const content = ref<string>('')
 
-console.log(user)
-
 const goBack = () => {
   instance?.proxy?.$router.back()
+}
+
+const save = () => {
+  postBoard(boardType as string, title.value, content.value, user.data.token)
+    .then((res) => {
+      instance?.proxy?.$router.push(`/board/${boardType}/${res.data.id}`)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 }
 
 </script>
@@ -25,10 +37,11 @@ const goBack = () => {
 <template>
   <div class="flex flex-col">
     <InputBox class="flex-none font-bold pb-4" v-model="title" placeholder="제목을 입력하세요" />
-    <QuillEditor class="min-h-[50vh]" theme="snow" />
+    <QuillEditor class="min-h-[50vh]" theme="snow" placeholder="내용을 입력하세요..." v-model:content="content"
+      contentType="html" />
     <div class="flex-none flex flex-row justify-evenly content-center place-items-center pt-8">
-      <ButtonBox class="w-14 text-xs h-8" @click="goBack" color="gray" size="sm">취소</ButtonBox>
-      <ButtonBox class="w-24" color="orange">작성</ButtonBox>
+      <ButtonBox class="w-14 text-xs h-8" color="gray" @click="goBack" size="xs">취소</ButtonBox>
+      <ButtonBox class="w-24" color="orange" @click="save">작성</ButtonBox>
     </div>
   </div>
 </template>

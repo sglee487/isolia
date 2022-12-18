@@ -2,44 +2,37 @@
 import { getCurrentInstance, ref, watch } from 'vue'
 
 import WriteComponent from './WriteComponent.vue'
+import ViewComponent from './ViewComponent.vue'
 import ButtonBox from '@/components/ButtonBox.vue'
 
-import { useUserStore } from '@/stores/userStore'
 import { getBoardList } from '@/apis/board'
 
 const props = defineProps<{
   boardName: string
 }>()
 
-const user = useUserStore()
-
 const instance = getCurrentInstance()
-const routerParams = instance.proxy.$route.params
-const queryParams = instance.proxy.$route.query
-const pageMode = ref<string | undefined>('')
+const boardType = ref<string>(instance.proxy.$route.params.name as string)
+const pageId = ref<string | undefined>('')
 const posts = ref<any[]>([])
 
-if (Object.keys(routerParams).includes('name')) {
-  const boardType = routerParams.name as string
-  getBoardList(boardType).then((response) => {
+if (Object.keys(instance.proxy.$route.params).includes('name')) {
+  getBoardList(boardType.value).then((response) => {
     posts.value = response.data
   })
 }
 
-if (Object.keys(queryParams).includes('mode')) {
-  pageMode.value = queryParams.mode as string
+if (Object.keys(instance.proxy.$route.params).includes('id')) {
+  pageId.value = instance.proxy.$route.params.postId as string
 }
 
-watch(() => instance.proxy.$route.query.mode, async (to) => {
-  pageMode.value = to as undefined | string
+watch(() => instance.proxy.$route.params, async (to) => {
+  pageId.value = to.postId as string
 })
 
 const changeMode = (mode: string) => {
   instance?.proxy?.$router.push({
-    path: '',
-    query: {
-      mode
-    }
+    path: `${boardType.value}/${mode}`
   })
 }
 
@@ -50,11 +43,14 @@ const changeMode = (mode: string) => {
     class="text-2xl font-bold content-start pt-4 pb-8 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
     {{ props.boardName }}
   </div>
-  <WriteComponent v-if="pageMode === 'write'" />
+  <template v-if="pageId">
+    <WriteComponent v-if="pageId === 'write'" />
+    <ViewComponent v-else />
+  </template>
   <div v-else class="flex flex-col space-y-4">
     <ul v-if="posts.length > 0" class="grid grid-cols-2 gap-4 justify-items-center mb-2">
       <li v-for="post in posts" :key="post.id" class="w-full">
-        <router-link :to="`/board/${post.id}`"
+        <router-link :to="`/board/${boardType}/${post.id}`"
           class="block text-center py-2 hover:bg-orange-500 hover:text-white rounded-xl bg-orange-300">
           {{ post.title }}
         </router-link>

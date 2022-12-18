@@ -22,7 +22,7 @@ const handleLoginSuccess = async (response: CredentialResponse) => {
     const response = await loginUser('google', null, null, credential)
     if (response.status === 200) {
       instance?.proxy?.$toast.success('로그인에 성공하였습니다.')
-      instance?.proxy?.$router.push('/')
+      instance?.proxy?.$router.back()
       user.login(
         response.data.token,
         response.data.login_type,

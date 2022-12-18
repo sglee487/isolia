@@ -24,6 +24,9 @@ export const useUserStore = defineStore('user', {
     isLogined() {
       return this.data.token !== null
     },
+    isAdmin() {
+      return this.data.isAdmin
+    },
     login(token: string, loginType: string, email: string, display_name: string, isAdmin: boolean, isAutoLogin: boolean = false) {
       this.data.token = token
       this.data.login_type = loginType

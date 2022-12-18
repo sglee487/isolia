@@ -2,7 +2,6 @@
 import { getCurrentInstance, ref, watch } from 'vue'
 
 import BoardComponent from '@/components/BoardComponent.vue'
-import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 // eslint-disable-next-line no-unused-vars
 const BoardTypes = {
