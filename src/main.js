@@ -72,8 +72,10 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const user = useUserStore()
+  console.log(to)
+  console.log(user)
 
-  if (to.params.id === 'notice' && to.params.postId === 'write') {
+  if (to.params.name === 'notice' && to.params.postId === 'write') {
     if (user.data.token === null) {
       $toast.error('로그인 후에 이용해주세요.')
       return '/login'

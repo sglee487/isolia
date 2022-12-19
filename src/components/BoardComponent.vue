@@ -15,6 +15,7 @@ const instance = getCurrentInstance()
 const boardType = ref<string>(instance.proxy.$route.params.name as string)
 const pageId = ref<string | undefined>('')
 const posts = ref<any[]>([])
+const postColumns = ref<object[]>([])
 
 if (Object.keys(instance.proxy.$route.params).includes('name')) {
   getBoardList(boardType.value).then((response) => {
@@ -29,6 +30,29 @@ if (Object.keys(instance.proxy.$route.params).includes('id')) {
 watch(() => instance.proxy.$route.params, async (to) => {
   pageId.value = to.postId as string
 })
+
+postColumns.value = [
+  {
+    title: '번호',
+    dataIndex: 'id',
+    key: 'id'
+  },
+  {
+    title: '제목',
+    dataIndex: 'title',
+    key: 'title'
+  },
+  {
+    title: '작성자',
+    dataIndex: 'author',
+    key: 'author'
+  },
+  {
+    title: '작성일',
+    dataIndex: 'createdAt',
+    key: 'createdAt'
+  }
+]
 
 const changeMode = (mode: string) => {
   instance?.proxy?.$router.push({
