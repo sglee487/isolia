@@ -40,7 +40,7 @@ const loginUser = async (loginType: string, email: string, password: string, sns
   return response
 }
 
-const refreshToken = async (userToken: string) => {
+const checkToken = async (userToken: string) => {
   const response = await axios.get(`${SERVER_URL}/token/`, {
     headers: {
       Authorization: `Bearer ${userToken}`,
@@ -65,4 +65,4 @@ const updateUser = async (user: any, name: string, password: string, newPassword
   return response
 }
 
-export { registerUser, loginUser, refreshToken, updateUser }
+export { registerUser, loginUser, checkToken, updateUser }

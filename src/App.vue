@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeMount, ref } from 'vue'
 
-import { refreshToken } from '@/apis/user'
+import { checkToken } from '@/apis/user'
 
 import ButtonBox from './components/ButtonBox.vue'
 
@@ -52,16 +52,14 @@ onBeforeMount(async () => {
   if (!user.isLogined()) {
     return
   }
-  if (user.data.login_type === 'email') {
-    const response = await refreshToken(user.data.token)
-    user.login(
-      response.data.token,
-      response.data.login_type,
-      response.data.email,
-      response.data.display_name,
-      response.data.role === 'admin'
-    )
-  }
+  const response = await checkToken(user.data.token)
+  user.login(
+    response.data.token,
+    response.data.login_type,
+    response.data.email,
+    response.data.display_name,
+    response.data.role === 'admin'
+  )
 })
 
 </script>
