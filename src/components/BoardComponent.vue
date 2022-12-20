@@ -37,25 +37,25 @@ postColumns.value = [
     title: '번호',
     dataIndex: 'id',
     key: 'id',
-    span: '1'
+    width: '10%'
   },
   {
     title: '제목',
     dataIndex: 'title',
     key: 'title',
-    span: '2'
+    width: '40%'
   },
   {
     title: '작성자',
     dataIndex: 'display_name',
     key: 'display_name',
-    span: '2'
+    width: '20%'
   },
   {
     title: '작성일',
     dataIndex: 'created_at',
     key: 'created_at',
-    span: '3'
+    width: '30%'
   }
 ]
 
@@ -87,28 +87,29 @@ const viewPost = (id: number) => {
       <WriteComponent v-if="pageId === 'write'" />
       <ViewComponent v-else />
     </template>
-    <table v-else class="w-full text-left border-separate border-spacing-2 border border-slate-500 rounded-md">
-      <thead>
-        <tr>
-          <th v-for="postColumn in postColumns" :key="postColumn['key']">
-            {{ postColumn['title'] }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="post in posts" :key="post['id']">
-          <td v-for="postColumn in postColumns" :key="postColumn['key']" class="cursor-pointer"
-            @click="viewPost(post['id'])">
-            {{ postColumn['dataIndex'] === 'created_at' ? moment(post[postColumn['dataIndex']]).format('YYYY-MM-DD \
-                        HH: mm: ss') :
-                post[postColumn['dataIndex']]
-            }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="flex justify-end">
-      <ButtonBox class="w-28 content-end" color="orange" @click="changeMode('write')">글쓰기</ButtonBox>
-    </div>
+    <template v-else>
+      <table class="w-full text-left border-separate border-spacing-2 border border-slate-500 rounded-md">
+        <thead>
+          <tr>
+            <th v-for="postColumn in postColumns" :key="postColumn['key']" :style="`width: ${postColumn['width']}`">
+              {{ postColumn['title'] }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="post in posts" :key="post['id']" class="cursor-pointer" @click="viewPost(post['id'])">
+            <td v-for="postColumn in postColumns" :key="postColumn['key']">
+              {{ postColumn['dataIndex'] === 'created_at' ? moment(post[postColumn['dataIndex']]).format('YYYY-MM-DD \
+                            HH:mm:ss') :
+                  post[postColumn['dataIndex']]
+              }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="flex justify-end">
+        <ButtonBox class="w-28 content-end" color="orange" @click="changeMode('write')">글쓰기</ButtonBox>
+      </div>
+    </template>
   </div>
 </template>
