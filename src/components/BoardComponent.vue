@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref, watch } from 'vue'
+import moment from 'moment'
 
 import WriteComponent from './WriteComponent.vue'
 import ViewComponent from './ViewComponent.vue'
@@ -35,24 +36,32 @@ postColumns.value = [
   {
     title: '번호',
     dataIndex: 'id',
-    key: 'id'
+    key: 'id',
+    span: '1'
   },
   {
     title: '제목',
     dataIndex: 'title',
-    key: 'title'
+    key: 'title',
+    span: '2'
   },
   {
     title: '작성자',
-    dataIndex: 'author',
-    key: 'author'
+    dataIndex: 'display_name',
+    key: 'display_name',
+    span: '2'
   },
   {
     title: '작성일',
-    dataIndex: 'createdAt',
-    key: 'createdAt'
+    dataIndex: 'created_at',
+    key: 'created_at',
+    span: '3'
   }
 ]
+
+// eslint-disable-next-line dot-notation
+const totalSpan = ref<Number>(postColumns.value.reduce((acc, cur) => acc + Number(cur['span']), 0))
+console.log(totalSpan.value)
 
 const changeMode = (mode: string) => {
   instance?.proxy?.$router.push({
@@ -60,29 +69,44 @@ const changeMode = (mode: string) => {
   })
 }
 
+const viewPost = (id: number) => {
+  instance?.proxy?.$router.push({
+    path: `${boardType.value}/${id}`
+  })
+}
+
 </script>
 
 <template>
-  <div
-    class="text-2xl font-bold content-start pt-4 pb-8 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
-    {{ props.boardName }}
-  </div>
-  <template v-if="pageId">
-    <WriteComponent v-if="pageId === 'write'" />
-    <ViewComponent v-else />
-  </template>
-  <div v-else class="flex flex-col space-y-4">
-    <ul v-if="posts.length > 0" class="grid grid-cols-2 gap-4 justify-items-center mb-2">
-      <li v-for="post in posts" :key="post.id" class="w-full">
-        <router-link :to="`/board/${boardType}/${post.id}`"
-          class="block text-center py-2 hover:bg-orange-500 hover:text-white rounded-xl bg-orange-300">
-          {{ post.title }}
-        </router-link>
-      </li>
-    </ul>
-    <div v-else>
-      게시물이 없습니다.
+  <div class="space-y-4">
+    <div
+      class="text-2xl font-bold content-start pt-4 pb-4 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
+      {{ props.boardName }}
     </div>
+    <template v-if="pageId">
+      <WriteComponent v-if="pageId === 'write'" />
+      <ViewComponent v-else />
+    </template>
+    <table v-else class="w-full text-left border-separate border-spacing-2 border border-slate-500 rounded-md">
+      <thead>
+        <tr>
+          <th v-for="postColumn in postColumns" :key="postColumn['key']">
+            {{ postColumn['title'] }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="post in posts" :key="post['id']">
+          <td v-for="postColumn in postColumns" :key="postColumn['key']" class="cursor-pointer"
+            @click="viewPost(post['id'])">
+            {{ postColumn['dataIndex'] === 'created_at' ? moment(post[postColumn['dataIndex']]).format('YYYY-MM-DD \
+                        HH: mm: ss') :
+                post[postColumn['dataIndex']]
+            }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
     <div class="flex justify-end">
       <ButtonBox class="w-28 content-end" color="orange" @click="changeMode('write')">글쓰기</ButtonBox>
     </div>

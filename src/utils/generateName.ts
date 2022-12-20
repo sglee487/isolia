@@ -1042,7 +1042,7 @@ const korean_noun = [
 const getGenerateRandomName = () => {
   const adjStr = korean_adj[Math.floor(Math.random() * korean_adj.length)];
   const nounStr = korean_noun[Math.floor(Math.random() * korean_noun.length)];
-  return `${adjStr} ${nounStr} ${Math.floor(Math.random() * 99) + 1}`;
+  return `${adjStr} ${nounStr}`;
 }
 
 export { getGenerateRandomName }
