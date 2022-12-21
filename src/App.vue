@@ -23,8 +23,6 @@ const user = useUserStore()
 
 const profileModal = ref<boolean>(false)
 
-const remainTime = ref<Number>(0)
-
 const navRoutes = [
   {
     to: '/board',
@@ -136,7 +134,7 @@ const getRemainTime = () => {
             <ButtonBox color="orange" size="sm">로그인</ButtonBox>
           </router-link>
           <div v-else class="flex flex-row space-x-2 items-center">
-            <VueCountdown :time="getRemainTime()" v-slot="{ minutes }" class="mt-2">
+            <VueCountdown :time="getRemainTime()" v-slot="{ minutes }" :interval="1000 * 60" class="mt-2">
               <Popper :hover="true" :arrow="true">
                 <template #content>
                   <div class="text-sm">남은 세션 시간</div>
