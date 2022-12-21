@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { onBeforeMount, ref } from 'vue'
+import VueCountdown from '@chenfengyuan/vue-countdown'
+import Popper from 'vue3-popper'
 
 import { checkToken } from '@/apis/user'
 
@@ -11,6 +13,7 @@ import {
   ArrowLeftOnRectangleIcon,
   Bars3Icon,
   CalculatorIcon,
+  ClockIcon,
   ClipboardDocumentIcon,
   UserIcon,
   CogIcon
@@ -19,6 +22,8 @@ import {
 const user = useUserStore()
 
 const profileModal = ref<boolean>(false)
+
+const remainTime = ref<Number>(0)
 
 const navRoutes = [
   {
@@ -53,14 +58,37 @@ onBeforeMount(async () => {
     return
   }
   const response = await checkToken(user.data.token)
+
+  if (response.status !== 200) {
+    user.logout()
+    return
+  }
+
   user.login(
     response.data.token,
+    response.data.exp,
     response.data.login_type,
     response.data.email,
     response.data.display_name,
     response.data.role === 'admin'
   )
 })
+
+
+const getRemainTime = () => {
+  if (!user.isLogined()) {
+    return 0
+  }
+  const now = new Date()
+  const exp = new Date(user.data.exp * 1000)
+  const diff = exp.getTime() - now.getTime()
+  const remainTime = Math.floor(diff)
+  return remainTime
+}
+
+// const timer = setInterval(() => {
+//   remainTime.value = getRemainTime()
+// }, 1000)
 
 </script>
 
@@ -107,10 +135,24 @@ onBeforeMount(async () => {
           <router-link to="/login" v-if="!user.isLogined()" class="px-4">
             <ButtonBox color="orange" size="sm">로그인</ButtonBox>
           </router-link>
-          <div v-else class="flex flex-row h-16 px-4 items-center cursor-pointer hover:bg-orange-400 hover:text-white"
-            @click="profileModal = true">
-            <UserIcon class="w-6 h-6 'inline-block mr-2" />
-            <span class="font-medium">{{ user.data.display_name }}</span>
+          <div v-else class="flex flex-row space-x-2 items-center">
+            <VueCountdown :time="getRemainTime()" v-slot="{ minutes }" class="mt-2">
+              <Popper :hover="true" :arrow="true">
+                <template #content>
+                  <div class="text-sm">남은 세션 시간</div>
+                </template>
+                <div class="flex flex-row space-x-4 items-center">
+                  <ClockIcon class="w-5 h-5 mr-1" />
+                  {{ minutes }} 분
+                </div>
+              </Popper>
+
+            </VueCountdown>
+            <div class="flex flex-row h-16 px-4 items-center cursor-pointer hover:bg-orange-400 hover:text-white"
+              @click="profileModal = true">
+              <UserIcon class="w-6 h-6 'inline-block mr-2" />
+              <span class="font-semibold">{{ user.data.display_name }}</span>
+            </div>
             <!-- <UserIcon /> -->
             <!-- <div class="font-bold">{{ user.data.display_name }}</div>
               <div class="">{{ user.data.email }}</div> -->

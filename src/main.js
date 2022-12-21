@@ -72,8 +72,6 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const user = useUserStore()
-  console.log(to)
-  console.log(user)
 
   if (to.params.name === 'notice' && to.params.postId === 'write') {
     if (user.data.token === null) {

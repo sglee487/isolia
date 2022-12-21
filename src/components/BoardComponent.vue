@@ -59,10 +59,6 @@ postColumns.value = [
   }
 ]
 
-// eslint-disable-next-line dot-notation
-const totalSpan = ref<Number>(postColumns.value.reduce((acc, cur) => acc + Number(cur['span']), 0))
-console.log(totalSpan.value)
-
 const changeMode = (mode: string) => {
   instance?.proxy?.$router.push({
     path: `${boardType.value}/${mode}`

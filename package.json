@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@chenfengyuan/vue-countdown": "2",
     "@heroicons/vue": "^2.0.13",
     "@vueup/vue-quill": "^1.0.0",
     "axios": "^1.2.0",
@@ -19,11 +20,12 @@
     "pinia": "^2.0.28",
     "pinia-plugin-persistedstate": "^3.0.1",
     "short-uuid": "^4.2.2",
-    "vue": "^3.2.41",
+    "vue": "3",
     "vue-final-modal": "3",
     "vue-router": "4",
     "vue-toast-notification": "3",
-    "vue3-google-signin": "^1.2.1"
+    "vue3-google-signin": "^1.2.1",
+    "vue3-popper": "^1.5.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.0.0",
