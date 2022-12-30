@@ -28,21 +28,21 @@ const generateRandomName = () => {
 }
 
 const update = async () => {
-  if (!password.value.match(/^.*(?=.{8,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/)) {
+  if (!password.value.match(/^.*(?=.{8,255})(?=.*[0-9])(?=.*[a-zA-Z]).*$/)) {
     useAnimateElement(document.getElementById('inputPassword') as HTMLElement)
-    instance?.proxy?.$toast.error('패스워드 형식이 올바르지 않습니다.')
+    instance?.proxy?.$toast.error('현재 패스워드 형식이 올바르지 않습니다.')
     return
   }
 
-  if (!newPassword.value.match(/^.*(?=.{8,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/)) {
+  if (newPassword.value !== '' && !newPassword.value.match(/^.*(?=.{8,255})(?=.*[0-9])(?=.*[a-zA-Z]).*$/)) {
     useAnimateElement(document.getElementById('inputNewPassword') as HTMLElement)
-    instance?.proxy?.$toast.error('패스워드 형식이 올바르지 않습니다.')
+    instance?.proxy?.$toast.error('새로운 패스워드 형식이 올바르지 않습니다.')
     return
   }
 
-  if (!newPasswordConfirm.value.match(/^.*(?=.{8,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/)) {
+  if (newPasswordConfirm.value !== '' && !newPasswordConfirm.value.match(/^.*(?=.{8,255})(?=.*[0-9])(?=.*[a-zA-Z]).*$/)) {
     useAnimateElement(document.getElementById('inputPasswordConfirm') as HTMLElement)
-    instance?.proxy?.$toast.error('패스워드 형식이 올바르지 않습니다.')
+    instance?.proxy?.$toast.error('새로운 패스워드 확인 형식이 올바르지 않습니다.')
     return
   }
 
@@ -51,6 +51,29 @@ const update = async () => {
     useAnimateElement(document.getElementById('inputPasswordConfirm') as HTMLElement)
     instance?.proxy?.$toast.error('새로운 비밀번호가 일치하지 않습니다.')
     return
+  }
+  const response = await updateUser(
+    user,
+    displayName.value,
+    password.value,
+    newPassword.value
+  )
+  if (response.status === 200) {
+    user.login(
+      response.data.token,
+      response.data.exp,
+      response.data.login_type,
+      response.data.email,
+      response.data.display_name,
+      response.data.role === 'admin'
+    )
+    instance?.proxy?.$toast.success('사용자 정보가 변경되었습니다.')
+    if (newPassword.value !== '') {
+      instance?.proxy?.$toast.success('새로운 비밀번호로 로그인해주세요.')
+      user.logout()
+    }
+  } else {
+    instance?.proxy?.$toast.error('사용자 정보 변경에 실패했습니다.')
   }
 }
 </script>

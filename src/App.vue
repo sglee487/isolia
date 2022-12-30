@@ -21,6 +21,21 @@ import {
 
 const user = useUserStore()
 
+// const userDisplayNameSubscribed = ref<string>('')
+// const userEmailSubscribed = ref<string>('')
+
+// user.$subscribe((mutation, state) => {
+//   console.log(mutation)
+//   console.log(state)
+//   console.log(state.data)
+//   console.log(state.data.display_name)
+//   console.log(state.data.email)
+//   // if (mutation.storeId === 'user' && mutation.type === 'direct') {
+//   //   userDisplayNameSubscribed.value = state.display_name
+//   //   userEmailSubscribed.value = state.email
+//   // }
+// })
+
 const profileModal = ref<boolean>(false)
 
 const navRoutes = [
@@ -71,7 +86,6 @@ onBeforeMount(async () => {
     response.data.role === 'admin'
   )
 })
-
 
 const getRemainTime = () => {
   if (!user.isLogined()) {

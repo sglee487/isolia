@@ -49,10 +49,11 @@ const checkToken = async (userToken: string) => {
   return response
 }
 
-const updateUser = async (user: any, name: string, password: string, newPassword: string) => {
+const updateUser = async (user: any, displayName: string, password: string, newPassword: string) => {
   const data = {
+    'login_type': user.data.login_type,
     'email': user.data.email,
-    'display_name': name,
+    'display_name': displayName,
     'password': password,
     'new_password': newPassword
   }
