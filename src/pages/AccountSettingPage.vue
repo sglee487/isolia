@@ -28,30 +28,33 @@ const generateRandomName = () => {
 }
 
 const update = async () => {
-  if (!password.value.match(/^.*(?=.{8,255})(?=.*[0-9])(?=.*[a-zA-Z]).*$/)) {
-    useAnimateElement(document.getElementById('inputPassword') as HTMLElement)
-    instance?.proxy?.$toast.error('현재 패스워드 형식이 올바르지 않습니다.')
-    return
+  if (user.data.login_type === 'email') {
+    if (!password.value.match(/^.*(?=.{8,255})(?=.*[0-9])(?=.*[a-zA-Z]).*$/)) {
+      useAnimateElement(document.getElementById('inputPassword') as HTMLElement)
+      instance?.proxy?.$toast.error('현재 패스워드 형식이 올바르지 않습니다.')
+      return
+    }
+
+    if (newPassword.value !== '' && !newPassword.value.match(/^.*(?=.{8,255})(?=.*[0-9])(?=.*[a-zA-Z]).*$/)) {
+      useAnimateElement(document.getElementById('inputNewPassword') as HTMLElement)
+      instance?.proxy?.$toast.error('새로운 패스워드 형식이 올바르지 않습니다.')
+      return
+    }
+
+    if (newPasswordConfirm.value !== '' && !newPasswordConfirm.value.match(/^.*(?=.{8,255})(?=.*[0-9])(?=.*[a-zA-Z]).*$/)) {
+      useAnimateElement(document.getElementById('inputPasswordConfirm') as HTMLElement)
+      instance?.proxy?.$toast.error('새로운 패스워드 확인 형식이 올바르지 않습니다.')
+      return
+    }
+
+    if (newPassword.value !== newPasswordConfirm.value) {
+      useAnimateElement(document.getElementById('inputNewPassword') as HTMLElement)
+      useAnimateElement(document.getElementById('inputPasswordConfirm') as HTMLElement)
+      instance?.proxy?.$toast.error('새로운 비밀번호가 일치하지 않습니다.')
+      return
+    }
   }
 
-  if (newPassword.value !== '' && !newPassword.value.match(/^.*(?=.{8,255})(?=.*[0-9])(?=.*[a-zA-Z]).*$/)) {
-    useAnimateElement(document.getElementById('inputNewPassword') as HTMLElement)
-    instance?.proxy?.$toast.error('새로운 패스워드 형식이 올바르지 않습니다.')
-    return
-  }
-
-  if (newPasswordConfirm.value !== '' && !newPasswordConfirm.value.match(/^.*(?=.{8,255})(?=.*[0-9])(?=.*[a-zA-Z]).*$/)) {
-    useAnimateElement(document.getElementById('inputPasswordConfirm') as HTMLElement)
-    instance?.proxy?.$toast.error('새로운 패스워드 확인 형식이 올바르지 않습니다.')
-    return
-  }
-
-  if (newPassword.value !== newPasswordConfirm.value) {
-    useAnimateElement(document.getElementById('inputNewPassword') as HTMLElement)
-    useAnimateElement(document.getElementById('inputPasswordConfirm') as HTMLElement)
-    instance?.proxy?.$toast.error('새로운 비밀번호가 일치하지 않습니다.')
-    return
-  }
   const response = await updateUser(
     user,
     displayName.value,
@@ -94,10 +97,12 @@ const update = async () => {
               class="absolute w-8 bottom-1 right-1 cursor-pointer p-1 text-orange-600 text-sm font-bold"
               @click="generateRandomName" />
           </div>
-          <InputBox label="현재 비밀번호" v-model="password" id="inputPassword" type="password" @keyup.enter="update" />
-          <InputBox label="새 비밀번호" v-model="newPassword" id="inputNewPassword" type="password" />
-          <InputBox label="새 비밀번호 확인" v-model="newPasswordConfirm" id="inputNewPasswordConfirm" type="password"
-            @keyup.enter="update" />
+          <div v-if="user.data.login_type === 'email'">
+            <InputBox label="현재 비밀번호" v-model="password" id="inputPassword" type="password" @keyup.enter="update" />
+            <InputBox label="새 비밀번호" v-model="newPassword" id="inputNewPassword" type="password" />
+            <InputBox label="새 비밀번호 확인" v-model="newPasswordConfirm" id="inputNewPasswordConfirm" type="password"
+              @keyup.enter="update" />
+          </div>
         </div>
         <div class="py-4 flex">
           <ButtonBox class="w-full" @click="update" color="orange">저장</ButtonBox>
