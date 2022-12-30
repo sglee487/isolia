@@ -72,6 +72,13 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const user = useUserStore()
+  if (user.isLogined() && to.path === '/login') {
+    return '/'
+  }
+
+  if (!user.isLogined() && to.path === '/user/edit') {
+    return '/login'
+  }
 
   if (to.params.name === 'notice' && to.params.postId === 'write') {
     if (user.data.token === null) {
