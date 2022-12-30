@@ -14,8 +14,10 @@ import {
   Bars3Icon,
   CalculatorIcon,
   ClockIcon,
-  ClipboardDocumentIcon,
+  NewspaperIcon,
   UserIcon,
+  HomeIcon,
+  BellIcon,
   CogIcon
 } from '@heroicons/vue/24/outline'
 
@@ -42,7 +44,7 @@ const navRoutes = [
   {
     to: '/board',
     name: '게시판',
-    icon: ClipboardDocumentIcon
+    icon: NewspaperIcon
   },
   {
     to: '/calculator',
@@ -123,6 +125,7 @@ const getRemainTime = () => {
           <div class="font-bold">
             <router-link id="menu" v-for="route in navRoutes" :key="route.to" :to="route.to"
               class="px-5 py-2 hover:border-b-2 border-orange-200">
+              <component :is="route.icon" class="w-5 h-5 inline-block" />
               {{ route.name }}
             </router-link>
           </div>
@@ -179,6 +182,48 @@ const getRemainTime = () => {
     <router-view />
   </div>
 
+  <section id="bottom-navigation" class="md:hidden block fixed inset-x-0 bottom-0 z-10 bg-white shadow">
+    <div id="tabs" class="flex justify-between">
+      <router-link to="/" id="nav"
+        class="w-full focus:text-teal-500 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1">
+        <HomeIcon class="w-6 h-6 inline-block mb-1" />
+        <span class="tab tab-home block text-xs">홈</span>
+      </router-link>
+      <router-link to="/board" id="nav"
+        class="w-full focus:text-teal-500 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1">
+        <NewspaperIcon class="w-6 h-6 inline-block mb-1" />
+        <span class="tab tab-kategori block text-xs">게시판</span>
+      </router-link>
+      <router-link to="/calculator" id="nav"
+        class="w-full focus:text-teal-500 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1">
+        <CalculatorIcon class="w-6 h-6 inline-block mb-1" />
+        <span class="tab tab-kategori block text-xs">계산기</span>
+      </router-link>
+      <router-link to="/" id="nav"
+        class="w-full focus:text-teal-500 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1 text-transparent">
+        <BellIcon class="w-6 h-6 inline-block mb-1" />
+        <span class="tab tab-kategori block text-xs line-through">미구현</span>
+      </router-link>
+      <router-link to="/" id="nav"
+        class="w-full focus:text-teal-500 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1">
+        <UserIcon class="w-6 h-6 inline-block mb-1" />
+        <span class="tab tab-kategori block text-xs">나의 솔리</span>
+      </router-link>
+    </div>
+  </section>
+
+  <!-- <footer>
+    <div class="h-16 flex justify-center items-center">
+      <div class="text-sm text-gray-500">
+        <span>© 2021 Isolia</span>
+        <span class="mx-2">|</span>
+        <span>개인정보처리방침</span>
+        <span class="mx-2">|</span>
+        <span>이용약관</span>
+      </div>
+    </div>
+  </footer> -->
+
   <vue-final-modal v-model="profileModal" :hide-overlay="true">
     <div
       class="mb-12 w-64 bg-[#f0f0f0] rounded-xl mx-2 divide-y divide-gray-300 shadow-md absolute right-3 top-20 max-w-xs">
@@ -228,12 +273,23 @@ header {
   border-bottom: 2px solid rgb(251 146 60);
 }
 
+#nav.router-link-active,
+#nav.router-link-exact-active {
+  border-bottom: 2px solid rgb(251 146 60);
+  /* #4EBDE5 */
+}
+
 @media (max-width: 768px) {
 
   #menu.router-link-active,
   #menu.router-link-exact-active #menu {
     color: white;
     background-color: rgb(251 146 60);
+  }
+
+  #nav.router-link-active,
+  #nav.router-link-exact-active #nav {
+    color: rgb(251 146 60);
   }
 }
 </style>
