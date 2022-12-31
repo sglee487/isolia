@@ -38,6 +38,7 @@ module.exports = {
         'app-300': '#7dd3fc',
         'app-400': '#38bdf8',
         'app-500': '#0ea5e9',
+        'app-600': '#0284c7',
       }
     }
   },

@@ -76,7 +76,7 @@ const viewPost = (id: number) => {
 <template>
   <div class="space-y-4">
     <div
-      class="text-2xl font-bold content-start pt-4 pb-4 text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-yellow-400">
+      class="text-2xl font-bold content-start pt-4 pb-4 text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-app-200">
       {{ props.boardName }}
     </div>
     <template v-if="pageId">

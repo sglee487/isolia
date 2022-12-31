@@ -167,8 +167,8 @@ const goBack = () => {
   </header>
 
   <header class="md:hidden fixed mt-4 mx-2">
-    <nav v-if="instance.proxy.$route.path !== '/'" class="cursor-pointer bg-gray-300 bg-opacity-50 rounded-full bg-transparent " @click="goBack()">
-      <ChevronLeftIcon class="w-8 h-8 pr-1 text-app-400 " />
+    <nav v-if="instance.proxy.$route.path !== '/'" class="cursor-pointer bg-gray-500 bg-opacity-10 rounded-full bg-transparent " @click="goBack()">
+      <ChevronLeftIcon class="w-8 h-8 pr-1 text-app-400" />
     </nav>
   </header>
 
