@@ -76,7 +76,7 @@ const viewPost = (id: number) => {
 <template>
   <div class="space-y-4">
     <div
-      class="text-2xl font-bold content-start pt-4 pb-4 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
+      class="text-2xl font-bold content-start pt-4 pb-4 text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-yellow-400">
       {{ props.boardName }}
     </div>
     <template v-if="pageId">
@@ -104,7 +104,7 @@ const viewPost = (id: number) => {
         </tbody>
       </table>
       <div class="flex justify-end">
-        <ButtonBox class="w-28 content-end" color="orange" @click="changeMode('write')">글쓰기</ButtonBox>
+        <ButtonBox class="w-28 content-end" color="app" @click="changeMode('write')">글쓰기</ButtonBox>
       </div>
     </template>
   </div>

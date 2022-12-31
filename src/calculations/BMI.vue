@@ -71,7 +71,7 @@ watch(() => weight.value, async () => {
 
 <template>
   <div class="flex flex-col">
-    <div class="pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
+    <div class="pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-app-200">
       <div class="text-2xl">
         BMI
       </div>
@@ -84,15 +84,22 @@ watch(() => weight.value, async () => {
         inputId="heightFocus" />
       <InputBox label="체중(kg)" v-model="weight" type="number" @keyup.enter="save" placeholder="0.00" />
     </div>
+    <div class="md:hidden block fixed inset-x-0 text-center bottom-14 bg-white py-2">
+			주입 속도는
+			<span class="font-bold text-app-600">
+				{{ calculated === null ? '0.00' : calculated.toFixed(2) }}
+			</span>
+			<small>cc/hr</small> 입니다.
+		</div>
     <div class="p-4 text-center">
       BMI는
-      <span class="font-bold text-orange-600">
+      <span class="font-bold text-app-600">
         {{ calculated === null ? '0.00' : calculated.toFixed(2) }}
       </span>입니다.
     </div>
     <div class="py-4 flex space-x-1">
       <ButtonBox class="text-sm w-32" @click="reset" color="red">초기화</ButtonBox>
-      <ButtonBox class="w-full" @click="save" color="orange">저장</ButtonBox>
+      <ButtonBox class="w-full" @click="save" color="app">저장</ButtonBox>
     </div>
   </div>
 </template>

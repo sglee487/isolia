@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue'
+import {getCurrentInstance, onBeforeMount, ref } from 'vue'
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import Popper from 'vue3-popper'
 
@@ -11,16 +11,17 @@ import { useUserStore } from '@/stores/userStore'
 
 import {
   ArrowLeftOnRectangleIcon,
-  Bars3Icon,
   CalculatorIcon,
   ClockIcon,
   NewspaperIcon,
   UserIcon,
   HomeIcon,
   BellIcon,
-  CogIcon
+  CogIcon,
+  ChevronLeftIcon
 } from '@heroicons/vue/24/outline'
 
+const instance = getCurrentInstance()
 const user = useUserStore()
 
 // const userDisplayNameSubscribed = ref<string>('')
@@ -66,8 +67,6 @@ const modalRoutes = [
   }
 ]
 
-const isOpenMobileMenu = ref<boolean>(false)
-
 onBeforeMount(async () => {
   if (!user.isLogined()) {
     return
@@ -100,40 +99,29 @@ const getRemainTime = () => {
   return remainTime
 }
 
-// const timer = setInterval(() => {
-//   remainTime.value = getRemainTime()
-// }, 1000)
+const goBack = () => {
+  instance?.proxy?.$router.back()
+}
 
 </script>
 
 <template>
-  <header class="fixed w-full bg-[#f5f5f5]">
+  <header class="hidden md:block fixed w-full bg-[#f5f5f5]">
     <nav class="border-b border-gray-300">
       <div class="h-16 ml-4 flex justify-between items-center">
         <router-link to="/" class="hidden md:inline-block p-1 cursor-pointer rounded-md">
           <div class="flex flex-row space-x-2 items-center">
             <img src="./assets/line-chart.png" class="w-10 p-1 inline-block rounded-md" />
-            <h1 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
+            <h1 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-sky-200">
               Isolia
             </h1>
           </div>
         </router-link>
-        <button class="md:hidden inline-block p-1 cursor-pointer rounded-md">
-          <Bars3Icon class="w-6 h-6 text-orange-600" @click="isOpenMobileMenu = !isOpenMobileMenu" />
-        </button>
-        <div class="hidden md:flex flex-grow justify-start items-center ml-5">
+        <div class="flex flex-grow justify-start items-center ml-5">
           <div class="font-bold">
             <router-link id="menu" v-for="route in navRoutes" :key="route.to" :to="route.to"
-              class="px-5 py-2 hover:border-b-2 border-orange-200">
+              class="px-5 py-2 hover:border-b-2 border-app-200">
               <component :is="route.icon" class="w-5 h-5 inline-block" />
-              {{ route.name }}
-            </router-link>
-          </div>
-        </div>
-        <div v-if="isOpenMobileMenu" class="z-10 md:hidden block absolute top-16 left-0 w-full bg-gray-100 shadow-md">
-          <div class="flex flex-col font-bold">
-            <router-link v-for="route in navRoutes" :key="route.to" :to="route.to" @click="isOpenMobileMenu = false"
-              class="px-5 py-2 hover:bg-orange-200 hover:text-white">
               {{ route.name }}
             </router-link>
           </div>
@@ -141,14 +129,14 @@ const getRemainTime = () => {
         <router-link to="/">
           <div class="md:hidden flex flex-row space-x-2 items-center">
             <img src="./assets/line-chart.png" class="w-10 p-1 inline-block rounded-md" />
-            <h1 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
+            <h1 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-yellow-400">
               Isolia
             </h1>
           </div>
         </router-link>
         <div class="flex justify-end">
           <router-link to="/login" v-if="!user.isLogined()" class="px-4">
-            <ButtonBox color="orange" size="sm">로그인</ButtonBox>
+            <ButtonBox color="app" size="sm">로그인</ButtonBox>
           </router-link>
           <div v-else class="flex flex-row space-x-2 items-center">
             <VueCountdown :time="getRemainTime()" v-slot="{ hours, minutes }" :interval="1000 * 60" class="mt-2">
@@ -163,7 +151,7 @@ const getRemainTime = () => {
               </Popper>
 
             </VueCountdown>
-            <div class="flex flex-row h-16 px-4 items-center cursor-pointer hover:bg-orange-400 hover:text-white"
+            <div class="flex flex-row h-16 px-4 items-center cursor-pointer hover:bg-app-400 hover:text-white"
               @click="profileModal = true">
               <UserIcon class="w-6 h-6 'inline-block mr-2" />
               <span class="font-semibold">{{ user.data.display_name }}</span>
@@ -178,35 +166,40 @@ const getRemainTime = () => {
     </nav>
   </header>
 
-  <div class="flex flex-col justify-center pt-16">
-    <router-view />
-    <hr class="md:hidden h-14" />
+  <header class="md:hidden fixed mt-4 mx-2">
+    <nav v-if="instance.proxy.$route.path !== '/'" class="cursor-pointer bg-gray-300 bg-opacity-50 rounded-full bg-transparent " @click="goBack()">
+      <ChevronLeftIcon class="w-8 h-8 pr-1 text-app-400 " />
+    </nav>
+  </header>
+
+  <div class="flex justify-center pt-4 md:pt-16 pb-14 md:pb-0">
+    <router-view  />
   </div>
 
   <section id="bottom-navigation" class="md:hidden block fixed inset-x-0 bottom-0 z-10 bg-white shadow">
     <div id="tabs" class="flex justify-between">
       <router-link to="/" id="nav"
-        class="w-full focus:text-teal-500 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1">
+        class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
         <HomeIcon class="w-6 h-6 inline-block mb-1" />
         <span class="tab tab-home block text-xs">홈</span>
       </router-link>
       <router-link to="/board" id="nav"
-        class="w-full focus:text-teal-500 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1">
+        class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
         <NewspaperIcon class="w-6 h-6 inline-block mb-1" />
         <span class="tab tab-kategori block text-xs">게시판</span>
       </router-link>
       <router-link to="/calculator" id="nav"
-        class="w-full focus:text-teal-500 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1">
+        class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
         <CalculatorIcon class="w-6 h-6 inline-block mb-1" />
         <span class="tab tab-kategori block text-xs">계산기</span>
       </router-link>
       <router-link to="/" id="nav"
-        class="w-full focus:text-teal-500 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1 text-transparent">
+        class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1 text-transparent">
         <BellIcon class="w-6 h-6 inline-block mb-1" />
         <span class="tab tab-kategori block text-xs line-through">미구현</span>
       </router-link>
       <router-link to="/" id="nav"
-        class="w-full focus:text-teal-500 hover:text-teal-500 justify-center inline-block text-center pt-2 pb-1">
+        class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
         <UserIcon class="w-6 h-6 inline-block mb-1" />
         <span class="tab tab-kategori block text-xs">나의 솔리</span>
       </router-link>
@@ -237,7 +230,7 @@ const getRemainTime = () => {
         </div>
       </div>
       <div v-for="route in modalRoutes" :key="route.to" class="py-2 ">
-        <router-link :to="route.to" class="p-3 hover:bg-orange-400 hover:text-white cursor-pointer block"
+        <router-link :to="route.to" class="p-3 hover:bg-sky-400 hover:text-white cursor-pointer block"
           @click="profileModal = false">
           <component :is="route.icon" class="w-5 h-5 inline-block">
           </component>
@@ -271,12 +264,12 @@ header {
 
 #menu.router-link-active,
 #menu.router-link-exact-active {
-  border-bottom: 2px solid rgb(251 146 60);
+  border-bottom: 2px solid rgb(56 189 248);
 }
 
 #nav.router-link-active,
 #nav.router-link-exact-active {
-  border-bottom: 2px solid rgb(251 146 60);
+  border-bottom: 2px solid rgb(56 189 248);
   /* #4EBDE5 */
 }
 
@@ -285,12 +278,12 @@ header {
   #menu.router-link-active,
   #menu.router-link-exact-active #menu {
     color: white;
-    background-color: rgb(251 146 60);
+    background-color: rgb(56 189 248);
   }
 
   #nav.router-link-active,
   #nav.router-link-exact-active #nav {
-    color: rgb(251 146 60);
+    color: rgb(56 189 248);
   }
 }
 </style>

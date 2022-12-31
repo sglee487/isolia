@@ -86,7 +86,7 @@ const update = async () => {
     <div class="w-96 p-10">
       <div class="flex flex-col pb-4">
         <div
-          class="text-2xl pt-4 pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
+          class="text-2xl pt-4 pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-yellow-400">
           사용자 변경
         </div>
         <div class="space-y-4">
@@ -94,7 +94,7 @@ const update = async () => {
           <div class="relative">
             <InputBox class="w-full" label="별명" v-model="displayName" @keyup.enter="update" />
             <ArrowPathRoundedSquareIcon
-              class="absolute w-8 bottom-1 right-1 cursor-pointer p-1 text-orange-600 text-sm font-bold"
+              class="absolute w-8 bottom-1 right-1 cursor-pointer p-1 text-app-600 text-sm font-bold"
               @click="generateRandomName" />
           </div>
           <div v-if="user.data.login_type === 'email'">
@@ -105,7 +105,7 @@ const update = async () => {
           </div>
         </div>
         <div class="py-4 flex">
-          <ButtonBox class="w-full" @click="update" color="orange">저장</ButtonBox>
+          <ButtonBox class="w-full" @click="update" color="app">저장</ButtonBox>
         </div>
       </div>
     </div>

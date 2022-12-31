@@ -26,12 +26,12 @@ const value = computed<string | number>({
 <template>
   <div class="grid grid-cols-1 items-center">
     <label
-      class="text-sm font-bold inline-block bg-gradient-to-r from-yellow-300 to-orange-300 border ring-1 ring-orange-300 text-orange-600 rounded-t-lg p-2.5"
+      class="text-sm font-bold inline-block bg-gradient-to-r from-app-100 to-app-300 border ring-1 ring-app-300 text-app-600 rounded-t-lg p-2.5"
       v-if="props.label">
       {{ props.label }}
     </label>
     <input
-      class="inline-block bg-gray-50 border ring-orange-300 text-gray-900 text-sm rounded-b-lg ring-1 outline-none focus:ring-orange-400 p-2.5"
+      class="inline-block bg-gray-50 border ring-app-300 text-gray-900 text-sm rounded-b-lg ring-1 outline-none focus:ring-app-400 p-2.5"
       :class="[
         props.label ? 'rounded-t-none' : 'rounded-t-lg',
         props.disabled ? 'bg-gray-200' : ''

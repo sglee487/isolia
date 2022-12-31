@@ -73,20 +73,20 @@ generateRandomName()
 <template>
   <div class="w-96 p-10 flex flex-col">
     <div
-      class="text-2xl pt-4 pb-10 font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
+      class="text-2xl pt-4 pb-10 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-yellow-400">
       회원가입
     </div>
     <div class="space-y-4">
       <div class="relative">
         <InputBox class="w-full" label="별명" v-model="displayName" @keyup.enter="register" />
         <ArrowPathRoundedSquareIcon
-          class="absolute w-8 bottom-1 right-1 cursor-pointer p-1 text-orange-600 text-sm font-bold"
+          class="absolute w-8 bottom-1 right-1 cursor-pointer p-1 text-app-600 text-sm font-bold"
           @click="generateRandomName" />
       </div>
       <InputBox label="이메일" v-model="email" @keyup.enter="register" id="inputEmail" />
       <InputBox label="비밀번호" v-model="password" @keyup.enter="register" type="password" id="inputPassword">
         <div class="flex flex-col pt-1">
-          <span class="text-xs text-gray-500">8자 이상 20자 이하</span>
+          <span class="text-xs text-gray-500">8자 이상 255자 이하</span>
           <span class="text-xs text-gray-500">영문, 숫자 포함</span>
         </div>
       </InputBox>
@@ -95,7 +95,7 @@ generateRandomName()
     </div>
     <div class="py-4 flex space-x-1">
       <ButtonBox class="text-sm w-32" @click="toLogin" color="red">뒤로</ButtonBox>
-      <ButtonBox class="w-full" @click="register" color="orange">가입하기</ButtonBox>
+      <ButtonBox class="w-full" @click="register" color="app">가입하기</ButtonBox>
     </div>
   </div>
 </template>

@@ -41,7 +41,7 @@ const save = () => {
       contentType="html" />
     <div class="flex-none flex flex-row justify-evenly content-center place-items-center pt-8">
       <ButtonBox class="w-14 text-xs h-8" color="gray" @click="goBack" size="xs">취소</ButtonBox>
-      <ButtonBox class="w-24" color="orange" @click="save">작성</ButtonBox>
+      <ButtonBox class="w-24" color="app" @click="save">작성</ButtonBox>
     </div>
   </div>
 </template>

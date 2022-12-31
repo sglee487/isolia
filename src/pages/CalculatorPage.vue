@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref, watch } from 'vue'
+import {
+  TrashIcon
+} from '@heroicons/vue/24/outline'
 
 import { useCalculateStore } from '@/stores/calculateStore'
 
 import Epinephrine from '@/calculations/EpinephrineRate.vue'
 import BMI from '@/calculations/BMI.vue'
-
-import { ChevronLeftIcon } from '@heroicons/vue/24/outline'
 
 const CalculatorTypes = {
 	Epinephrine: 'epinephrine',
@@ -62,16 +63,12 @@ const units = {
 </script>
 
 <template>
-	<div class="flex flex-col w-full h-full">
-		<router-link v-if="calculatorType !== undefined" to="/calculator"
-			class="md:hidden w-8 h-8 ml-2 mt-2 flex-none absolute bg-[#f0f0f0] rounded-md">
-			<ChevronLeftIcon class="text-orange-400 cursor-pointer" />
-		</router-link>
+	<div class="flex flex-col w-full h-full pb-10 md:pb-0">
 		<div class="flex flex-col md:flex-row justify-between w-full h-full">
 			<ul
 				class="h-full hidden md:flex flex-col items-center w-64 border-r border-gray-300 text-xl font-bold overflow-y-auto">
 				<li v-for="route in routes" :key="route.to" class="w-full">
-					<router-link :to="route.to" class="block text-center py-2 hover:bg-orange-400 hover:text-white">
+					<router-link :to="route.to" class="block text-center py-2 hover:bg-app-400 hover:text-white">
 						{{ route.name }}
 						<br>
 						<small>{{ route.nameKo }}</small>
@@ -90,7 +87,7 @@ const units = {
 						<ul class="grid grid-cols-2 gap-4 justify-items-center mb-2">
 							<li v-for="route in routes" :key="route.to" class="w-full">
 								<router-link :to="route.to"
-									class="block text-center py-2 hover:bg-orange-500 hover:text-white rounded-xl bg-orange-300">
+									class="block text-center py-2 hover:bg-app-500 hover:text-white rounded-xl bg-app-300">
 									{{ route.name }}
 									<br>
 									<small>{{ route.nameKo }}</small>
@@ -117,7 +114,7 @@ const units = {
 								<TrashIcon class="w-5 h-5 text-red-400 cursor-pointer" @click="calculateHistory.removeResult(index)" />
 							</div>
 							<hr class="h-1">
-							<div class="font-bold text-orange-600">
+							<div class="font-bold text-app-600">
 								{{ result['type'] }}
 							</div>
 							<div v-for="(value, key) in result.input" :key="key" class="flex items-center">
@@ -133,7 +130,7 @@ const units = {
 							</div>
 							<hr class="border-0 h-2">
 							<div class="flex items-center">
-								<div class="text-sm text-left text-orange-600 font-bold w-28 ">
+								<div class="text-sm text-left text-app-600 font-bold w-28 ">
 									{{ result.output.label }}
 								</div>
 								<div class="text-left mr-1">
@@ -153,7 +150,7 @@ const units = {
 
 <style scoped>
 .router-link-exact-active {
-	background-color: rgb(251 146 60);
+	background-color: rgb(56 189 248);
 	color: #fff;
 }
 </style>

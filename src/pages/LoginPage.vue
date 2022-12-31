@@ -98,7 +98,7 @@ const register = () => {
           ※ 아직 구현중입니다. <br />로그인 / 회원가입은 추천하지 않습니다.
         </div>
         <div
-          class="text-2xl pt-4 pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
+          class="text-2xl pt-4 pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-yellow-400">
           로그인
         </div>
         <div class="space-y-4">
@@ -107,12 +107,12 @@ const register = () => {
         </div>
         <div class="py-4 flex space-x-1">
           <ButtonBox class="text-sm w-32" @click="register" color="red">회원가입</ButtonBox>
-          <ButtonBox class="w-full" @click="login" color="orange">로그인</ButtonBox>
+          <ButtonBox class="w-full" @click="login" color="app">로그인</ButtonBox>
         </div>
       </div>
       <div class="flex flex-col pb-8">
         <div
-          class="text-2xl pt-4 pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">
+          class="text-2xl pt-4 pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-yellow-400">
           간편 로그인
         </div>
         <div class="flex flex-wrap">
