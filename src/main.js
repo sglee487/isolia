@@ -17,6 +17,8 @@ import RegisterPage from './pages/RegisterPage.vue'
 import BoardPage from './pages/BoardPage.vue'
 import CalculatorPage from './pages/CalculatorPage.vue'
 import AccountSettingPage from './pages/AccountSettingPage.vue'
+import NotificationPage from './pages/NotificationPage.vue'
+import SettingsPage from './pages/SettingsPage.vue'
 
 import BoardComponent from './components/BoardComponent.vue'
 
@@ -62,6 +64,14 @@ const routes = [
         component: CalculatorPage
       }
     ]
+  },
+  {
+    path: '/notification',
+    component: NotificationPage,
+  },
+  {
+    path: '/settings',
+    component: SettingsPage,
   }
 ]
 

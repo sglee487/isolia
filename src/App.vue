@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {getCurrentInstance, onBeforeMount, ref } from 'vue'
+import { getCurrentInstance, onBeforeMount, ref } from 'vue'
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import Popper from 'vue3-popper'
 
@@ -167,13 +167,14 @@ const goBack = () => {
   </header>
 
   <header class="md:hidden fixed mt-4 mx-2">
-    <nav v-if="instance.proxy.$route.path !== '/'" class="cursor-pointer bg-gray-500 bg-opacity-10 rounded-full bg-transparent " @click="goBack()">
+    <nav v-if="instance.proxy.$route.path !== '/'"
+      class="cursor-pointer bg-gray-500 bg-opacity-10 rounded-full bg-transparent " @click="goBack()">
       <ChevronLeftIcon class="w-8 h-8 pr-1 text-app-400" />
     </nav>
   </header>
 
   <div class="flex justify-center pt-4 md:pt-16 pb-14 md:pb-0">
-    <router-view  />
+    <router-view />
   </div>
 
   <section id="bottom-navigation" class="md:hidden block fixed inset-x-0 bottom-0 z-10 bg-white shadow">
@@ -193,12 +194,17 @@ const goBack = () => {
         <CalculatorIcon class="w-6 h-6 inline-block mb-1" />
         <span class="tab tab-kategori block text-xs">계산기</span>
       </router-link>
-      <router-link to="/" id="nav"
-        class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1 text-transparent">
+      <!-- <router-link to="/notification" id="nav"
+        class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
         <BellIcon class="w-6 h-6 inline-block mb-1" />
-        <span class="tab tab-kategori block text-xs line-through">미구현</span>
-      </router-link>
-      <router-link to="/" id="nav"
+        <span class="tab tab-kategori block text-xs line-through">알림(미구현)</span>
+      </router-link> -->
+      <div id="nav"
+        class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
+        <BellIcon class="w-6 h-6 inline-block mb-1" />
+        <span class="tab tab-kategori block text-xs line-through">알림(미구현)</span>
+      </div>
+      <router-link to="/settings" id="nav"
         class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
         <UserIcon class="w-6 h-6 inline-block mb-1" />
         <span class="tab tab-kategori block text-xs">나의 솔리</span>

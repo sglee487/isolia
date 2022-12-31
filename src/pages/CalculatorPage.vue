@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref, watch } from 'vue'
 import {
-  TrashIcon
+	TrashIcon
 } from '@heroicons/vue/24/outline'
 
 import { useCalculateStore } from '@/stores/calculateStore'
@@ -83,7 +83,11 @@ const units = {
 					<BMI v-if="calculatorType === CalculatorTypes.BMI" />
 				</div>
 				<div v-else class="flex flex-col pl-8 pb-2">
-					<div class="md:hidden">
+					<div class="md:hidden flex flex-col">
+						<div
+							class="pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-app-200 text-2xl">
+							계산기
+						</div>
 						<ul class="grid grid-cols-2 gap-4 justify-items-center mb-2">
 							<li v-for="route in routes" :key="route.to" class="w-full">
 								<router-link :to="route.to"
@@ -111,7 +115,8 @@ const units = {
 								<div class="text-xs font-bold text-gray-600 pt-1">
 									{{ result['createdAt'] }}
 								</div>
-								<TrashIcon class="w-5 h-5 text-red-400 cursor-pointer" @click="calculateHistory.removeResult(index)" />
+								<TrashIcon class="w-5 h-5 text-red-400 cursor-pointer"
+									@click="calculateHistory.removeResult(index)" />
 							</div>
 							<hr class="h-1">
 							<div class="font-bold text-app-600">
