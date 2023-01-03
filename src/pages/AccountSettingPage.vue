@@ -67,6 +67,8 @@ const update = async () => {
       response.data.exp,
       response.data.login_type,
       response.data.email,
+      response.data.picture_32,
+      response.data.picture_96,
       response.data.display_name,
       response.data.role === 'admin'
     )

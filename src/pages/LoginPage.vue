@@ -23,11 +23,14 @@ const handleLoginSuccess = async (response: CredentialResponse) => {
     if (response.status === 200) {
       instance?.proxy?.$toast.success('로그인에 성공하였습니다.')
       instance?.proxy?.$router.back()
+      console.log(response)
       user.login(
         response.data.token,
         response.data.exp,
         response.data.login_type,
         response.data.email,
+        response.data.picture_32,
+        response.data.picture_96,
         response.data.display_name,
         response.data.role === 'admin'
       )
@@ -68,11 +71,14 @@ const login = async () => {
     if (response.status === 200) {
       instance?.proxy?.$toast.success('로그인에 성공하였습니다.')
       instance?.proxy?.$router.back()
+      console.log(response)
       user.login(
         response.data.token,
         response.data.exp,
         response.data.login_type,
         response.data.email,
+        response.data.picture_32,
+        response.data.picture_96,
         response.data.display_name,
         response.data.role === 'admin'
       )

@@ -83,6 +83,8 @@ onBeforeMount(async () => {
     response.data.exp,
     response.data.login_type,
     response.data.email,
+    response.data.picture_32,
+    response.data.picture_96,
     response.data.display_name,
     response.data.role === 'admin'
   )
@@ -97,6 +99,16 @@ const getRemainTime = () => {
   const diff = exp.getTime() - now.getTime()
   const remainTime = Math.floor(diff)
   return remainTime
+}
+
+const rootPaths = ['/', '/login', '/logout', '/user', '/register', '/board', '/calculator', '/notification', '/settings']
+const isRootPath = () => {
+  for (const path of rootPaths) {
+    if (instance?.proxy?.$route.path === path) {
+      return true
+    }
+  }
+  return false
 }
 
 const goBack = () => {
@@ -167,8 +179,8 @@ const goBack = () => {
   </header>
 
   <header class="md:hidden fixed mt-4 mx-2">
-    <nav v-if="instance.proxy.$route.path !== '/'"
-      class="cursor-pointer bg-gray-500 bg-opacity-10 rounded-full bg-transparent " @click="goBack()">
+    <nav v-if="!isRootPath()" class="cursor-pointer bg-gray-500 bg-opacity-10 rounded-full bg-transparent "
+      @click="goBack()">
       <ChevronLeftIcon class="w-8 h-8 pr-1 text-app-400" />
     </nav>
   </header>
@@ -206,7 +218,9 @@ const goBack = () => {
       </div>
       <router-link to="/settings" id="nav"
         class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
-        <UserIcon class="w-6 h-6 inline-block mb-1" />
+        <img :src="user.data.picture_32" v-if="user.isLogined()"
+          class="w-6 h-6 inline-block mb-1 rounded-full shadow-lg" />
+        <UserIcon v-else class="w-6 h-6 inline-block mb-1" />
         <span class="tab tab-kategori block text-xs">나의 솔리</span>
       </router-link>
     </div>
