@@ -81,7 +81,6 @@ const router = createRouter({
 })
 
 router.beforeEach((to) => {
-  console.log(to)
   const user = useUserStore()
   if (user.isLogined() && to.path === '/login') {
     return '/'

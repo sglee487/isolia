@@ -8,6 +8,7 @@ import { checkToken } from '@/apis/user'
 import ButtonBox from './components/ButtonBox.vue'
 
 import { useUserStore } from '@/stores/userStore'
+import { useSettingsStore } from '@/stores/settingsStore'
 
 import {
   ArrowLeftOnRectangleIcon,
@@ -23,6 +24,13 @@ import {
 
 const instance = getCurrentInstance()
 const user = useUserStore()
+const settings = useSettingsStore()
+
+if (settings.themeLightDark === 'dark' || (settings.themeLightDark === 'default' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+  document.documentElement.classList.add('dark')
+} else {
+  document.documentElement.classList.remove('dark')
+}
 
 // const userDisplayNameSubscribed = ref<string>('')
 // const userEmailSubscribed = ref<string>('')
@@ -189,7 +197,8 @@ const goBack = () => {
     <router-view />
   </div>
 
-  <section id="bottom-navigation" class="md:hidden block fixed inset-x-0 bottom-0 z-10 bg-white shadow">
+  <section id="bottom-navigation"
+    class="md:hidden block fixed inset-x-0 bottom-0 z-10 bg-neutral-50 dark:bg-neutral-900 shadow">
     <div id="tabs" class="flex justify-between">
       <router-link to="/" id="nav"
         class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
@@ -260,22 +269,6 @@ const goBack = () => {
     </div>
   </vue-final-modal>
 </template>
-
-<style>
-html,
-body,
-#app {
-  height: 100%;
-}
-
-header {
-  font-family: 'gothica1';
-}
-
-#app {
-  font-family: 'naverNeo';
-}
-</style>
 
 <style scoped>
 .h-content {
