@@ -198,7 +198,7 @@ const goBack = () => {
   </div>
 
   <section id="bottom-navigation"
-    class="md:hidden block fixed inset-x-0 bottom-0 z-10 bg-neutral-50 dark:bg-neutral-900 shadow">
+    class="md:hidden block fixed inset-x-0 bottom-0 z-10 bg-neutral-50 dark:bg-[#121212] shadow">
     <div id="tabs" class="flex justify-between">
       <router-link to="/" id="nav"
         class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
@@ -230,7 +230,7 @@ const goBack = () => {
         <img :src="user.data.picture_32" v-if="user.isLogined()"
           class="w-6 h-6 inline-block mb-1 rounded-full shadow-lg" />
         <UserIcon v-else class="w-6 h-6 inline-block mb-1" />
-        <span class="tab tab-kategori block text-xs">나의 솔리</span>
+        <span class="tab tab-kategori block text-xs">나의 이솔</span>
       </router-link>
     </div>
   </section>

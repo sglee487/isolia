@@ -85,13 +85,13 @@ const units = {
 				<div v-else class="flex flex-col pl-8 pb-2">
 					<div class="md:hidden flex flex-col">
 						<div
-							class="pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-app-200 text-2xl">
+							class="pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-500 to-app-300 dark:from-app-400 dark:to-app-200 text-2xl">
 							계산기
 						</div>
 						<ul class="grid grid-cols-2 gap-4 justify-items-center mb-2">
 							<li v-for="route in routes" :key="route.to" class="w-full">
 								<router-link :to="route.to"
-									class="block text-center py-2 hover:bg-app-500 hover:text-white rounded-xl bg-app-300">
+									class="block text-center py-2 hover:bg-app-500 hover:text-white rounded-xl bg-app-300 dark:bg-app-950">
 									{{ route.name }}
 									<br>
 									<small>{{ route.nameKo }}</small>
@@ -106,7 +106,7 @@ const units = {
 					</div>
 				</div>
 			</div>
-			<hr class="block md:hidden border-gray-300">
+			<hr class="block md:hidden border-gray-300 dark:border-gray-700">
 			<div class="flex flex-col w-full md:w-80 border-l border-gray-300 overflow-visible md:overflow-y-auto">
 				<ul v-for="(result, index) in calculateHistory.results" :key="index">
 					<li class="block text-center p-5 border-b border-gray-300">
@@ -115,8 +115,7 @@ const units = {
 								<div class="text-xs font-bold text-gray-600 pt-1">
 									{{ result['createdAt'] }}
 								</div>
-								<TrashIcon class="w-5 h-5 text-red-400 cursor-pointer"
-									@click="calculateHistory.removeResult(index)" />
+								<TrashIcon class="w-5 h-5 text-red-400 cursor-pointer" @click="calculateHistory.removeResult(index)" />
 							</div>
 							<hr class="h-1">
 							<div class="font-bold text-app-600">

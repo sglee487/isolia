@@ -86,7 +86,8 @@ watch(() => afterShuffleIV.value, async () => {
 
 <template>
 	<div class="flex flex-col">
-		<div class="pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-app-200">
+		<div
+			class="pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-500 to-app-300 dark:from-app-400 dark:to-app-200">
 			<div class="text-2xl">
 				Epinephrine Rate
 			</div>
@@ -102,7 +103,7 @@ watch(() => afterShuffleIV.value, async () => {
 			<InputBox label="혼합 후 수액량(ml)" v-model="afterShuffleIV" type="number" @keyup.enter="save" placeholder="0.00" />
 		</div>
 
-		<div class="md:hidden block fixed inset-x-0 text-center bottom-14 bg-white py-2">
+		<div class="md:hidden block fixed inset-x-0 text-center bottom-14 bg-white dark:bg-black py-2">
 			주입 속도는
 			<span class="font-bold text-app-600">
 				{{ calculated === null ? '0.00' : calculated.toFixed(2) }}

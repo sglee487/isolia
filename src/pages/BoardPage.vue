@@ -50,7 +50,7 @@ const routes = [
       <ul class="grid grid-cols-2 gap-4 justify-items-center mb-2">
         <li v-for="route in routes" :key="route.to" class="w-full">
           <router-link :to="route.to"
-            class="block text-center py-2 hover:bg-app-400 hover:text-white rounded-xl bg-app-200">
+            class="block text-center py-2 hover:bg-app-400 hover:text-white rounded-xl bg-app-200 dark:bg-app-950">
             {{ route.name }}
           </router-link>
         </li>
