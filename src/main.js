@@ -29,16 +29,13 @@ const $toast = useToast()
 
 const routes = [
   { path: '/', component: HomePage },
-  { path: '/login', component: LoginPage },
-  { path: '/logout', component: LogoutPage },
-  { path: '/user/edit', component: AccountSettingPage },
+  // { path: '/settings/user_edit', component: AccountSettingPage },
   { path: '/register', component: RegisterPage },
   {
     path: '/board',
     name: 'board',
-    component: BoardPage,
     children: [
-      { path: '' },
+      { path: '', component: BoardPage },
       {
         path: ':name',
         name: 'boardType',
@@ -57,8 +54,11 @@ const routes = [
   },
   {
     path: '/calculator',
-    component: CalculatorPage,
     children: [
+      {
+        path: '',
+        component: CalculatorPage
+      },
       {
         path: ':name',
         component: CalculatorPage
@@ -67,12 +67,23 @@ const routes = [
   },
   {
     path: '/notification',
-    component: NotificationPage,
+    component: NotificationPage
   },
   {
     path: '/settings',
-    component: SettingsPage,
-  }
+    children: [
+      {
+        path: '',
+        component: SettingsPage
+      },
+      {
+        path: 'user_edit',
+        component: AccountSettingPage
+      }
+    ]
+  },
+  { path: '/settings/login', component: LoginPage },
+  { path: '/settings/logout', component: LogoutPage }
 ]
 
 const router = createRouter({
@@ -86,7 +97,7 @@ router.beforeEach((to) => {
     return '/'
   }
 
-  if (!user.isLogined() && to.path === '/user/edit') {
+  if (!user.isLogined() && to.path === '/settings/user_edit') {
     return '/login'
   }
 

@@ -63,7 +63,7 @@ const units = {
 </script>
 
 <template>
-	<div class="flex flex-col w-full h-full pb-10 md:pb-0">
+	<div class="flex flex-col w-full h-full pb-24 md:pb-0">
 		<div class="flex flex-col md:flex-row justify-between w-full h-full">
 			<ul
 				class="h-full hidden md:flex flex-col items-center w-64 border-r border-gray-300 text-xl font-bold overflow-y-auto">
@@ -107,9 +107,10 @@ const units = {
 				</div>
 			</div>
 			<hr class="block md:hidden border-gray-300 dark:border-gray-700">
-			<div class="flex flex-col w-full md:w-80 border-l border-gray-300 overflow-visible md:overflow-y-auto">
+			<div
+				class="flex flex-col w-full md:w-80 md:border-l border-gray-300 dark:border-gray-700 overflow-visible md:overflow-y-auto">
 				<ul v-for="(result, index) in calculateHistory.results" :key="index">
-					<li class="block text-center p-5 border-b border-gray-300">
+					<li class="block text-center p-5 border-b border-gray-300 dark:border-gray-700">
 						<div class="flex flex-col items-start">
 							<div class="flex flex-row w-full justify-between">
 								<div class="text-xs font-bold text-gray-600 pt-1">

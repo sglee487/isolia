@@ -77,6 +77,7 @@ const update = async () => {
       instance?.proxy?.$toast.success('새로운 비밀번호로 로그인해주세요.')
       user.logout()
     }
+    instance?.proxy?.$router.back()
   } else {
     instance?.proxy?.$toast.error('사용자 정보 변경에 실패했습니다.')
   }

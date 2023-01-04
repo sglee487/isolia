@@ -5,7 +5,8 @@ import {
   Cog6ToothIcon,
   PresentationChartLineIcon,
   SunIcon,
-  MoonIcon
+  MoonIcon,
+  ArrowLeftOnRectangleIcon
 } from '@heroicons/vue/24/outline'
 import ThemeLightDarkVueIcon from '@/icons/ThemeLightDark.vue'
 
@@ -59,7 +60,7 @@ const changeLightDarkTheme = () => {
           <span class="font-bold text-ellipsis">{{ user.data.display_name }}</span>
           <span class="text-sm text-ellipsis">{{ user.data.email }}</span>
         </div>
-        <router-link to="/user/edit" class="flex-none">
+        <router-link to="/settings/user_edit" class="flex-none">
           <ButtonBox color="app" size="xs">
             <UserIcon class="w-4 inline-block mr-1" />수정
           </ButtonBox>
@@ -68,7 +69,7 @@ const changeLightDarkTheme = () => {
       <div v-else class="flex flex-row gap-2 p-5 items-start">
         <UserIcon
           class="flex-none w-14 h-14 inline-block mb-1 rounded-full shadow-md shadow-[#222222]/20 dark:shadow-[#f2f2f2]/20" />
-        <router-link to="/login" class="grow flex flex-col h-full justify-end space-y-1 ml-1">
+        <router-link to="/settings/login" class="grow flex flex-col h-full justify-end space-y-1 ml-1">
           <span class="font-bold text-ellipsis">로그인이 필요해요</span>
           <span class="text-sm text-ellipsis text-gray-400">(~˘▾˘)~</span>
         </router-link>
@@ -142,6 +143,13 @@ const changeLightDarkTheme = () => {
           </router-link> -->
         </div>
       </div>
+    </div>
+    <div class="grid justify-items-center">
+      <router-link to="/settings/logout" v-if="user.isLogined()">
+        <ButtonBox color="red" size="xs">
+          <ArrowLeftOnRectangleIcon class="w-4 inline-block mr-1" />로그아웃
+        </ButtonBox>
+      </router-link>
     </div>
   </div>
 

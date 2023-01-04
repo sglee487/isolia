@@ -64,7 +64,7 @@ const navRoutes = [
 
 const modalRoutes = [
   {
-    to: '/user/edit',
+    to: '/settings/user_edit',
     name: 'My Account',
     icon: CogIcon
   },
@@ -109,7 +109,7 @@ const getRemainTime = () => {
   return remainTime
 }
 
-const rootPaths = ['/', '/login', '/logout', '/user', '/register', '/board', '/calculator', '/notification', '/settings']
+const rootPaths = ['/', '/logout', '/user', '/register', '/board', '/calculator', '/notification', '/settings']
 const isRootPath = () => {
   for (const path of rootPaths) {
     if (instance?.proxy?.$route.path === path) {
@@ -126,8 +126,8 @@ const goBack = () => {
 </script>
 
 <template>
-  <header class="hidden md:block fixed w-full bg-[#f5f5f5]">
-    <nav class="border-b border-gray-300">
+  <header class="hidden md:block fixed w-full bg-[#f5f5f5] dark:bg-[#121212]">
+    <nav class="border-b border-gray-300 dark:border-gray-700">
       <div class="h-16 ml-4 flex justify-between items-center">
         <router-link to="/" class="hidden md:inline-block p-1 cursor-pointer rounded-md">
           <div class="flex flex-row space-x-2 items-center">
@@ -193,7 +193,7 @@ const goBack = () => {
     </nav>
   </header>
 
-  <div class="flex justify-center pt-4 md:pt-16 pb-14 md:pb-0">
+  <div class="md:pt-16">
     <router-view />
   </div>
 
@@ -249,7 +249,7 @@ const goBack = () => {
 
   <vue-final-modal v-model="profileModal" :hide-overlay="true">
     <div
-      class="mb-12 w-64 bg-[#f0f0f0] rounded-xl mx-2 divide-y divide-gray-300 shadow-md absolute right-3 top-20 max-w-xs">
+      class="mb-12 w-64 bg-neutral-100 dark:bg-neutral-900 rounded-xl mx-2 divide-y divide-gray-300 dark:divide-gray-400 shadow-md absolute right-3 top-20 max-w-xs">
       <div class="flex flex-row gap-2 p-5 items-start">
         <UserIcon class="w-12 h-12" />
         <div class="flex flex-col">
@@ -277,11 +277,22 @@ const goBack = () => {
 
 #menu.router-link-active,
 #menu.router-link-exact-active {
+  border-bottom: 2px solid rgb(14 165 233);
+}
+
+#menu.router-link-active.dark,
+#menu.router-link-exact-active.dark {
   border-bottom: 2px solid rgb(56 189 248);
 }
 
 #nav.router-link-active,
 #nav.router-link-exact-active {
+  border-bottom: 2px solid rgb(14 165 233);
+  /* #4EBDE5 */
+}
+
+#nav.router-link-active.dark,
+#nav.router-link-exact-active.dark {
   border-bottom: 2px solid rgb(56 189 248);
   /* #4EBDE5 */
 }
@@ -291,11 +302,22 @@ const goBack = () => {
   #menu.router-link-active,
   #menu.router-link-exact-active #menu {
     color: white;
+    background-color: rgb(14 165 233);
+  }
+
+  #menu.router-link-active.dark,
+  #menu.router-link-exact-active.dark #menu.dark {
+    color: white;
     background-color: rgb(56 189 248);
   }
 
   #nav.router-link-active,
   #nav.router-link-exact-active #nav {
+    color: rgb(14 165 233);
+  }
+
+  #nav.router-link-active.dark,
+  #nav.router-link-exact-active.dark #nav.dark {
     color: rgb(56 189 248);
   }
 }

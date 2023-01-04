@@ -1,5 +1,11 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref, watch } from 'vue'
+import {
+  ChevronDownIcon,
+  PlusCircleIcon
+} from '@heroicons/vue/24/outline'
+
+import { VueFinalModal } from 'vue-final-modal'
 
 import BoardComponent from '@/components/BoardComponent.vue'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
@@ -19,6 +25,7 @@ const BoardNames = {
 const instance = getCurrentInstance()
 
 const boardType = ref<any>()
+const boardMenuModal = ref<boolean>(false)
 
 const routerParams = instance.proxy.$route.params
 
@@ -30,31 +37,52 @@ watch(() => instance.proxy.$route.params.name, async (name) => {
   boardType.value = name
 })
 
-const routes = [
-  {
-    to: '/board/notice',
-    name: '공지게시판'
-  },
-  {
-    to: '/board/suggestion',
-    name: '건의게시판'
-  }
+// const routes = [
+//   {
+//     to: '/board/notice',
+//     name: '공지게시판'
+//   },
+//   {
+//     to: '/board/suggestion',
+//     name: '건의게시판'
+//   }
+// ]
+
+const boardMenus = [
+  '공지', '건의', '자유'
 ]
 
 </script>
 
 <template>
-  <div class="w-2/3">
-    <BoardComponent v-if="boardType" :boardName="BoardNames[boardType]" />
-    <div v-else>
-      <ul class="grid grid-cols-2 gap-4 justify-items-center mb-2">
-        <li v-for="route in routes" :key="route.to" class="w-full">
-          <router-link :to="route.to"
-            class="block text-center py-2 hover:bg-app-400 hover:text-white rounded-xl bg-app-200 dark:bg-app-950">
-            {{ route.name }}
-          </router-link>
-        </li>
-      </ul>
+  <div class="p-4">
+    <header
+      class="flex flex-row justify-between items-center font-extrabold pb-2 border-b border-gray-300 dark:border-gray-700">
+      <div class="relative">
+        <button class="rounded-md" @click="boardMenuModal = true">
+          전체
+          <ChevronDownIcon class="w-5 h-5 inline-block" />
+        </button>
+        <vue-final-modal v-model="boardMenuModal" :hide-overlay="true">
+          <div
+            class="absolute w-28 top-12 left-2 p-2 bg-neutral-100 dark:bg-neutral-900 rounded-xl divide-y divide-gray-300 dark:divide-gray-400 space-y-1 shadow-md">
+            <div>
+              전체
+            </div>
+            <ul class="space-y-1">
+              <il v-for="boardMenu in boardMenus" :key="boardMenu" class="block my-1">
+                {{ boardMenu }}
+              </il>
+            </ul>
+          </div>
+        </vue-final-modal>
+      </div>
+      <div class="pr-2">
+        <PlusCircleIcon class="w-8 h-8" />
+      </div>
+    </header>
+    <div>
+      hji
     </div>
   </div>
 </template>
