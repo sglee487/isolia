@@ -4,11 +4,13 @@ import VueCountdown from '@chenfengyuan/vue-countdown'
 import Popper from 'vue3-popper'
 
 import { checkToken } from '@/apis/user'
+import { useUserStore } from '@/stores/userStore'
+import { useSettingsStore } from '@/stores/settingsStore'
+import { axiosErrorHandler } from '@/handler/axiosErrorHandler'
+
 
 import ButtonBox from './components/ButtonBox.vue'
 
-import { useUserStore } from '@/stores/userStore'
-import { useSettingsStore } from '@/stores/settingsStore'
 
 import {
   ArrowLeftOnRectangleIcon,
@@ -79,23 +81,26 @@ onBeforeMount(async () => {
   if (!user.isLogined()) {
     return
   }
-  const response = await checkToken(user.data.token)
-
-  if (response.status !== 200) {
+  console.log(user.data.token)
+  try {
+    const response = await checkToken(user.data.token)
+    console.log(response)
+  } catch (error) {
+    axiosErrorHandler(instance, error)
+    console.log(error)
     user.logout()
-    return
   }
 
-  user.login(
-    response.data.token,
-    response.data.exp,
-    response.data.login_type,
-    response.data.email,
-    response.data.picture_32,
-    response.data.picture_96,
-    response.data.display_name,
-    response.data.role === 'admin'
-  )
+  // user.login(
+  //   response.data.token,
+  //   response.data.exp,
+  //   response.data.login_type,
+  //   response.data.email,
+  //   response.data.picture_32,
+  //   response.data.picture_96,
+  //   response.data.display_name,
+  //   response.data.role === 'admin'
+  // )
 })
 
 const getRemainTime = () => {

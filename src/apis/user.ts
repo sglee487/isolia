@@ -46,6 +46,7 @@ const checkToken = async (userToken: string) => {
       Authorization: `Bearer ${userToken}`,
     }
   })
+  console.log(response)
   return response
 }
 
