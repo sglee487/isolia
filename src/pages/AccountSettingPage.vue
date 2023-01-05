@@ -96,11 +96,11 @@ const update = async () => {
         </div>
         <div class="space-y-4">
           <div>
-            <div>
-              프로파일 사진 변경
+            <div class="font-bold text-lg">
+              프로필 사진 변경
             </div>
-            <div class="flex flex-row space-x-2">
-              <PlusCircleIcon class="w-12 h-12" />
+            <PlusCircleIcon class="w-12 h-12" />
+            <div class="w-72 flex flex-wrap space-x-2">
               <button v-if="customPicture"
                 class="w-12 h-12 rounded-full cursor-pointer focus:ring-4 ring-black dark:ring-white overflow-hidden">
                 <img :src="customPicture.toString" />

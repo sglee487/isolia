@@ -23,6 +23,7 @@ import {
   CogIcon,
   ChevronLeftIcon
 } from '@heroicons/vue/24/outline'
+import { AxiosError } from 'axios'
 
 const instance = getCurrentInstance()
 const user = useUserStore()
@@ -81,14 +82,11 @@ onBeforeMount(async () => {
   if (!user.isLogined()) {
     return
   }
-  console.log(user.data.token)
   try {
     const response = await checkToken(user.data.token)
-    console.log(response)
   } catch (error) {
-    axiosErrorHandler(instance, error)
-    console.log(error)
-    user.logout()
+    axiosErrorHandler(instance, error as AxiosError)
+    // user.logout()
   }
 
   // user.login(
