@@ -97,35 +97,32 @@ const register = () => {
 </script>
 
 <template>
-  <div>
-    <div class="w-96 p-10">
-      <div class="flex flex-col pb-4">
-        <div class="text-xl font-bold text-red-500">
-          ※ 아직 구현중입니다. <br />로그인 / 회원가입은 추천하지 않습니다.
-        </div>
-        <div
-          class="text-2xl pt-4 pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-yellow-400">
-          로그인
-        </div>
-        <div class="space-y-4">
-          <InputBox label="이메일" v-model="email" id="inputEmail" @keyup.enter="login" />
-          <InputBox label="비밀번호" v-model="password" id="inputPassword" type="password" @keyup.enter="login" />
-        </div>
-        <div class="py-4 flex space-x-1">
-          <ButtonBox class="text-sm w-32" @click="register" color="red">회원가입</ButtonBox>
-          <ButtonBox class="w-full" @click="login" color="app">로그인</ButtonBox>
-        </div>
+  <div class="p-10">
+    <div class="flex flex-col pb-4">
+      <div class="text-xl font-bold text-red-500">
+        ※ 아직 구현중입니다. <br />로그인 / 회원가입은 추천하지 않습니다.
       </div>
-      <div class="flex flex-col pb-8">
-        <div
-          class="text-2xl pt-4 pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-yellow-400">
-          간편 로그인
-        </div>
-        <div class="flex flex-wrap">
-          <GoogleSignInButton @success="handleLoginSuccess" @error="handleLoginError"></GoogleSignInButton>
-        </div>
+      <div
+        class="text-2xl pt-4 pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-yellow-400">
+        로그인
+      </div>
+      <div class="space-y-4">
+        <InputBox label="이메일" v-model="email" id="inputEmail" @keyup.enter="login" />
+        <InputBox label="비밀번호" v-model="password" id="inputPassword" type="password" @keyup.enter="login" />
+      </div>
+      <div class="py-4 flex space-x-1">
+        <ButtonBox class="text-sm w-32" @click="register" color="red">회원가입</ButtonBox>
+        <ButtonBox class="w-full" @click="login" color="app">로그인</ButtonBox>
+      </div>
+    </div>
+    <div class="flex flex-col pb-8">
+      <div
+        class="text-2xl pt-4 pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-yellow-400">
+        간편 로그인
+      </div>
+      <div class="flex flex-wrap">
+        <GoogleSignInButton @success="handleLoginSuccess" @error="handleLoginError"></GoogleSignInButton>
       </div>
     </div>
   </div>
-
 </template>

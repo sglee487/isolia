@@ -34,7 +34,7 @@ const value = computed<string | number>({
       class="inline-block bg-zinc-50 dark:bg-zinc-800 border ring-app-300 dark:ring-app-500 text-gray-900 dark:text-gray-100 text-sm rounded-b-lg ring-1 outline-none focus:ring-app-400 dark:focus:ring-app-600 p-2.5"
       :class="[
         props.label ? 'rounded-t-none' : 'rounded-t-lg',
-        props.disabled ? 'bg-gray-200' : ''
+        props.disabled ? 'bg-gray-200 dark:bg-gray-500' : ''
       ]" v-model="value" :id="props.inputId" :type="props.type" :placeholder="props.placeholder"
       :readonly="props.readonly" :disabled="props.disabled">
     <slot />

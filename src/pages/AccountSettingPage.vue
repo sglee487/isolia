@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref } from 'vue'
 import {
-  ArrowPathRoundedSquareIcon
+  ArrowPathRoundedSquareIcon,
+  PlusCircleIcon
 } from '@heroicons/vue/24/outline'
 
 import InputBox from '@/components/InputBox.vue'
@@ -13,10 +14,11 @@ import { useUserStore } from '@/stores/userStore'
 
 import { updateUser } from '@/apis/user'
 import { getGenerateRandomName } from '@/utils/generateName'
-
+import { defaultProfilePicture96List } from '@/utils/defaultProfilePictureList'
 const instance = getCurrentInstance()
 const user = useUserStore()
 
+const customPicture = ref<string | boolean>(false)
 const email = user.data.email
 const displayName = ref<string>(user.data.display_name)
 const password = ref<string>('')
@@ -86,13 +88,29 @@ const update = async () => {
 
 <template>
   <div>
-    <div class="w-96 p-10">
+    <div class="p-10">
       <div class="flex flex-col pb-4">
         <div
           class="text-2xl pt-4 pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-yellow-400">
           사용자 변경
         </div>
         <div class="space-y-4">
+          <div>
+            <div>
+              프로파일 사진 변경
+            </div>
+            <div class="flex flex-row space-x-2">
+              <PlusCircleIcon class="w-12 h-12" />
+              <button v-if="customPicture"
+                class="w-12 h-12 rounded-full cursor-pointer focus:ring-4 ring-black dark:ring-white overflow-hidden">
+                <img :src="customPicture.toString" />
+              </button>
+              <button v-for="picture in defaultProfilePicture96List" :key="picture"
+                class="w-12 h-12 rounded-full cursor-pointer focus:ring-4 ring-black dark:ring-white overflow-hidden">
+                <img :src="picture" />
+              </button>
+            </div>
+          </div>
           <InputBox label="이메일" v-model="email" id="inputEmail" :readonly="true" :disabled="true" />
           <div class="relative">
             <InputBox class="w-full" label="별명" v-model="displayName" @keyup.enter="update" />

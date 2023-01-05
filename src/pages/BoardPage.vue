@@ -70,9 +70,9 @@ const boardMenus = [
               전체
             </div>
             <ul class="space-y-1">
-              <il v-for="boardMenu in boardMenus" :key="boardMenu" class="block my-1">
+              <li v-for="boardMenu in boardMenus" :key="boardMenu" class="block my-1">
                 {{ boardMenu }}
-              </il>
+              </li>
             </ul>
           </div>
         </vue-final-modal>
