@@ -18,6 +18,7 @@ import { defaultProfilePicture96List } from '@/utils/defaultProfilePictureList'
 const instance = getCurrentInstance()
 const user = useUserStore()
 
+const uploadedPictureList = ref<string[]>([])
 const customPicture = ref<string | boolean>(false)
 const email = user.data.email
 const displayName = ref<string>(user.data.display_name)
@@ -87,49 +88,50 @@ const update = async () => {
 </script>
 
 <template>
-  <div>
-    <div class="p-10">
-      <div class="flex flex-col pb-4">
-        <div
-          class="text-2xl pt-4 pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-yellow-400">
-          사용자 변경
-        </div>
-        <div class="space-y-4">
-          <div>
-            <div class="font-bold text-lg">
-              프로필 사진 변경
-            </div>
+  <div class="p-10 flex justify-center">
+    <div class="flex flex-col pb-4">
+      <div
+        class="text-2xl pt-4 pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-yellow-400">
+        사용자 변경
+      </div>
+      <div class="space-y-4">
+        <div>
+          <div class="font-bold text-lg">
+            프로필 사진 변경
+          </div>
+          <div class="grid grid-cols-5 gap-2">
+            <button v-for="picture in defaultProfilePicture96List" :key="picture"
+              class="w-12 h-12 rounded-full cursor-pointer focus:ring-4 ring-black dark:ring-white overflow-hidden">
+              <img :src="picture" />
+            </button>
+            <button autofocus
+              class="w-12 h-12 rounded-full cursor-pointer focus:ring-4 ring-black dark:ring-white overflow-hidden">
+              <img :src="user.data.picture_96" />
+            </button>
+            <button v-for="picture in uploadedPictureList" :key="picture"
+              class="w-12 h-12 rounded-full cursor-pointer focus:ring-4 ring-black dark:ring-white overflow-hidden">
+              <img :src="picture" />
+            </button>
             <PlusCircleIcon class="w-12 h-12" />
-            <div class="w-72 flex flex-wrap space-x-2">
-              <button v-if="customPicture"
-                class="w-12 h-12 rounded-full cursor-pointer focus:ring-4 ring-black dark:ring-white overflow-hidden">
-                <img :src="customPicture.toString" />
-              </button>
-              <button v-for="picture in defaultProfilePicture96List" :key="picture"
-                class="w-12 h-12 rounded-full cursor-pointer focus:ring-4 ring-black dark:ring-white overflow-hidden">
-                <img :src="picture" />
-              </button>
-            </div>
-          </div>
-          <InputBox label="이메일" v-model="email" id="inputEmail" :readonly="true" :disabled="true" />
-          <div class="relative">
-            <InputBox class="w-full" label="별명" v-model="displayName" @keyup.enter="update" />
-            <ArrowPathRoundedSquareIcon
-              class="absolute w-8 bottom-1 right-1 cursor-pointer p-1 text-app-600 text-sm font-bold"
-              @click="generateRandomName" />
-          </div>
-          <div v-if="user.data.login_type === 'email'">
-            <InputBox label="현재 비밀번호" v-model="password" id="inputPassword" type="password" @keyup.enter="update" />
-            <InputBox label="새 비밀번호" v-model="newPassword" id="inputNewPassword" type="password" />
-            <InputBox label="새 비밀번호 확인" v-model="newPasswordConfirm" id="inputNewPasswordConfirm" type="password"
-              @keyup.enter="update" />
           </div>
         </div>
-        <div class="py-4 flex">
-          <ButtonBox class="w-full" @click="update" color="app">저장</ButtonBox>
+        <InputBox label="이메일" v-model="email" id="inputEmail" :readonly="true" :disabled="true" />
+        <div class="relative">
+          <InputBox class="w-full" label="별명" v-model="displayName" @keyup.enter="update" />
+          <ArrowPathRoundedSquareIcon
+            class="absolute w-8 bottom-1 right-1 cursor-pointer p-1 text-app-600 text-sm font-bold"
+            @click="generateRandomName" />
         </div>
+        <div v-if="user.data.login_type === 'email'">
+          <InputBox label="현재 비밀번호" v-model="password" id="inputPassword" type="password" @keyup.enter="update" />
+          <InputBox label="새 비밀번호" v-model="newPassword" id="inputNewPassword" type="password" />
+          <InputBox label="새 비밀번호 확인" v-model="newPasswordConfirm" id="inputNewPasswordConfirm" type="password"
+            @keyup.enter="update" />
+        </div>
+      </div>
+      <div class="py-4 flex">
+        <ButtonBox class="w-full" @click="update" color="app">저장</ButtonBox>
       </div>
     </div>
   </div>
-
 </template>
