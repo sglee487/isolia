@@ -49,9 +49,10 @@ const checkToken = async (userToken: string) => {
   return response
 }
 
-const updateUser = async (user: any, displayName: string, password: string, newPassword: string) => {
+const updateUser = async (user: any, picture: string, displayName: string, password: string, newPassword: string) => {
   const data = {
     'login_type': user.data.login_type,
+    'picture': picture,
     'email': user.data.email,
     'display_name': displayName,
     'password': password,

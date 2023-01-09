@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getCurrentInstance, ref } from 'vue'
+import { getCurrentInstance, ref, onMounted } from 'vue'
 import {
   ArrowPathRoundedSquareIcon,
   PlusCircleIcon
@@ -18,13 +18,20 @@ import { defaultProfilePicture96List } from '@/utils/defaultProfilePictureList'
 const instance = getCurrentInstance()
 const user = useUserStore()
 
-const uploadedPictureList = ref<string[]>([])
-const customPicture = ref<string | boolean>(false)
+const candidatePictures = [...defaultProfilePicture96List]
 const email = user.data.email
 const displayName = ref<string>(user.data.display_name)
 const password = ref<string>('')
 const newPassword = ref<string>('')
 const newPasswordConfirm = ref<string>('')
+
+candidatePictures.push(user.data.picture_96)
+const selectedPictureIndex = ref<number>(candidatePictures.indexOf(user.data.picture_96))
+
+// TODO: later
+// const uploadProfilePicture = () => {
+
+// }
 
 const generateRandomName = () => {
   displayName.value = getGenerateRandomName()
@@ -60,6 +67,7 @@ const update = async () => {
 
   const response = await updateUser(
     user,
+    candidatePictures[selectedPictureIndex.value],
     displayName.value,
     password.value,
     newPassword.value
@@ -95,25 +103,12 @@ const update = async () => {
         사용자 변경
       </div>
       <div class="space-y-4">
-        <div>
-          <div class="font-bold text-lg">
-            프로필 사진 변경
-          </div>
-          <div class="grid grid-cols-5 gap-2">
-            <button v-for="picture in defaultProfilePicture96List" :key="picture"
-              class="w-12 h-12 rounded-full cursor-pointer focus:ring-4 ring-black dark:ring-white overflow-hidden">
-              <img :src="picture" />
-            </button>
-            <button autofocus
-              class="w-12 h-12 rounded-full cursor-pointer focus:ring-4 ring-black dark:ring-white overflow-hidden">
-              <img :src="user.data.picture_96" />
-            </button>
-            <button v-for="picture in uploadedPictureList" :key="picture"
-              class="w-12 h-12 rounded-full cursor-pointer focus:ring-4 ring-black dark:ring-white overflow-hidden">
-              <img :src="picture" />
-            </button>
-            <PlusCircleIcon class="w-12 h-12" />
-          </div>
+        <div class="grid grid-cols-5 gap-2">
+          <img v-for="picture, index in candidatePictures" :key="picture"
+            :class="selectedPictureIndex === index ? 'ring-4 ring-black dark:ring-white' : ''"
+            class="w-12 h-12 rounded-full cursor-pointer overflow-hidden" :src="picture"
+            @click="selectedPictureIndex = index" />
+          <!-- <PlusCircleIcon class="w-12 h-12" @click="uploadProfilePicture" /> -->
         </div>
         <InputBox label="이메일" v-model="email" id="inputEmail" :readonly="true" :disabled="true" />
         <div class="relative">
