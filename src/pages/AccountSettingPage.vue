@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { get } from '@vueuse/core'
 import { getCurrentInstance, ref, onMounted } from 'vue'
 import {
   ArrowPathRoundedSquareIcon,
@@ -38,25 +39,16 @@ const newPasswordConfirm = ref<string>('')
 
 const cropImageOpen = ref<boolean>(false)
 
-const setCropImageOpen = (value: boolean) => {
-  cropImageOpen.value = value
+const openCropImage = () => {
+  cropImageOpen.value = true
+}
+
+const closeCropImage = () => {
+  cropImageOpen.value = false
 }
 
 candidatePictures.push(user.data.picture_96)
 const selectedPictureIndex = ref<number>(candidatePictures.indexOf(user.data.picture_96))
-
-// TODO: later
-const uploadProfilePicture = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  const file = target.files?.item(0)
-
-  if (!file) {
-    return
-  }
-
-  // await loadFromFile(file)
-  // cropImageOpen.value = true
-}
 
 const generateRandomName = () => {
   displayName.value = getGenerateRandomName()
@@ -141,16 +133,99 @@ const onResize = (resizeEvent) => {
 // 				maximum: instance.proxy.aspectRatio || instance.proxy.maxAspectRatio,
 // 			}
 // 		}
-async function onFileInput(event: Event) {
-  const target = event.target as HTMLInputElement
-  const file = target.files?.item(0)
 
-  if (!file) {
-    return
+const fileImage = ref({
+  src: null,
+  type: null
+})
+
+function getMimeType(file, fallback = null) {
+  const byteArray = (new Uint8Array(file)).subarray(0, 4);
+  let header = '';
+  for (let i = 0; i < byteArray.length; i++) {
+    header += byteArray[i].toString(16);
   }
-
-  // await loadFromFile(file)
+  switch (header) {
+    case "89504e47":
+      return "image/png";
+    case "47494638":
+      return "image/gif";
+    case "ffd8ffe0":
+    case "ffd8ffe1":
+    case "ffd8ffe2":
+    case "ffd8ffe3":
+    case "ffd8ffe8":
+      return "image/jpeg";
+    default:
+      return fallback;
+  }
 }
+
+const crop = () => {
+  const { canvas } = instance.proxy.$refs.cropper.getResult();
+  canvas.toBlob((blob) => {
+    // Do something with blob: upload to a server, download and etc.
+  }, fileImage.value.type);
+}
+
+const reset = () => {
+  fileImage.value = {
+    src: null,
+    type: null
+  }
+}
+
+const loadImage = (event) => {
+  // Reference to the DOM input element
+  const { files } = event.target;
+  console.log(files)
+  // Ensure that you have a file before attempting to read it
+  if (files && files[0]) {
+    // openCropImage()
+    // 1. Revoke the object URL, to allow the garbage collector to destroy the uploaded before file
+    if (fileImage.value.src) {
+      URL.revokeObjectURL(fileImage.value.src)
+    }
+    // 2. Create the blob link to the file to optimize performance:
+    const blob = URL.createObjectURL(files[0]);
+
+    // 3. The steps below are designated to determine a file mime type to use it during the
+    // getting of a cropped image from the canvas. You can replace it them by the following string,
+    // but the type will be derived from the extension and it can lead to an incorrect result:
+    //
+    // this.image = {
+    //    src: blob;
+    //    type: files[0].type
+    // }
+
+    // Create a new FileReader to read this image binary data
+    const reader = new FileReader();
+    // Define a callback function to run, when FileReader finishes its job
+    reader.onload = (e) => {
+      // Note: arrow function used here, so that "this.image" refers to the image of Vue component
+      fileImage.value = {
+        // Set the image source (it will look like blob:http://example.com/2c5270a5-18b5-406e-a4fb-07427f5e7b94)
+        src: blob,
+        // Determine the image type to preserve it during the extracting the image from canvas:
+        type: getMimeType(e.target.result, files[0].type),
+      };
+    };
+    reader.onloadend = () => {
+      openCropImage()
+      event.target.value = ''
+    }
+    // Start the reader job - read file as a data url (base64 format)
+    reader.readAsArrayBuffer(files[0]);
+  }
+}
+
+// const destroyed = () => {
+//   // Revoke the object URL, to allow the garbage collector to destroy the uploaded before file
+//   if (image.value.src) {
+//     URL.revokeObjectURL(image.value.src)
+//   }
+// }
+
 </script>
 
 <template>
@@ -166,33 +241,12 @@ async function onFileInput(event: Event) {
             :class="selectedPictureIndex === index ? 'ring-4 ring-black dark:ring-white' : ''"
             class="w-12 h-12 rounded-full cursor-pointer overflow-hidden" :src="picture"
             @click="selectedPictureIndex = index" />
-          <PlusCircleIcon class="w-12 h-12" @click="uploadProfilePicture" />
-          <input type="file" ref="fileInput" multiple="true" placeholder="Choose files" accept=""
-            @change="onFileInput" />
-          <input type="file" accept="image/*" />
-
+          <label
+            class="w-12 h-12 cursor-pointer hover:text-gray-500 dark:hover:text-gray-400 rounded-md focus-within:ring-2 focus-within:ring-pink-300 transform transition">
+            <PlusCircleIcon />
+            <input accept="image/png, image/gif, image/jpeg" type="file" class="sr-only" @change="loadImage" />
+          </label>
         </div>
-        <label for="file-upload" :class="[
-          'group flex items-center justify-center',
-          'rounded border-gray-700 border shadow-sm bg-gray-800',
-          'h-full py-2.5 px-12',
-          'cursor-pointer',
-          'hover:bg-gray-700',
-          'focus-within:ring-2 focus-within:ring-pink-300',
-          'transform transition'
-        ]">
-          <div class="flex items-center space-x-2 text-center">
-            <icon name="uil:image-upload" class="w-5 h-5 text-gray-500" />
-            <div class="flex">
-              <div
-                class="relative text-sm font-medium text-gray-400 transition rounded-md cursor-pointer focus-within:outline-none">
-                <span>Use a local image</span>
-                <input id="file-upload" name="file-upload" accept="image/*" type="file" class="sr-only"
-                  @change="onFileInput" />
-              </div>
-            </div>
-          </div>
-        </label>
         <InputBox label="이메일" v-model="email" id="inputEmail" :readonly="true" :disabled="true" />
         <div class="relative">
           <InputBox class="w-full" label="별명" v-model="displayName" @keyup.enter="update" />
@@ -213,7 +267,7 @@ async function onFileInput(event: Event) {
     </div>
   </div>
   <TransitionRoot appear :show="cropImageOpen" as="template">
-    <Dialog as="div" @close="setCropImageOpen(false)" class="relative z-10">
+    <Dialog as="div" @close="closeCropImage" class="relative z-10">
       <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100"
         leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
         <div class="fixed inset-0 bg-black bg-opacity-25" />
@@ -229,12 +283,14 @@ async function onFileInput(event: Event) {
               <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
                 사진 업로드
               </DialogTitle>
-              <cropper src='https://images.pexels.com/photos/4323307/pexels-photo-4323307.jpeg' @change="change" />
+              <cropper ref="cropper" :src='fileImage.src' :stencil-props="{
+                'circle': true,
+              }" />
 
               <div class="mt-4">
                 <button type="button"
                   class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                  @click="setCropImageOpen(false)">
+                  @click="closeCropImage">
                   Got it, thanks!
                 </button>
               </div>
