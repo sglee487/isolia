@@ -4,6 +4,17 @@ import {
   ArrowPathRoundedSquareIcon,
   PlusCircleIcon
 } from '@heroicons/vue/24/outline'
+import {
+  TransitionRoot,
+  TransitionChild,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  DialogDescription
+} from '@headlessui/vue'
+
+import { Cropper } from 'vue-advanced-cropper';
+import 'vue-advanced-cropper/dist/style.css';
 
 import InputBox from '@/components/InputBox.vue'
 import ButtonBox from '@/components/ButtonBox.vue'
@@ -25,13 +36,27 @@ const password = ref<string>('')
 const newPassword = ref<string>('')
 const newPasswordConfirm = ref<string>('')
 
+const cropImageOpen = ref<boolean>(false)
+
+const setCropImageOpen = (value: boolean) => {
+  cropImageOpen.value = value
+}
+
 candidatePictures.push(user.data.picture_96)
 const selectedPictureIndex = ref<number>(candidatePictures.indexOf(user.data.picture_96))
 
 // TODO: later
-// const uploadProfilePicture = () => {
+const uploadProfilePicture = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.item(0)
 
-// }
+  if (!file) {
+    return
+  }
+
+  // await loadFromFile(file)
+  // cropImageOpen.value = true
+}
 
 const generateRandomName = () => {
   displayName.value = getGenerateRandomName()
@@ -93,6 +118,39 @@ const update = async () => {
     instance?.proxy?.$toast.error('사용자 정보 변경에 실패했습니다.')
   }
 }
+
+
+const change = ({ coordinates, canvas }) => {
+  console.log(coordinates, canvas);
+}
+const onMove = (moveEvent) => {
+  instance.proxy.$emit('move', moveEvent);
+}
+const onMoveEnd = () => {
+  instance.proxy.$emit('moveEnd');
+}
+const onResize = (resizeEvent) => {
+  instance.proxy.$emit('resize', resizeEvent);
+}
+// const onResizeEnd = () => {
+//   instance.proxy.$emit('resizeEnd');
+// 		}
+// const aspectRatios = () => {
+// 			return {
+// 				minimum: instance.proxy.aspectRatio || instance.proxy.minAspectRatio,
+// 				maximum: instance.proxy.aspectRatio || instance.proxy.maxAspectRatio,
+// 			}
+// 		}
+async function onFileInput(event: Event) {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.item(0)
+
+  if (!file) {
+    return
+  }
+
+  // await loadFromFile(file)
+}
 </script>
 
 <template>
@@ -108,8 +166,33 @@ const update = async () => {
             :class="selectedPictureIndex === index ? 'ring-4 ring-black dark:ring-white' : ''"
             class="w-12 h-12 rounded-full cursor-pointer overflow-hidden" :src="picture"
             @click="selectedPictureIndex = index" />
-          <!-- <PlusCircleIcon class="w-12 h-12" @click="uploadProfilePicture" /> -->
+          <PlusCircleIcon class="w-12 h-12" @click="uploadProfilePicture" />
+          <input type="file" ref="fileInput" multiple="true" placeholder="Choose files" accept=""
+            @change="onFileInput" />
+          <input type="file" accept="image/*" />
+
         </div>
+        <label for="file-upload" :class="[
+          'group flex items-center justify-center',
+          'rounded border-gray-700 border shadow-sm bg-gray-800',
+          'h-full py-2.5 px-12',
+          'cursor-pointer',
+          'hover:bg-gray-700',
+          'focus-within:ring-2 focus-within:ring-pink-300',
+          'transform transition'
+        ]">
+          <div class="flex items-center space-x-2 text-center">
+            <icon name="uil:image-upload" class="w-5 h-5 text-gray-500" />
+            <div class="flex">
+              <div
+                class="relative text-sm font-medium text-gray-400 transition rounded-md cursor-pointer focus-within:outline-none">
+                <span>Use a local image</span>
+                <input id="file-upload" name="file-upload" accept="image/*" type="file" class="sr-only"
+                  @change="onFileInput" />
+              </div>
+            </div>
+          </div>
+        </label>
         <InputBox label="이메일" v-model="email" id="inputEmail" :readonly="true" :disabled="true" />
         <div class="relative">
           <InputBox class="w-full" label="별명" v-model="displayName" @keyup.enter="update" />
@@ -129,4 +212,36 @@ const update = async () => {
       </div>
     </div>
   </div>
+  <TransitionRoot appear :show="cropImageOpen" as="template">
+    <Dialog as="div" @close="setCropImageOpen(false)" class="relative z-10">
+      <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100"
+        leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
+        <div class="fixed inset-0 bg-black bg-opacity-25" />
+      </TransitionChild>
+
+      <div class="fixed inset-0 overflow-y-auto">
+        <div class="flex min-h-full items-center justify-center p-4 text-center">
+          <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95"
+            enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100"
+            leave-to="opacity-0 scale-95">
+            <DialogPanel
+              class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
+                사진 업로드
+              </DialogTitle>
+              <cropper src='https://images.pexels.com/photos/4323307/pexels-photo-4323307.jpeg' @change="change" />
+
+              <div class="mt-4">
+                <button type="button"
+                  class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                  @click="setCropImageOpen(false)">
+                  Got it, thanks!
+                </button>
+              </div>
+            </DialogPanel>
+          </TransitionChild>
+        </div>
+      </div>
+    </Dialog>
+  </TransitionRoot>
 </template>

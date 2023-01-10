@@ -86,7 +86,7 @@ onBeforeMount(async () => {
     const response = await checkToken(user.data.token)
   } catch (error) {
     axiosErrorHandler(instance, error as AxiosError)
-    // user.logout()
+    user.logout()
   }
 
   // user.login(
