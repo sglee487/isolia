@@ -112,7 +112,7 @@ const getRemainTime = () => {
   return remainTime
 }
 
-const rootPaths = ['/', '/logout', '/user', '/register', '/board', '/calculator', '/notification', '/settings']
+const rootPaths = ['/', '/logout', '/user', '/register', '/board/list', '/calculator', '/notification', '/settings']
 const isRootPath = () => {
   for (const path of rootPaths) {
     if (instance?.proxy?.$route.path === path) {
@@ -208,7 +208,7 @@ const goBack = () => {
         <HomeIcon class="w-6 h-6 inline-block mb-1" />
         <span class="tab tab-home block text-xs">홈</span>
       </router-link>
-      <router-link to="/board" id="nav"
+      <router-link to="/board/list/all" id="nav"
         class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
         <NewspaperIcon class="w-6 h-6 inline-block mb-1" />
         <span class="tab tab-kategori block text-xs">게시판</span>

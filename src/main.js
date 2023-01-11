@@ -32,26 +32,31 @@ const routes = [
   // { path: '/settings/user_edit', component: AccountSettingPage },
   { path: '/register', component: RegisterPage },
   {
-    path: '/board',
+    path: '/board/:mode/:menu',
     name: 'board',
-    children: [
-      { path: '', component: BoardPage },
-      {
-        path: ':name',
-        name: 'boardType',
-        component: BoardComponent,
-        children: [
-          {
-            path: ':postId',
-            name: 'postId',
-            component: BoardComponent
-          }
-        ]
-      }
-      // { path: 'write', query: { mode: 'write' } },
-      // { path: ':id', component: ViewPage }
-    ]
+    component: BoardPage
   },
+  // {
+  //   path: '/board',
+  //   name: 'board',
+  //   children: [
+  //     { path: '', component: BoardPage },
+  //     {
+  //       path: ':name',
+  //       name: 'boardType',
+  //       component: BoardComponent,
+  //       children: [
+  //         {
+  //           path: ':postId',
+  //           name: 'postId',
+  //           component: BoardComponent
+  //         }
+  //       ]
+  //     }
+  //     // { path: 'write', query: { mode: 'write' } },
+  //     // { path: ':id', component: ViewPage }
+  //   ]
+  // },
   {
     path: '/calculator',
     children: [
@@ -93,18 +98,18 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const user = useUserStore()
-  if (user.isLogined() && to.path === '/login') {
+  if (user.isLogined() && to.path === '/settings/login') {
     return '/'
   }
 
   if (!user.isLogined() && to.path === '/settings/user_edit') {
-    return '/login'
+    return '/settings/login'
   }
 
   if (to.params.name === 'notice' && to.params.postId === 'write') {
     if (user.data.token === null) {
       $toast.error('로그인 후에 이용해주세요.')
-      return '/login'
+      return '/settings/login'
     }
     if (user.isAdmin() === false) {
       $toast.error('권한이 없습니다.')
