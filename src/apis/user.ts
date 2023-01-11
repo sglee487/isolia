@@ -78,7 +78,7 @@ const updateUser = async (user: any, picture32: string, picture96: string, displ
       Authorization: `Bearer ${user.data.token}`
     }
   })
-  return response.data
+  return response
 }
 
 export { registerUser, loginUser, checkToken, updateUser, uploadProfilePicture }

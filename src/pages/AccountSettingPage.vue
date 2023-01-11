@@ -77,11 +77,10 @@ const crop = () => {
   setCropImageModal(false)
   canvas.toBlob(async (blob) => {
     destroyed()
-    selectedPictureIndex.value = candidatePictures96.value.length - 1
-
     const response = await uploadProfilePicture(user, blob)
     candidatePictures32.push(response.picture_32)
     candidatePictures96.value.push(response.picture_96)
+    selectedPictureIndex.value = candidatePictures96.value.length - 1
   }, fileImage.value.type)
 }
 
