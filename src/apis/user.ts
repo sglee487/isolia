@@ -49,10 +49,24 @@ const checkToken = async (userToken: string) => {
   return response
 }
 
-const updateUser = async (user: any, picture: string, displayName: string, password: string, newPassword: string) => {
+const uploadProfilePicture = async (user: any, blob: Blob) => {
+  const form = new FormData()
+  form.append('file', blob)
+
+  const response = await axios.post(`${SERVER_URL}/upload/profile_picture/`, form, {
+    headers: {
+      Authorization: `Bearer ${user.data.token}`
+    }
+  })
+  return response.data
+
+}
+
+const updateUser = async (user: any, picture32: string, picture96: string, displayName: string, password: string, newPassword: string) => {
   const data = {
     'login_type': user.data.login_type,
-    'picture': picture,
+    'picture_32': picture32,
+    'picture_96': picture96,
     'email': user.data.email,
     'display_name': displayName,
     'password': password,
@@ -64,7 +78,7 @@ const updateUser = async (user: any, picture: string, displayName: string, passw
       Authorization: `Bearer ${user.data.token}`
     }
   })
-  return response
+  return response.data
 }
 
-export { registerUser, loginUser, checkToken, updateUser }
+export { registerUser, loginUser, checkToken, updateUser, uploadProfilePicture }

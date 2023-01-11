@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { get } from '@vueuse/core'
-import { getCurrentInstance, ref, onMounted } from 'vue'
+import { getCurrentInstance, ref } from 'vue'
 import {
   ArrowPathRoundedSquareIcon,
   PlusCircleIcon
@@ -10,12 +9,11 @@ import {
   TransitionChild,
   Dialog,
   DialogPanel,
-  DialogTitle,
-  DialogDescription
+  DialogTitle
 } from '@headlessui/vue'
 
-import { Cropper } from 'vue-advanced-cropper';
-import 'vue-advanced-cropper/dist/style.css';
+import { Cropper } from 'vue-advanced-cropper'
+import 'vue-advanced-cropper/dist/style.css'
 
 import InputBox from '@/components/InputBox.vue'
 import ButtonBox from '@/components/ButtonBox.vue'
@@ -24,31 +22,97 @@ import useAnimateElement from '@/composables/AnimateElement'
 
 import { useUserStore } from '@/stores/userStore'
 
-import { updateUser } from '@/apis/user'
+import { uploadProfilePicture, updateUser } from '@/apis/user'
 import { getGenerateRandomName } from '@/utils/generateName'
-import { defaultProfilePicture96List } from '@/utils/defaultProfilePictureList'
+import { defaultProfilePicture32List, defaultProfilePicture96List } from '@/utils/defaultProfilePictureList'
 const instance = getCurrentInstance()
 const user = useUserStore()
 
-const candidatePictures = [...defaultProfilePicture96List]
+const candidatePictures32 = [...defaultProfilePicture32List]
+const candidatePictures96 = ref<string[]>([...defaultProfilePicture96List])
+candidatePictures32.push(user.data.picture_32)
+candidatePictures96.value.push(user.data.picture_96)
+const selectedPictureIndex = ref<number>(candidatePictures96.value.indexOf(user.data.picture_96))
+const cropImageModal = ref<boolean>(false)
 const email = user.data.email
 const displayName = ref<string>(user.data.display_name)
 const password = ref<string>('')
 const newPassword = ref<string>('')
 const newPasswordConfirm = ref<string>('')
 
-const cropImageOpen = ref<boolean>(false)
-
-const openCropImage = () => {
-  cropImageOpen.value = true
+const setCropImageModal = (value: boolean) => {
+  cropImageModal.value = value
 }
 
-const closeCropImage = () => {
-  cropImageOpen.value = false
+const fileImage = ref({
+  src: null,
+  type: null
+})
+
+const getMimeType = (file, fallback = null) => {
+  const byteArray = (new Uint8Array(file)).subarray(0, 4)
+  let header = ''
+  for (let i = 0; i < byteArray.length; i++) {
+    header += byteArray[i].toString(16)
+  }
+  switch (header) {
+    case '89504e47':
+      return 'image/png'
+    case '47494638':
+      return 'image/gif'
+    case 'ffd8ffe0':
+    case 'ffd8ffe1':
+    case 'ffd8ffe2':
+    case 'ffd8ffe3':
+    case 'ffd8ffe8':
+      return 'image/jpeg'
+    default:
+      return fallback
+  }
 }
 
-candidatePictures.push(user.data.picture_96)
-const selectedPictureIndex = ref<number>(candidatePictures.indexOf(user.data.picture_96))
+const crop = () => {
+  const cropperRef: any = instance.proxy.$refs.cropper
+  const { canvas } = cropperRef.getResult()
+  setCropImageModal(false)
+  canvas.toBlob(async (blob) => {
+    destroyed()
+    selectedPictureIndex.value = candidatePictures96.value.length - 1
+
+    const response = await uploadProfilePicture(user, blob)
+    candidatePictures32.push(response.picture_32)
+    candidatePictures96.value.push(response.picture_96)
+  }, fileImage.value.type)
+}
+
+const loadImage = (event) => {
+  const { files } = event.target
+  if (files && files[0]) {
+    if (fileImage.value.src) {
+      URL.revokeObjectURL(fileImage.value.src)
+    }
+    const blob = URL.createObjectURL(files[0])
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      fileImage.value = {
+        src: blob,
+        type: getMimeType(e.target.result, files[0].type)
+      }
+    }
+    reader.onloadend = () => {
+      setCropImageModal(true)
+      event.target.value = ''
+    }
+    reader.readAsArrayBuffer(files[0])
+  }
+}
+
+const destroyed = () => {
+  // Revoke the object URL, to allow the garbage collector to destroy the uploaded before file
+  if (fileImage.value.src) {
+    URL.revokeObjectURL(fileImage.value.src)
+  }
+}
 
 const generateRandomName = () => {
   displayName.value = getGenerateRandomName()
@@ -84,7 +148,8 @@ const update = async () => {
 
   const response = await updateUser(
     user,
-    candidatePictures[selectedPictureIndex.value],
+    candidatePictures32[selectedPictureIndex.value],
+    candidatePictures96.value[selectedPictureIndex.value],
     displayName.value,
     password.value,
     newPassword.value
@@ -111,121 +176,6 @@ const update = async () => {
   }
 }
 
-
-const change = ({ coordinates, canvas }) => {
-  console.log(coordinates, canvas);
-}
-const onMove = (moveEvent) => {
-  instance.proxy.$emit('move', moveEvent);
-}
-const onMoveEnd = () => {
-  instance.proxy.$emit('moveEnd');
-}
-const onResize = (resizeEvent) => {
-  instance.proxy.$emit('resize', resizeEvent);
-}
-// const onResizeEnd = () => {
-//   instance.proxy.$emit('resizeEnd');
-// 		}
-// const aspectRatios = () => {
-// 			return {
-// 				minimum: instance.proxy.aspectRatio || instance.proxy.minAspectRatio,
-// 				maximum: instance.proxy.aspectRatio || instance.proxy.maxAspectRatio,
-// 			}
-// 		}
-
-const fileImage = ref({
-  src: null,
-  type: null
-})
-
-function getMimeType(file, fallback = null) {
-  const byteArray = (new Uint8Array(file)).subarray(0, 4);
-  let header = '';
-  for (let i = 0; i < byteArray.length; i++) {
-    header += byteArray[i].toString(16);
-  }
-  switch (header) {
-    case "89504e47":
-      return "image/png";
-    case "47494638":
-      return "image/gif";
-    case "ffd8ffe0":
-    case "ffd8ffe1":
-    case "ffd8ffe2":
-    case "ffd8ffe3":
-    case "ffd8ffe8":
-      return "image/jpeg";
-    default:
-      return fallback;
-  }
-}
-
-const crop = () => {
-  const { canvas } = instance.proxy.$refs.cropper.getResult();
-  canvas.toBlob((blob) => {
-    // Do something with blob: upload to a server, download and etc.
-  }, fileImage.value.type);
-}
-
-const reset = () => {
-  fileImage.value = {
-    src: null,
-    type: null
-  }
-}
-
-const loadImage = (event) => {
-  // Reference to the DOM input element
-  const { files } = event.target;
-  console.log(files)
-  // Ensure that you have a file before attempting to read it
-  if (files && files[0]) {
-    // openCropImage()
-    // 1. Revoke the object URL, to allow the garbage collector to destroy the uploaded before file
-    if (fileImage.value.src) {
-      URL.revokeObjectURL(fileImage.value.src)
-    }
-    // 2. Create the blob link to the file to optimize performance:
-    const blob = URL.createObjectURL(files[0]);
-
-    // 3. The steps below are designated to determine a file mime type to use it during the
-    // getting of a cropped image from the canvas. You can replace it them by the following string,
-    // but the type will be derived from the extension and it can lead to an incorrect result:
-    //
-    // this.image = {
-    //    src: blob;
-    //    type: files[0].type
-    // }
-
-    // Create a new FileReader to read this image binary data
-    const reader = new FileReader();
-    // Define a callback function to run, when FileReader finishes its job
-    reader.onload = (e) => {
-      // Note: arrow function used here, so that "this.image" refers to the image of Vue component
-      fileImage.value = {
-        // Set the image source (it will look like blob:http://example.com/2c5270a5-18b5-406e-a4fb-07427f5e7b94)
-        src: blob,
-        // Determine the image type to preserve it during the extracting the image from canvas:
-        type: getMimeType(e.target.result, files[0].type),
-      };
-    };
-    reader.onloadend = () => {
-      openCropImage()
-      event.target.value = ''
-    }
-    // Start the reader job - read file as a data url (base64 format)
-    reader.readAsArrayBuffer(files[0]);
-  }
-}
-
-// const destroyed = () => {
-//   // Revoke the object URL, to allow the garbage collector to destroy the uploaded before file
-//   if (image.value.src) {
-//     URL.revokeObjectURL(image.value.src)
-//   }
-// }
-
 </script>
 
 <template>
@@ -237,7 +187,7 @@ const loadImage = (event) => {
       </div>
       <div class="space-y-4">
         <div class="grid grid-cols-5 gap-2">
-          <img v-for="picture, index in candidatePictures" :key="picture"
+          <img v-for="picture, index in candidatePictures96" :key="picture"
             :class="selectedPictureIndex === index ? 'ring-4 ring-black dark:ring-white' : ''"
             class="w-12 h-12 rounded-full cursor-pointer overflow-hidden" :src="picture"
             @click="selectedPictureIndex = index" />
@@ -266,33 +216,33 @@ const loadImage = (event) => {
       </div>
     </div>
   </div>
-  <TransitionRoot appear :show="cropImageOpen" as="template">
-    <Dialog as="div" @close="closeCropImage" class="relative z-10">
+  <TransitionRoot appear :show="cropImageModal" as="template">
+    <Dialog as="div" @close="setCropImageModal(false)" class="relative z-10">
       <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100"
         leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
         <div class="fixed inset-0 bg-black bg-opacity-25" />
       </TransitionChild>
 
       <div class="fixed inset-0 overflow-y-auto">
-        <div class="flex min-h-full items-center justify-center p-4 text-center">
+        <div class="flex min-h-full items-center justify-center p-4 text-center w-full">
           <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95"
             enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100"
             leave-to="opacity-0 scale-95">
             <DialogPanel
               class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-              <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
+              <DialogTitle as="h3"
+                class="text-2xl pt-4 pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-yellow-400">
                 사진 업로드
               </DialogTitle>
-              <cropper ref="cropper" :src='fileImage.src' :stencil-props="{
-                'circle': true,
-              }" />
+              <cropper ref="cropper" :src='fileImage.src' class="m-4" />
 
-              <div class="mt-4">
-                <button type="button"
-                  class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                  @click="closeCropImage">
-                  Got it, thanks!
-                </button>
+              <div class="flex flex-row space-x-2">
+                <ButtonBox class="w-24" color="red" @click="setCropImageModal(false)">
+                  취소
+                </ButtonBox>
+                <ButtonBox class="w-full min-w-fit" color="app" @click="crop">
+                  저장
+                </ButtonBox>
               </div>
             </DialogPanel>
           </TransitionChild>
