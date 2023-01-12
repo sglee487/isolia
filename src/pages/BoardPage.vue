@@ -93,7 +93,7 @@ const getWriteMenu = () => {
           </MenuItems>
         </transition>
       </Menu>
-      <router-link :to="`/board/write/${getWriteMenu()}`" class="mr-2">
+      <router-link :to="`/board/write/${getWriteMenu()}`" class="mr-2" v-if="$route.params.menu !== 'notice'">
         <PlusCircleIcon class="w-8 h-8" />
       </router-link>
     </header>

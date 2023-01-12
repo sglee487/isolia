@@ -17,7 +17,10 @@ module.exports = {
     'hover:bg-gray-500',
     'border-sky-500',
     'text-sky-500',
-    'hover:bg-sky-500'
+    'hover:bg-sky-500',
+    'border-violet-500',
+    'text-violet-500',
+    'hover:bg-violet-500'
     // {
     //   pattern:
     //     /(bg|border|text)-(slate|gray|zinc|neutral|stone|red|app|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(100|200|300|400|500|600|900)/,

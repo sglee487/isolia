@@ -37,12 +37,9 @@ const routes = [
     name: 'board',
     children: [
       {
-        path: '',
-        component: BoardPage
-      },
-      {
         path: 'write/:menu',
-        component: WritePage
+        component: WritePage,
+        name: 'write'
       },
       {
         path: ':name/:menu',
@@ -112,7 +109,7 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const user = useUserStore()
-  if (user.isLogined() && to.path === '/board') {
+  if (to.path === '/board') {
     return '/board/list/all'
   }
 
@@ -123,15 +120,14 @@ router.beforeEach((to) => {
   if (!user.isLogined() && to.path === '/settings/user_edit') {
     return '/settings/login'
   }
-
-  if (to.params.name === 'notice' && to.params.postId === 'write') {
-    if (user.data.token === null) {
+  if (to.name === 'write') {
+    if (!user.isLogined()) {
       $toast.error('로그인 후에 이용해주세요.')
       return '/settings/login'
     }
-    if (user.isAdmin() === false) {
+    if (to.params.menu === 'notice' && user.isAdmin() === false) {
       $toast.error('권한이 없습니다.')
-      return '/board'
+      return '/board/list/all'
     }
   }
 })
