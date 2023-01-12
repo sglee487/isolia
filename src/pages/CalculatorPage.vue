@@ -92,7 +92,7 @@ const units = {
 							<li v-for="route in routes" :key="route.to" class="w-full">
 								<router-link :to="route.to"
 									class="block text-center py-2 hover:bg-app-500 hover:text-white rounded-xl bg-app-300 dark:bg-app-950">
-									{{ route.name }}
+									<span class="font-bold">{{ route.name }}</span>
 									<br>
 									<small>{{ route.nameKo }}</small>
 									<br>

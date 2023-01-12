@@ -8,9 +8,7 @@ import { useUserStore } from '@/stores/userStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { axiosErrorHandler } from '@/handler/axiosErrorHandler'
 
-
 import ButtonBox from './components/ButtonBox.vue'
-
 
 import {
   ArrowLeftOnRectangleIcon,
@@ -72,7 +70,7 @@ const modalRoutes = [
     icon: CogIcon
   },
   {
-    to: '/logout',
+    to: '/settings/logout',
     name: 'Logout',
     icon: ArrowLeftOnRectangleIcon
   }
@@ -112,15 +110,16 @@ const getRemainTime = () => {
   return remainTime
 }
 
-const rootPaths = ['/', '/logout', '/user', '/register', '/board/list', '/calculator', '/notification', '/settings']
-const isRootPath = () => {
-  for (const path of rootPaths) {
-    if (instance?.proxy?.$route.path === path) {
-      return true
-    }
-  }
-  return false
-}
+// const rootPaths = ['/', '/logout', '/user', '/register', '/board/list', '/board/write', '/calculator', '/notification', '/settings']
+// const isRootPath = () => {
+//   console.log(instance?.proxy?.$route.path)
+//   for (const path of rootPaths) {
+//     if (instance?.proxy?.$route.path === path) {
+//       return true
+//     }
+//   }
+//   return false
+// }
 
 const goBack = () => {
   instance?.proxy?.$router.back()
@@ -189,12 +188,12 @@ const goBack = () => {
     </nav>
   </header>
 
-  <header class="md:hidden fixed mt-4 mx-2">
+  <!-- <header class="md:hidden fixed mt-4 mx-2">
     <nav v-if="!isRootPath()" class="cursor-pointer bg-gray-500 bg-opacity-10 rounded-full bg-transparent "
       @click="goBack()">
       <ChevronLeftIcon class="w-8 h-8 pr-1 text-app-400" />
     </nav>
-  </header>
+  </header> -->
 
   <div class="md:pt-16">
     <router-view />
@@ -208,7 +207,7 @@ const goBack = () => {
         <HomeIcon class="w-6 h-6 inline-block mb-1" />
         <span class="tab tab-home block text-xs">홈</span>
       </router-link>
-      <router-link to="/board/list/all" id="nav"
+      <router-link to="/board" id="nav"
         class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
         <NewspaperIcon class="w-6 h-6 inline-block mb-1" />
         <span class="tab tab-kategori block text-xs">게시판</span>

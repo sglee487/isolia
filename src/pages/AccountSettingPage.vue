@@ -2,7 +2,8 @@
 import { getCurrentInstance, ref } from 'vue'
 import {
   ArrowPathRoundedSquareIcon,
-  PlusCircleIcon
+  PlusCircleIcon,
+  ChevronLeftIcon
 } from '@heroicons/vue/24/outline'
 import {
   TransitionRoot,
@@ -48,6 +49,10 @@ const fileImage = ref({
   src: null,
   type: null
 })
+
+const goBack = () => {
+  instance?.proxy?.$router.back()
+}
 
 const getMimeType = (file, fallback = null) => {
   const byteArray = (new Uint8Array(file)).subarray(0, 4)
@@ -178,13 +183,17 @@ const update = async () => {
 </script>
 
 <template>
-  <div class="p-10 flex justify-center">
-    <div class="flex flex-col pb-4">
+  <div class="p-4">
+    <header
+      class="flex space-x-4 justify-between items-center font-extrabold pb-2 border-b border-gray-300 dark:border-gray-700">
+      <ChevronLeftIcon class="flex-none w-8 h-8 cursor-pointer text-black dark:text-white" @click="goBack()" />
       <div
-        class="text-2xl pt-4 pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-yellow-400">
+        class="grow text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-500 to-app-300 dark:from-app-400 dark:to-app-200">
         사용자 변경
       </div>
-      <div class="space-y-4">
+    </header>
+    <div class="pt-6 grid place-content-center">
+      <div class="flex flex-col justify-center space-y-4">
         <div class="grid grid-cols-5 gap-2">
           <img v-for="picture, index in candidatePictures96" :key="picture"
             :class="selectedPictureIndex === index ? 'ring-4 ring-black dark:ring-white' : ''"

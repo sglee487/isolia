@@ -15,12 +15,13 @@ import LoginPage from './pages/LoginPage.vue'
 import LogoutPage from './pages/LogoutPage.vue'
 import RegisterPage from './pages/RegisterPage.vue'
 import BoardPage from './pages/BoardPage.vue'
+import WritePage from './pages/WritePage.vue'
 import CalculatorPage from './pages/CalculatorPage.vue'
 import AccountSettingPage from './pages/AccountSettingPage.vue'
 import NotificationPage from './pages/NotificationPage.vue'
 import SettingsPage from './pages/SettingsPage.vue'
 
-import BoardComponent from './components/BoardComponent.vue'
+// import BoardComponent from './components/BoardComponent.vue'
 
 import './style.css'
 import 'vue-toast-notification/dist/theme-default.css'
@@ -32,9 +33,22 @@ const routes = [
   // { path: '/settings/user_edit', component: AccountSettingPage },
   { path: '/register', component: RegisterPage },
   {
-    path: '/board/:mode/:menu',
+    path: '/board',
     name: 'board',
-    component: BoardPage
+    children: [
+      {
+        path: '',
+        component: BoardPage
+      },
+      {
+        path: 'write/:menu',
+        component: WritePage
+      },
+      {
+        path: ':name/:menu',
+        component: BoardPage
+      }
+    ]
   },
   // {
   //   path: '/board',
@@ -98,6 +112,10 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const user = useUserStore()
+  if (user.isLogined() && to.path === '/board') {
+    return '/board/list/all'
+  }
+
   if (user.isLogined() && to.path === '/settings/login') {
     return '/'
   }
