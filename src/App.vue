@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getCurrentInstance, onBeforeMount, ref } from 'vue'
+import { getCurrentInstance, onBeforeMount, ref, watch } from 'vue'
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import Popper from 'vue3-popper'
 
@@ -22,6 +22,8 @@ import {
   ChevronLeftIcon
 } from '@heroicons/vue/24/outline'
 import { AxiosError } from 'axios'
+
+import BottomNavBar from './components/BottomNavBar.vue'
 
 const instance = getCurrentInstance()
 const user = useUserStore()
@@ -121,6 +123,13 @@ const getRemainTime = () => {
 //   return false
 // }
 
+// const navNotVisiblePaths = ['board/write/free']
+
+// watch(() => instance.proxy.$route, async (name) => {
+//   console.log(instance.proxy.$route)
+// })
+
+
 const goBack = () => {
   instance?.proxy?.$router.back()
 }
@@ -195,47 +204,11 @@ const goBack = () => {
     </nav>
   </header> -->
 
-  <div class="md:pt-16">
+  <div class="md:pb-0 md:pt-16">
     <router-view />
   </div>
 
-  <section id="bottom-navigation"
-    class="md:hidden block fixed inset-x-0 bottom-0 z-10 bg-neutral-50 dark:bg-[#121212] shadow">
-    <div id="tabs" class="flex justify-between">
-      <router-link to="/" id="nav"
-        class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
-        <HomeIcon class="w-6 h-6 inline-block mb-1" />
-        <span class="tab tab-home block text-xs">홈</span>
-      </router-link>
-      <router-link to="/board" id="nav"
-        class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
-        <NewspaperIcon class="w-6 h-6 inline-block mb-1" />
-        <span class="tab tab-kategori block text-xs">게시판</span>
-      </router-link>
-      <router-link to="/calculator" id="nav"
-        class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
-        <CalculatorIcon class="w-6 h-6 inline-block mb-1" />
-        <span class="tab tab-kategori block text-xs">계산기</span>
-      </router-link>
-      <!-- <router-link to="/notification" id="nav"
-        class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
-        <BellIcon class="w-6 h-6 inline-block mb-1" />
-        <span class="tab tab-kategori block text-xs line-through">알림(미구현)</span>
-      </router-link> -->
-      <div id="nav"
-        class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
-        <BellIcon class="w-6 h-6 inline-block mb-1" />
-        <span class="tab tab-kategori block text-xs line-through">알림(미구현)</span>
-      </div>
-      <router-link to="/settings" id="nav"
-        class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
-        <img :src="user.data.picture_32" v-if="user.isLogined()"
-          class="w-6 h-6 inline-block mb-1 rounded-full shadow-lg" />
-        <UserIcon v-else class="w-6 h-6 inline-block mb-1" />
-        <span class="tab tab-kategori block text-xs">나의 이솔</span>
-      </router-link>
-    </div>
-  </section>
+  <BottomNavBar v-if="instance.proxy.$route.name !== 'write'" />
 
   <!-- <footer>
     <div class="h-16 flex justify-center items-center">
@@ -287,18 +260,6 @@ const goBack = () => {
   border-bottom: 2px solid rgb(56 189 248);
 }
 
-#nav.router-link-active,
-#nav.router-link-exact-active {
-  border-bottom: 2px solid rgb(14 165 233);
-  /* #4EBDE5 */
-}
-
-#nav.router-link-active.dark,
-#nav.router-link-exact-active.dark {
-  border-bottom: 2px solid rgb(56 189 248);
-  /* #4EBDE5 */
-}
-
 @media (max-width: 768px) {
 
   #menu.router-link-active,
@@ -311,16 +272,6 @@ const goBack = () => {
   #menu.router-link-exact-active.dark #menu.dark {
     color: white;
     background-color: rgb(56 189 248);
-  }
-
-  #nav.router-link-active,
-  #nav.router-link-exact-active #nav {
-    color: rgb(14 165 233);
-  }
-
-  #nav.router-link-active.dark,
-  #nav.router-link-exact-active.dark #nav.dark {
-    color: rgb(56 189 248);
   }
 }
 </style>

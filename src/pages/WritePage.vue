@@ -66,7 +66,7 @@ const save = () => {
       class="flex space-x-4 justify-between items-center font-extrabold pb-2 mb-2 border-b border-gray-300 dark:border-gray-700">
       <ChevronLeftIcon class="flex-none w-8 h-8 cursor-pointer text-black dark:text-white" @click="goBack()" />
       <div
-        class="grow text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-500 to-app-300 dark:from-app-400 dark:to-app-200">
+        class="grow text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-500 to-app-300 dark:from-app-400 dark:to-app-200">
         게시글 쓰기
       </div>
       <!-- <div class="flex-none pr-2">
@@ -110,6 +110,5 @@ const save = () => {
         contentType="html" /> -->
       <tiptap />
     </div>
-
   </div>
 </template>

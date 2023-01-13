@@ -63,7 +63,7 @@ const units = {
 </script>
 
 <template>
-	<div class="flex flex-col w-full h-full pb-24 md:pb-0">
+	<div class="flex flex-col w-full h-full pb-8 md:pb-0">
 		<div class="flex flex-col md:flex-row justify-between w-full h-full">
 			<ul
 				class="h-full hidden md:flex flex-col items-center w-64 border-r border-gray-300 text-xl font-bold overflow-y-auto">
