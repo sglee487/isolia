@@ -68,8 +68,9 @@ onBeforeUnmount(() => {
 
 <style lang="scss">
 .ProseMirror {
-  >*+* {
-    margin-top: 0.75em;
+  p {
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
   }
 
   img {
@@ -82,20 +83,20 @@ onBeforeUnmount(() => {
   }
 }
 
-.ProseMirror {
+// .ProseMirror {
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  ol,
-  blockquote,
-  hr,
-  table,
-  strong {
-    color: rgb(17, 24, 39);
-  }
-}
+//   h1,
+//   h2,
+//   h3,
+//   h4,
+//   h5,
+//   h6,
+//   ol,
+//   blockquote,
+//   hr,
+//   table,
+//   strong {
+//     color: rgb(17, 24, 39);
+//   }
+// }
 </style>
