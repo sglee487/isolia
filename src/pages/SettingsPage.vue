@@ -46,7 +46,7 @@ const changeLightDarkTheme = () => {
 </script>
 
 <template>
-  <div class="w-full px-8 flex flex-col space-y-2">
+  <div class="w-full px-8 flex flex-col space-y-2 mb-16">
     <div
       class="text-2xl font-bold pt-4 text-transparent bg-clip-text bg-gradient-to-r from-app-500 to-app-300 dark:from-app-400 dark:to-app-200">
       나의 아이솔리아

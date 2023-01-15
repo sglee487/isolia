@@ -86,7 +86,9 @@ onBeforeMount(async () => {
     const response = await checkToken(user.data.token)
   } catch (error) {
     axiosErrorHandler(instance, error as AxiosError)
-    user.logout()
+    if (error.response.statusText === 'Unauthorized') {
+      user.logout()
+    }
   }
 
   // user.login(

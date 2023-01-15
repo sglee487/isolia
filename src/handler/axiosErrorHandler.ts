@@ -6,12 +6,9 @@ export const axiosErrorHandler = (instance: ComponentInternalInstance, error: Ax
     instance?.proxy?.$toast.error(error.message)
     instance?.proxy?.$toast.error(error.response.data.detail)
   } else if (error.request) {
-    console.log(error.request);
-    console.log(error.message)
     instance?.proxy?.$toast.error('서버 응답이 없습니다. 잠시 후 다시 시도해주세요.')
   } else {
     instance?.proxy?.$toast.error(error.message)
-    console.log("Error", error.message);
   }
   console.log(error.config);
 };

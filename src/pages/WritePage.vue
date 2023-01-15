@@ -47,13 +47,14 @@ const routerTo = (to: string) => {
 }
 
 const save = () => {
-  postBoard(routerParams.menu as string, title.value, content.value, user.data.token)
-    .then((res) => {
-      instance?.proxy?.$router.push(`/board/list/${routerParams.menu}`)
-    })
-    .catch((err) => {
-      console.log(err)
-    })
+  console.log()
+  // postBoard(routerParams.menu as string, title.value, content.value, user.data.token)
+  //   .then((res) => {
+  //     instance?.proxy?.$router.push(`/board/list/${routerParams.menu}`)
+  //   })
+  //   .catch((err) => {
+  //     console.log(err)
+  //   })
 }
 
 
@@ -61,7 +62,7 @@ const save = () => {
 </script>
 
 <template>
-  <div class="p-4">
+  <div class="p-4 w-[46.5rem] mx-auto">
     <header
       class="flex space-x-4 justify-between items-center font-extrabold pb-2 mb-2 border-b border-gray-300 dark:border-gray-700">
       <ChevronLeftIcon class="flex-none w-8 h-8 cursor-pointer text-black dark:text-white" @click="goBack()" />
@@ -70,15 +71,15 @@ const save = () => {
         게시글 쓰기
       </div>
       <!-- <div class="flex-none pr-2">
-        임시저장
-      </div> -->
+          임시저장
+        </div> -->
       <div class="flex-none">
-        <ButtonBox color="violet" size="sm" @click="save">저장</ButtonBox>
+        <ButtonBox color="violet" size="sm" @click="save">게시</ButtonBox>
       </div>
     </header>
-    <div class="flex flex-col">
-      <div class="flex-none flex space-x-2">
-        <Menu as="div" class="relative inline-block text-left z-10 flex-none mt-1">
+    <div class="w-full">
+      <div class="flex space-x-2 pb-2">
+        <Menu as="div" class="relative text-left z-10 mt-1">
           <MenuButton
             class="inline-flex w-full justify-center rounded-md bg-white dark:bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-black dark:text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
             {{ boardNames[$route.params.menu] }}
@@ -104,11 +105,9 @@ const save = () => {
             </MenuItems>
           </transition>
         </Menu>
-        <InputBox class="grow font-bold pb-2" v-model="title" placeholder="제목을 입력하세요" />
+        <InputBox class="grow font-bold" v-model="title" placeholder="제목을 입력하세요" />
       </div>
-      <!-- <QuillEditor class="min-h-[50vh]" theme="snow" placeholder="내용을 입력하세요..." v-model:content="content"
-        contentType="html" /> -->
-      <tiptap />
+      <tiptap v-model="content" />
     </div>
   </div>
 </template>
