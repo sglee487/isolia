@@ -32,7 +32,7 @@ const loginUser = async (loginType: string, email: string, password: string, sns
     'sns_token': snsToken
   }
 
-  const response = await axios.post(`${SERVER_URL}/login/`, data, {
+  const response = await axios.post(`${SERVER_URL}/user/login/`, data, {
     headers: {
       Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`
     }
@@ -53,7 +53,7 @@ const uploadProfilePicture = async (user: any, blob: Blob) => {
   const form = new FormData()
   form.append('file', blob)
 
-  const response = await axios.post(`${SERVER_URL}/upload/profile_picture/`, form, {
+  const response = await axios.post(`${SERVER_URL}/user/upload_profile_picture/`, form, {
     headers: {
       Authorization: `Bearer ${user.data.token}`
     }

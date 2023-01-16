@@ -55,7 +55,7 @@ const getWriteMenu = () => {
 </script>
 
 <template>
-  <div class="p-4 w-[62rem] mx-auto">
+  <div class="p-4 w-[62rem]">
     <header
       class="flex flex-row justify-between items-center font-extrabold pb-2 border-b border-gray-300 dark:border-gray-700">
       <Menu as="div" class="relative inline-block text-left">

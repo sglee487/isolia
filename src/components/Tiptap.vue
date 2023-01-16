@@ -3,7 +3,8 @@
   <div class="space-y-2">
     <div :editor="editor" :tippy-options="{ duration: 100 }" v-if="editor" class="flex flex-row divide-x space-x-2">
       <div>
-        <ImagePlusIcon class="inline-block cursor-pointer w-8 h-8" :class="{ 'is-active': editor.isActive('image') }" />
+        <ImagePlusIcon class="inline-block cursor-pointer w-8 h-8" @click="uploadImageFiles"
+          :class="{ 'is-active': editor.isActive('image') }" />
       </div>
       <div>
         <BoldIcon class="inline-block cursor-pointer w-8 h-8" @click="editor.chain().focus().toggleBold().run()"
@@ -24,13 +25,15 @@ import { Editor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
 
+import { uploadImages } from '@/apis/board'
 import BoldIcon from '@/icons/Bold.vue'
 import ItalicIcon from '@/icons/Italic.vue'
 import Strikethrough2Icon from '@/icons/Strikethrough2.vue'
 import ImagePlusIcon from '@/icons/ImagePlus.vue'
 
 const props = defineProps<{
-  modelValue: String
+  modelValue: String,
+  user: Object
 }>()
 
 const emit = defineEmits(['update:modelValue'])
@@ -51,7 +54,7 @@ const editor = new Editor({
   ],
   editorProps: {
     attributes: {
-      class: 'prose prose-sm sm:prose outline outline-1 outline-offset-2 outline-gray-500 rounded-md min-h-[50vh] text-gray-900 dark:text-gray-100 bg-zinc-50 dark:bg-zinc-800'
+      class: 'prose prose-sm sm:prose outline outline-1 outline-offset-2 outline-gray-500 rounded-md min-h-[50vh] text-gray-900 dark:text-gray-100 bg-zinc-50 dark:bg-zinc-800 p-2'
     }
   },
   content: props.modelValue,
@@ -64,13 +67,49 @@ onBeforeUnmount(() => {
   editor.destroy()
 })
 
+const uploadImageFiles = () => {
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.accept = 'image/*'
+  input.multiple = true
+  input.click()
+
+  input.onchange = async () => {
+    const files = input.files
+
+    if (!files) {
+      return
+    }
+
+    uploadImages(props.user.data.token, files).then((res) => {
+      console.log(res)
+      editor.chain().focus().setImage({ src: res.data }).run()
+    })
+
+    // console.log(file)
+    // const reader = new FileReader()
+    // reader.readAsDataURL(file)
+    // reader.onload = async () => {
+    //   const url = reader.result as string
+    //   editor.chain().focus().setImage({ src: url }).run()
+    // }
+  }
+}
+
 </script>
 
 <style lang="scss">
 .ProseMirror {
+  >*+* {
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+  }
+
   p {
-    margin-top: 0.1em;
-    margin-bottom: 0.1em;
+    line-height: 1.1em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    // color: rgb(17, 24, 39);
   }
 
   img {
@@ -82,21 +121,4 @@ onBeforeUnmount(() => {
     }
   }
 }
-
-// .ProseMirror {
-
-//   h1,
-//   h2,
-//   h3,
-//   h4,
-//   h5,
-//   h6,
-//   ol,
-//   blockquote,
-//   hr,
-//   table,
-//   strong {
-//     color: rgb(17, 24, 39);
-//   }
-// }
 </style>

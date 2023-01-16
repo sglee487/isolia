@@ -62,7 +62,7 @@ const save = () => {
 </script>
 
 <template>
-  <div class="p-4 w-[46.5rem] mx-auto">
+  <div class="p-4 w-[46.5rem]">
     <header
       class="flex space-x-4 justify-between items-center font-extrabold pb-2 mb-2 border-b border-gray-300 dark:border-gray-700">
       <ChevronLeftIcon class="flex-none w-8 h-8 cursor-pointer text-black dark:text-white" @click="goBack()" />
@@ -107,7 +107,7 @@ const save = () => {
         </Menu>
         <InputBox class="grow font-bold" v-model="title" placeholder="제목을 입력하세요" />
       </div>
-      <tiptap v-model="content" />
+      <tiptap v-model="content" :user="user" />
     </div>
   </div>
 </template>

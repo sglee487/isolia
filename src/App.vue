@@ -206,7 +206,7 @@ const goBack = () => {
     </nav>
   </header> -->
 
-  <div class="md:pb-0 md:pt-16">
+  <div class="flex justify-center md:pb-0 md:pt-16">
     <router-view />
   </div>
 
