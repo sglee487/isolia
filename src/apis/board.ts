@@ -16,18 +16,9 @@ const getBoardList = async (boardType: string) => {
 
 const uploadImages = async (userToken: string, files: [File]) => {
   const formData = new FormData()
-  // formData.append('files', files)
-  // console.log(files)
-  console.log(files)
   for (var i = 0; i < files.length; i++) {
-    const file = files[i];
-    console.log(files[0])
-    console.log(file)
-    formData.append('files', file);
+    formData.append('files', files[i]);
   }
-  console.log(files.length)
-  console.log(formData)
-
 
   const response = await axios.post(`${SERVER_URL}/board/images/`, formData, {
     headers: {

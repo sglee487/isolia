@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang='ts'>
-import { onBeforeUnmount, defineProps, defineEmits, watch } from 'vue'
+import { onBeforeUnmount, watch } from 'vue'
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
@@ -80,10 +80,16 @@ const uploadImageFiles = () => {
     if (!files) {
       return
     }
+    console.log(files)
 
     uploadImages(props.user.data.token, files).then((res) => {
       console.log(res)
-      editor.chain().focus().setImage({ src: res.data }).run()
+      for (let i = 0; i < res.data.length; i++) {
+        editor.chain().focus().setImage({ src: res.data[i] }).run()
+        // editor.chain().focus('end')
+        console.log(editor.state.selection.from)
+        editor.commands.setTextSelection(editor.state.selection.from + 1)
+      }
     })
 
     // console.log(file)
