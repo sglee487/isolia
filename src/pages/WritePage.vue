@@ -46,15 +46,18 @@ const routerTo = (to: string) => {
   instance.proxy.$router.push(to)
 }
 
-const save = () => {
+const post = () => {
   console.log()
-  // postBoard(routerParams.menu as string, title.value, content.value, user.data.token)
-  //   .then((res) => {
-  //     instance?.proxy?.$router.push(`/board/list/${routerParams.menu}`)
-  //   })
-  //   .catch((err) => {
-  //     console.log(err)
-  //   })
+  console.log(content.value)
+  console.log(routerParams)
+  console.log(routerParams.menu as string)
+  postBoard(routerParams.menu as string, title.value, content.value, user.data.token)
+    .then((res) => {
+      instance?.proxy?.$router.push(`/board/list/${routerParams.menu}`)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 }
 
 
@@ -74,7 +77,7 @@ const save = () => {
           임시저장
         </div> -->
       <div class="flex-none">
-        <ButtonBox color="violet" size="sm" @click="save">게시</ButtonBox>
+        <ButtonBox color="violet" size="sm" @click="post">게시</ButtonBox>
       </div>
     </header>
     <div class="w-full">

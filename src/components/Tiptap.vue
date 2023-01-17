@@ -80,25 +80,13 @@ const uploadImageFiles = () => {
     if (!files) {
       return
     }
-    console.log(files)
 
     uploadImages(props.user.data.token, files).then((res) => {
-      console.log(res)
       for (let i = 0; i < res.data.length; i++) {
         editor.chain().focus().setImage({ src: res.data[i] }).run()
-        // editor.chain().focus('end')
-        console.log(editor.state.selection.from)
         editor.commands.setTextSelection(editor.state.selection.from + 1)
       }
     })
-
-    // console.log(file)
-    // const reader = new FileReader()
-    // reader.readAsDataURL(file)
-    // reader.onload = async () => {
-    //   const url = reader.result as string
-    //   editor.chain().focus().setImage({ src: url }).run()
-    // }
   }
 }
 

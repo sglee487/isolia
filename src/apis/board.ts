@@ -1,9 +1,6 @@
 import axios from 'axios'
 
-const SERVER_URL = `
-${import.meta.env.VITE_SERVER_PROTOCOL}://
-${import.meta.env.VITE_SERVER_ADDRESS}:${import.meta.env.VITE_SERVER_PORT
-  }`
+const SERVER_URL = `${import.meta.env.VITE_SERVER_PROTOCOL}://${import.meta.env.VITE_SERVER_ADDRESS}:${import.meta.env.VITE_SERVER_PORT}`
 
 const getBoardList = async (boardType: string) => {
   const response = await axios.get(`${SERVER_URL}/board/${boardType}`, {
@@ -30,18 +27,22 @@ const uploadImages = async (userToken: string, files: [File]) => {
 }
 
 const postBoard = async (boardType: string, boardTitle: string, boardContent: string, userToken: string) => {
+  console.log(boardType, boardTitle, boardContent, userToken)
+  console.log(SERVER_URL)
 
-  const response = await axios.post(`${SERVER_URL}/board/${boardType}`,
-    {
-      title: boardTitle,
-      content: boardContent
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${userToken}`
-      }
-    })
-  return response
+  const data = {
+    'board_type': boardType,
+    'title': boardTitle,
+    'content': boardContent
+  }
+
+  const response = await axios.post(`${SERVER_URL}/board/`, data, {
+    headers: {
+      'accept': 'application/json',
+      'Authorization': `Bearer ${userToken}`
+    }
+  });
+  return response;
 }
 
 export { getBoardList, uploadImages, postBoard }
