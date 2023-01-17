@@ -139,7 +139,7 @@ const goBack = () => {
 </script>
 
 <template>
-  <header class="hidden md:block fixed w-full bg-[#f5f5f5] dark:bg-[#121212]">
+  <header class="hidden md:block fixed w-full bg-[#f5f5f5] dark:bg-[#121212] z-50">
     <nav class="border-b border-gray-300 dark:border-gray-700">
       <div class="h-16 ml-4 flex justify-between items-center">
         <router-link to="/" class="hidden md:inline-block p-1 cursor-pointer rounded-md">

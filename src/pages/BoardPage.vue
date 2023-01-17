@@ -10,7 +10,9 @@ import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import BoardComponent from '@/components/BoardComponent.vue'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
+import { getListBoard } from '@/apis/board'
 import boardNames from '@/pages/boardNames'
+import PostCard from '@/components/PostCard.vue'
 
 const instance = getCurrentInstance()
 
@@ -18,12 +20,21 @@ const boardType = ref<any>()
 
 const routerParams = instance.proxy.$route.params
 
-if (Object.keys(routerParams).includes('name')) {
-  boardType.value = routerParams.name
+const posts = ref<any>([])
+
+if (Object.keys(routerParams).includes('menu')) {
+  boardType.value = routerParams.menu
+  getListBoard(boardType.value).then((res) => {
+    posts.value = res.data
+    console.log(res.data)
+  })
 }
 
-watch(() => instance.proxy.$route.params.name, async (name) => {
-  boardType.value = name
+watch(() => instance.proxy.$route.params.menu, async (menu) => {
+  boardType.value = menu
+  getListBoard(boardType.value).then((res) => {
+    posts.value = res.data
+  })
 })
 
 const boardRoutes = [
@@ -55,7 +66,7 @@ const getWriteMenu = () => {
 </script>
 
 <template>
-  <div class="p-4 w-[62rem]">
+  <div class="p-4 w-[62rem] mb-12">
     <header
       class="flex flex-row justify-between items-center font-extrabold pb-2 border-b border-gray-300 dark:border-gray-700">
       <Menu as="div" class="relative inline-block text-left">
@@ -98,9 +109,8 @@ const getWriteMenu = () => {
       </router-link>
     </header>
     <div>
-      {{ $route.params.name }}
-      {{ $route.params.menu }}
-
+      <PostCard v-for="post in posts" :key="post.id" class="flex flex-col" :post="post"
+        :menu="instance.proxy.$route.params.menu as string" />
     </div>
   </div>
 </template>

@@ -26,6 +26,15 @@ const uploadImages = async (userToken: string, files: [File]) => {
   return response
 }
 
+const getListBoard = async (menu: string) => {
+  const response = await axios.get(`${SERVER_URL}/board/${menu}/`, {
+    headers: {
+      Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`
+    }
+  })
+  return response
+}
+
 const postBoard = async (boardType: string, boardTitle: string, boardContent: string, userToken: string) => {
   console.log(boardType, boardTitle, boardContent, userToken)
   console.log(SERVER_URL)
@@ -42,7 +51,7 @@ const postBoard = async (boardType: string, boardTitle: string, boardContent: st
       'Authorization': `Bearer ${userToken}`
     }
   });
-  return response;
+  return response
 }
 
-export { getBoardList, uploadImages, postBoard }
+export { getBoardList, uploadImages, getListBoard, postBoard }
