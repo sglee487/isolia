@@ -53,7 +53,7 @@ const register = async () => {
     const response = await registerUser('email', displayName.value, email.value, password.value)
     if (response.status === 201) {
       instance?.proxy?.$toast.success('회원가입에 성공하였습니다.')
-      instance?.proxy?.$router.push('/login')
+      instance?.proxy?.$router.push('/settings/login')
       return
     }
     instance?.proxy?.$toast.error(response.data.detail)
@@ -64,7 +64,7 @@ const register = async () => {
 }
 
 const toLogin = () => {
-  instance?.proxy?.$router.push('/login')
+  instance?.proxy?.$router.push('/settings/login')
 }
 
 generateRandomName()

@@ -168,7 +168,7 @@ const goBack = () => {
           </div>
         </router-link>
         <div class="flex justify-end">
-          <router-link to="/login" v-if="!user.isLogined()" class="px-4">
+          <router-link to="/settings/login" v-if="!user.isLogined()" class="px-4">
             <ButtonBox color="app" size="sm">로그인</ButtonBox>
           </router-link>
           <div v-else class="flex flex-row space-x-2 items-center">

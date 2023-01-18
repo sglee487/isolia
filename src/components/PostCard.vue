@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import {
+  ChatBubbleOvalLeftIcon,
+  HeartIcon
+} from '@heroicons/vue/24/outline'
+import dayjs from 'dayjs'
 
 const props = defineProps<{
   post: Object,
@@ -16,14 +21,16 @@ const menuDict = {
 
 <template>
   <div class="mx-2 my-4 p-4 ring-2 ring-slate-500 rounded-md space-y-2">
-    <div v-if="menu === 'all'"
-      class="px-2 py-1 pb-2 rounded-md bg-slate-400 dark:bg-slate-600 w-fit text-app-600 dark:text-app-300">
-      {{ menuDict[props.post.board_type] }}
+    <div class="flex space-x-2 items-center">
+      <div v-if="menu === 'all'"
+        class="px-2 py-1 rounded-md bg-slate-400 dark:bg-slate-600 w-fit text-app-600 dark:text-app-300">
+        {{ menuDict[props.post['board_type']] }}
+      </div>
+      <div class="font-extrabold my-1">
+        {{ props.post.title }}
+      </div>
     </div>
-    <div class="font-extrabold">
-      {{ props.post.title }}
-    </div>
-    <div class="flex justify-between">
+    <div class="flex justify-between space-x-4 pb-2">
       <div class="break-all text-ellipsis">
         {{ props.post.preview_text }}
       </div>
@@ -38,15 +45,17 @@ const menuDict = {
     </div>
     <hr />
     <div class="flex justify-between">
-      <div>
-        {{ props.post.created_at }}
-      </div>
+      <small class="self-end">
+        {{ dayjs(props.post.created_at).format('MM.DD HH:mm') }}
+      </small>
       <div class="flex space-x-2">
         <div>
+          <HeartIcon class="w-5 h-5 inline-block" />
           {{ props.post.like }}
         </div>
         <div>
-          코멘트
+          <ChatBubbleOvalLeftIcon class="w-5 h-5 inline-block" />
+          {{ props.post.comment_length }}
         </div>
       </div>
     </div>

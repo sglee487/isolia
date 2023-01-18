@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref, watch } from 'vue'
-import moment from 'moment'
-
-import WriteComponent from './WriteComponent.vue'
 import ViewComponent from './ViewComponent.vue'
 import ButtonBox from '@/components/ButtonBox.vue'
 
@@ -95,10 +92,10 @@ const viewPost = (id: number) => {
         <tbody>
           <tr v-for="post in posts" :key="post['id']" class="cursor-pointer" @click="viewPost(post['id'])">
             <td v-for="postColumn in postColumns" :key="postColumn['key']">
-              {{ postColumn['dataIndex'] === 'created_at' ? moment(post[postColumn['dataIndex']]).format('YYYY-MM-DD \
+              <!-- {{ postColumn['dataIndex'] === 'created_at' ? moment(post[postColumn['dataIndex']]).format('YYYY-MM-DD \
                             HH:mm:ss') :
                   post[postColumn['dataIndex']]
-              }}
+              }} -->
             </td>
           </tr>
         </tbody>

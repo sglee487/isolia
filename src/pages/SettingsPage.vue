@@ -78,7 +78,7 @@ const changeLightDarkTheme = () => {
         <div class="font-bold text-lg">
           <PresentationChartLineIcon class="w-6 h-6 inline-block mr-2" />앱
         </div>
-        <router-link to="/settings/privacy" class="flex flex-row gap-2 p-5 items-start">
+        <router-link to="/" class="flex flex-row gap-2 p-5 items-start">
           <NewspaperIcon class="w-6 h-6 inline-block mb-1" />
           <div class="grow flex flex-col h-full justify-end space-y-1 ml-1">
             <span class="font-bold text-ellipsis">공지사항</span>
@@ -92,7 +92,7 @@ const changeLightDarkTheme = () => {
         </div>
         <div class="flex flex-col space-y-1">
           <!-- dark mode on off -->
-          <div to="/settings/privacy" class="flex flex-row gap-2 p-5 items-start">
+          <div class="flex flex-row gap-2 p-5 items-start">
             <MoonIcon class="w-6 h-6 inline-block mb-1" />
             <div class="grow flex flex-col h-full justify-end space-y-1 ml-1">
               <span class="font-bold text-ellipsis">다크모드</span>
