@@ -24,9 +24,11 @@ const menuDict = {
       {{ props.post.title }}
     </div>
     <div class="flex justify-between">
-      <div class="break-all">
-        {{ props.post.content }}
+      <div class="break-all text-ellipsis">
+        {{ props.post.preview_text }}
       </div>
+      <img v-if="props.post.preview_image !== null" :src="props.post.preview_image" alt="preview"
+        class="w-32 h-24 object-cover" />
     </div>
     <div class="flex">
       <img class="w-6 h-6 inline-block mb-1 rounded-full shadow-lg" :src="props.post.picture_32" alt="pic32">
