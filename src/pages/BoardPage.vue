@@ -109,8 +109,9 @@ const getWriteMenu = () => {
       </router-link>
     </header>
     <div>
-      <PostCard v-for="post in posts" :key="post.id" class="flex flex-col" :post="post"
-        :menu="instance.proxy.$route.params.menu as string" />
+      <router-link :to="`/board/post/${post.id}`" v-for="post in posts" :key="post.id">
+        <PostCard class="flex flex-col" :post="post" :menu="instance.proxy.$route.params.menu as string" />
+      </router-link>
     </div>
   </div>
 </template>

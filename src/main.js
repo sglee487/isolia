@@ -16,6 +16,7 @@ import LogoutPage from './pages/LogoutPage.vue'
 import RegisterPage from './pages/RegisterPage.vue'
 import BoardPage from './pages/BoardPage.vue'
 import WritePage from './pages/WritePage.vue'
+import PostPage from './pages/PostPage.vue'
 import CalculatorPage from './pages/CalculatorPage.vue'
 import AccountSettingPage from './pages/AccountSettingPage.vue'
 import NotificationPage from './pages/NotificationPage.vue'
@@ -44,6 +45,10 @@ const routes = [
       {
         path: ':name/:menu',
         component: BoardPage
+      },
+      {
+        path: 'post/:postId',
+        component: PostPage
       }
     ]
   },
