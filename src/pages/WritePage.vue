@@ -12,7 +12,9 @@ import { useUserStore } from '@/stores/userStore'
 import InputBox from '@/components/InputBox.vue'
 import ButtonBox from '@/components/ButtonBox.vue'
 import Tiptap from '@/components/Tiptap.vue'
-import boardNames from '@/pages/boardNames'
+import boardNames from '@/pages/menuDict'
+
+import { goBack, routerTo } from '@/utils/routerUtils'
 
 const instance = getCurrentInstance()
 const user = useUserStore()
@@ -38,13 +40,6 @@ boardRoutes.push(
     name: '자유게시판'
   }
 )
-const goBack = () => {
-  instance?.proxy?.$router.back()
-}
-
-const routerTo = (to: string) => {
-  instance.proxy.$router.push(to)
-}
 
 const post = () => {
   console.log()
@@ -68,7 +63,7 @@ const post = () => {
   <div class="p-4 w-[46.5rem]">
     <header
       class="flex space-x-4 justify-between items-center font-extrabold pb-2 mb-2 border-b border-gray-300 dark:border-gray-700">
-      <ChevronLeftIcon class="flex-none w-8 h-8 cursor-pointer text-black dark:text-white" @click="goBack()" />
+      <ChevronLeftIcon class="flex-none w-8 h-8 cursor-pointer text-black dark:text-white" @click="goBack($router)" />
       <div
         class="grow text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-500 to-app-300 dark:from-app-400 dark:to-app-200">
         게시글 쓰기
@@ -100,7 +95,7 @@ const post = () => {
                 <MenuItem v-for="boardRoute in boardRoutes" :key="boardRoute.to">
                 <button
                   class="group flex w-full items-center rounded-md px-2 py-2 text-sm text-gray-900 dark:text-gray-50"
-                  @click="routerTo(boardRoute.to)">
+                  @click="routerTo($router, boardRoute.to)">
                   {{ boardRoute.name }}
                 </button>
                 </MenuItem>

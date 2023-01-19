@@ -54,7 +54,7 @@ const editor = new Editor({
   ],
   editorProps: {
     attributes: {
-      class: 'prose prose-sm sm:prose outline outline-1 outline-offset-2 outline-gray-500 rounded-md min-h-[50vh] text-gray-900 dark:text-gray-100 bg-zinc-50 dark:bg-zinc-800 p-2'
+      class: 'prose prose-sm sm:prose dark:prose-invert outline outline-1 outline-offset-2 outline-gray-500 rounded-md min-h-[50vh] text-gray-900 dark:text-gray-100 bg-zinc-50 dark:bg-zinc-800 p-2'
     }
   },
   content: props.modelValue,

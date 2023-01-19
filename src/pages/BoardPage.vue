@@ -11,7 +11,8 @@ import BoardComponent from '@/components/BoardComponent.vue'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
 import { getListBoard } from '@/apis/board'
-import boardNames from '@/pages/boardNames'
+import { routerTo } from '@/utils/routerUtils'
+import boardNames from '@/pages/menuDict'
 import PostCard from '@/components/PostCard.vue'
 
 const instance = getCurrentInstance()
@@ -22,7 +23,7 @@ const routerParams = instance.proxy.$route.params
 
 const posts = ref<any>([])
 
-if (Object.keys(routerParams).includes('menu')) {
+if (routerParams && Object.keys(routerParams).includes('menu')) {
   boardType.value = routerParams.menu
   getListBoard(boardType.value).then((res) => {
     posts.value = res.data
@@ -31,10 +32,13 @@ if (Object.keys(routerParams).includes('menu')) {
 }
 
 watch(() => instance.proxy.$route.params.menu, async (menu) => {
-  boardType.value = menu
-  getListBoard(boardType.value).then((res) => {
-    posts.value = res.data
-  })
+  if (menu) {
+    boardType.value = menu
+    console.log(menu)
+    getListBoard(boardType.value).then((res) => {
+      posts.value = res.data
+    })
+  }
 })
 
 const boardRoutes = [
@@ -52,16 +56,24 @@ const boardRoutes = [
   }
 ]
 
-const routerTo = (to: string) => {
-  instance.proxy.$router.push(to)
-}
-
 const getWriteMenu = () => {
   if (instance.proxy.$route.params.menu === 'all') {
     return 'free'
   }
   return instance.proxy.$route.params.menu
 }
+
+const handleScroll = () => {
+  console.log('scroll')
+  console.log(instance.proxy.$el.scrollHeight)
+  console.log(instance.proxy.$el.scrollTop)
+  console.log(instance.proxy.$el.clientHeight)
+  // if ($el.scrollHeight - this.$el.scrollTop === this.$el.clientHeight) {
+  //       this.loadMorePosts()
+  //     }
+}
+
+// handleScroll()
 
 </script>
 
@@ -86,7 +98,7 @@ const getWriteMenu = () => {
             class="absolute left-0 mt-2 w-32 px-2 origin-top-right divide-y divide-gray-200 dark:divide-gray-500 rounded-md bg-white dark:bg-black shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
             <div class="px-1 py-1">
               <MenuItem>
-              <button @click="routerTo('/board/list/all')"
+              <button @click="routerTo($router, '/board/list/all')"
                 class="group flex w-full items-center rounded-md px-2 py-2 text-sm text-gray-900 dark:text-gray-50">
                 전체
               </button>
@@ -96,7 +108,7 @@ const getWriteMenu = () => {
               <MenuItem v-for="boardRoute in boardRoutes" :key="boardRoute.to">
               <button
                 class="group flex w-full items-center rounded-md px-2 py-2 text-sm text-gray-900 dark:text-gray-50"
-                @click="routerTo(boardRoute.to)">
+                @click="routerTo($router, boardRoute.to)">
                 {{ boardRoute.name }}
               </button>
               </MenuItem>
@@ -108,8 +120,8 @@ const getWriteMenu = () => {
         <PlusCircleIcon class="w-8 h-8" />
       </router-link>
     </header>
-    <div>
-      <router-link :to="`/board/post/${post.id}`" v-for="post in posts" :key="post.id">
+    <div @scroll="handleScroll">
+      <router-link :to="`/board/post/${post.id}`" v-for="post in posts" :key="post.id" @scroll="handleScroll">
         <PostCard class="flex flex-col" :post="post" :menu="instance.proxy.$route.params.menu as string" />
       </router-link>
     </div>

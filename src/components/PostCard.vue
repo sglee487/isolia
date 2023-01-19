@@ -5,6 +5,8 @@ import {
 } from '@heroicons/vue/24/outline'
 import dayjs from 'dayjs'
 
+import menuDict from '@/pages/menuDict'
+
 const props = defineProps<{
   post: Object,
   menu: string | null
@@ -12,11 +14,6 @@ const props = defineProps<{
 
 console.log(props.post)
 
-const menuDict = {
-  notice: '공지',
-  suggestion: '건의',
-  free: '자유'
-}
 </script>
 
 <template>
