@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getCurrentInstance, ref, watch } from 'vue'
+import { getCurrentInstance, ref, watch, onMounted, onUnmounted } from 'vue'
 import {
   ChevronDownIcon,
   PlusCircleIcon
@@ -22,6 +22,7 @@ const boardType = ref<any>()
 const routerParams = instance.proxy.$route.params
 
 const posts = ref<any>([])
+const scrollComponent = ref<any>(null)
 
 if (routerParams && Object.keys(routerParams).includes('menu')) {
   boardType.value = routerParams.menu
@@ -63,14 +64,30 @@ const getWriteMenu = () => {
   return instance.proxy.$route.params.menu
 }
 
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+
 const handleScroll = () => {
   console.log('scroll')
-  console.log(instance.proxy.$el.scrollHeight)
-  console.log(instance.proxy.$el.scrollTop)
-  console.log(instance.proxy.$el.clientHeight)
-  // if ($el.scrollHeight - this.$el.scrollTop === this.$el.clientHeight) {
-  //       this.loadMorePosts()
-  //     }
+  const element = scrollComponent.value
+  console.log(element)
+  console.log(element.getBoundingClientRect())
+  console.log(element.getBoundingClientRect().bottom)
+  console.log(window.innerHeight)
+
+  if (element.getBoundingClientRect().bottom < window.innerHeight) {
+    loadMorePosts()
+  }
+}
+
+const loadMorePosts = () => {
+  // let newPosts = getPosts(10)
+  // console.log(newPosts)
+  // posts.value.push(...newPosts)
 }
 
 // handleScroll()
@@ -120,8 +137,8 @@ const handleScroll = () => {
         <PlusCircleIcon class="w-8 h-8" />
       </router-link>
     </header>
-    <div @scroll="handleScroll">
-      <router-link :to="`/board/post/${post.id}`" v-for="post in posts" :key="post.id" @scroll="handleScroll">
+    <div class="scrolling-component" ref="scrollComponent">
+      <router-link :to="`/board/post/${post.id}`" v-for="post in posts" :key="post.id">
         <PostCard class="flex flex-col" :post="post" :menu="instance.proxy.$route.params.menu as string" />
       </router-link>
     </div>
