@@ -1,15 +1,11 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/userStore'
 import {
-  ArrowLeftOnRectangleIcon,
   CalculatorIcon,
-  ClockIcon,
   NewspaperIcon,
   UserIcon,
   HomeIcon,
-  BellIcon,
-  CogIcon,
-  ChevronLeftIcon
+  BellIcon
 } from '@heroicons/vue/24/outline'
 
 const user = useUserStore()

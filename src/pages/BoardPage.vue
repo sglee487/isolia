@@ -2,7 +2,8 @@
 import { getCurrentInstance, ref, watch, onMounted, onUnmounted } from 'vue'
 import {
   ChevronDownIcon,
-  PlusCircleIcon
+  PlusCircleIcon,
+  ArrowUpCircleIcon
 } from '@heroicons/vue/24/outline'
 
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
@@ -24,6 +25,7 @@ const posts = ref<any>([])
 
 const headerComponent = ref<any>(null)
 const isHideHeader = ref<boolean>(false)
+const isShowScrollToTop = ref<boolean>(false)
 let lastScroll = 0
 const moreLoading = ref<Boolean>(false)
 
@@ -77,9 +79,9 @@ onUnmounted(() => {
 })
 
 const handleScroll = () => {
-  console.log('scroll')
   const postsElement = scrollComponent.value
 
+  // header hide and show
   const currentScroll = window.scrollY
   if (currentScroll > lastScroll) {
     isHideHeader.value = true
@@ -87,6 +89,15 @@ const handleScroll = () => {
     isHideHeader.value = false
   }
   lastScroll = currentScroll
+
+  console.log(currentScroll)
+
+  // scroll to top
+  if (currentScroll !== 0) {
+    isShowScrollToTop.value = true
+  } else {
+    isShowScrollToTop.value = false
+  }
 
   if (postsElement.getBoundingClientRect().bottom < window.innerHeight) {
     loadMorePosts()
@@ -99,7 +110,12 @@ const loadMorePosts = () => {
   // posts.value.push(...newPosts)
 }
 
-// handleScroll()
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+}
 
 </script>
 
@@ -151,11 +167,20 @@ const loadMorePosts = () => {
         <PostCard class="flex flex-col" :post="post" :menu="instance.proxy.$route.params.menu as string" />
       </router-link>
     </div>
+    <div :class="{ 'showToTop': isShowScrollToTop }"
+      class="fixed right-8 bottom-20 w-10 h-10 rounded-lg bg-gray-500 opacity-0 transition duration-300 transform cursor-pointer">
+      <ArrowUpCircleIcon @click="scrollToTop" />
+
+    </div>
   </div>
 </template>
 
 <style scoped>
 .hiddenHeader {
   transform: translateY(-100%);
+}
+
+.showToTop {
+  opacity: 40%;
 }
 </style>
