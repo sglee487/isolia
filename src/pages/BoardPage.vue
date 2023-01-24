@@ -7,7 +7,6 @@ import {
 
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 
-import BoardComponent from '@/components/BoardComponent.vue'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
 import { getListBoard } from '@/apis/board'
@@ -22,6 +21,12 @@ const boardType = ref<any>()
 const routerParams = instance.proxy.$route.params
 
 const posts = ref<any>([])
+
+const headerComponent = ref<any>(null)
+const isHideHeader = ref<boolean>(false)
+let lastScroll = 0
+const moreLoading = ref<Boolean>(false)
+
 const scrollComponent = ref<any>(null)
 
 if (routerParams && Object.keys(routerParams).includes('menu')) {
@@ -73,13 +78,17 @@ onUnmounted(() => {
 
 const handleScroll = () => {
   console.log('scroll')
-  const element = scrollComponent.value
-  console.log(element)
-  console.log(element.getBoundingClientRect())
-  console.log(element.getBoundingClientRect().bottom)
-  console.log(window.innerHeight)
+  const postsElement = scrollComponent.value
 
-  if (element.getBoundingClientRect().bottom < window.innerHeight) {
+  const currentScroll = window.scrollY
+  if (currentScroll > lastScroll) {
+    isHideHeader.value = true
+  } else {
+    isHideHeader.value = false
+  }
+  lastScroll = currentScroll
+
+  if (postsElement.getBoundingClientRect().bottom < window.innerHeight) {
     loadMorePosts()
   }
 }
@@ -96,8 +105,8 @@ const loadMorePosts = () => {
 
 <template>
   <div class="p-4 w-[62rem] mb-12">
-    <header
-      class="flex flex-row justify-between items-center font-extrabold pb-2 border-b border-gray-300 dark:border-gray-700">
+    <header ref="headerComponent" :class="{ 'hidden': isHideHeader }"
+      class="w-full pr-6 top-0 pt-2 bg-[#f2f2f2] dark:bg-[#222222] fixed flex flex-row justify-between items-center font-extrabold pb-2 border-b border-gray-300 dark:border-gray-700">
       <Menu as="div" class="relative inline-block text-left">
         <div>
           <MenuButton
@@ -137,7 +146,7 @@ const loadMorePosts = () => {
         <PlusCircleIcon class="w-8 h-8" />
       </router-link>
     </header>
-    <div class="scrolling-component" ref="scrollComponent">
+    <div class="mt-12 scroll-smooth" ref="scrollComponent">
       <router-link :to="`/board/post/${post.id}`" v-for="post in posts" :key="post.id">
         <PostCard class="flex flex-col" :post="post" :menu="instance.proxy.$route.params.menu as string" />
       </router-link>
