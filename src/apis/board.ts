@@ -57,13 +57,13 @@ const postBoard = async (boardType: string, boardTitle: string, boardContent: st
   return response
 }
 
-const postComment = async (content: String, boardId: Number, userToken: String) => {
+const postComment = async (boardId: Number, content: String, userToken: String) => {
   const data = {
-    'content': content,
-    'boardId': boardId
+    'board_id': boardId,
+    'content': content
   }
 
-  const response = await axios.post(`${SERVER_URL}/board/`, data, {
+  const response = await axios.post(`${SERVER_URL}/comment/`, data, {
     headers: {
       'accept': 'application/json',
       'Authorization': `Bearer ${userToken}`

@@ -12,6 +12,7 @@ import { goBack } from '@/utils/routerUtils'
 import { useUserStore } from '@/stores/userStore'
 import InputAreaBox from '@/components/InputAreaBox.vue'
 import ButtonBox from '@/components/ButtonBox.vue'
+import { axiosErrorHandler } from '@/handler/axiosErrorHandler'
 
 const instance = getCurrentInstance()
 
@@ -64,13 +65,23 @@ const writeCommentText = ref<string>('')
 if ('postId' in instance.proxy.$route.params) {
   const postId = parseInt(instance.proxy.$route.params.postId)
   getPost(postId).then((res) => {
-    console.log(res.data)
     postData.value = res.data
   });
 }
 
-const saveComment = () => {
-  console.log(writeCommentText.value)
+const saveComment = async () => {
+  try {
+    const commentResponse = postComment(postData.value.id, writeCommentText.value, user.data.token)
+  } catch (error) {
+    axiosErrorHandler(instance, error)
+    return
+  }
+  writeCommentText.value = ''
+
+  const postId = parseInt(instance.proxy.$route.params.postId)
+  getPost(postId).then((res) => {
+    postData.value = res.data
+  })
 }
 
 </script>
@@ -112,9 +123,38 @@ const saveComment = () => {
       <div>
         댓글 개수: {{ postData.comments.length }}
       </div>
-      <div class="divide-y-2 divide-gray-300 dark:divide-gray-500">
-        <div v-for="comment in postData.comments" :key="comment.id">
-
+      <div class="space-y-8">
+        <div v-for="comment in postData.comments" :key="comment.id"
+          class="space-y-4 divide-gray-300 dark:divide-gray-500">
+          <div class="flex space-x-2 items-center">
+            <img class="w-8 h-8 inline-block mb-1 rounded-full shadow-lg" :src="comment.picture_96" alt="pic96">
+            <div class="flex flex-col ">
+              <div class="text-sm">
+                {{ comment.display_name }}
+              </div>
+              <div class="text-gray-600 dark:text-gray-400 text-xs">
+                {{ dayjs(comment.created_at).format('YY.MM.DD HH:mm:ss ddd') }}
+              </div>
+            </div>
+          </div>
+          <div>
+            {{ comment.content }}
+          </div>
+          <div class="flex flex-col w-full">
+            <div class="flex space-x-2">
+              <div class="flex-grow">
+                <ButtonBox @click="likeComment(comment.id)" color="green" class="w-full">
+                  좋아요 {{ comment.like }}
+                </ButtonBox>
+              </div>
+              <div class="flex-grow">
+                <ButtonBox @click="dislikeComment(comment.id)" color="red" class="w-full">
+                  싫어요 {{ comment.dislike }}
+                </ButtonBox>
+              </div>
+            </div>
+          </div>
+          <hr />
         </div>
       </div>
     </div>
