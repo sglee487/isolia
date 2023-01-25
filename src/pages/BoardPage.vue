@@ -11,41 +11,55 @@ import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
 import { getListBoard } from '@/apis/board'
+import { useBoardStore } from '@/stores/boardStore'
 import { routerTo } from '@/utils/routerUtils'
 import boardNames from '@/pages/menuDict'
 import PostCard from '@/components/PostCard.vue'
+import SpinnerIcon from '@/icons/Spinner.vue'
 
 const instance = getCurrentInstance()
+const boardStore = useBoardStore()
 
 const boardType = ref<any>()
 
 const routerParams = instance.proxy.$route.params
 
-const posts = ref<any>([])
-
 const headerComponent = ref<any>(null)
 const isHideHeader = ref<boolean>(false)
 const isShowScrollToTop = ref<boolean>(false)
 let lastScroll = 0
+
+const currentPage = ref<number>(0)
 const moreLoading = ref<Boolean>(false)
+let isLastPage = false
 
 const scrollComponent = ref<any>(null)
 
+const loadMorePosts = async () => {
+  const res = await getListBoard(boardType.value, currentPage.value + 1)
+  if (res.status === 200) {
+    if (res.data.length > 0) {
+      currentPage.value += 1
+      boardStore.addPosts(res.data)
+    } else {
+      isLastPage = true
+    }
+  }
+}
+
 if (routerParams && Object.keys(routerParams).includes('menu')) {
   boardType.value = routerParams.menu
-  getListBoard(boardType.value).then((res) => {
-    posts.value = res.data
-    console.log(res.data)
-  })
+  if (boardStore.posts.length === 0) {
+    loadMorePosts()
+  }
 }
 
 watch(() => instance.proxy.$route.params.menu, async (menu) => {
   if (menu) {
+    boardStore.clearPosts()
+    currentPage.value = 0
     boardType.value = menu
-    console.log(menu)
-    getListBoard(boardType.value).then((res) => {
-      posts.value = res.data
-    })
+    loadMorePosts()
   }
 })
 
@@ -78,7 +92,7 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
 
-const handleScroll = () => {
+const handleScroll = async () => {
   const postsElement = scrollComponent.value
 
   // header hide and show
@@ -90,8 +104,6 @@ const handleScroll = () => {
   }
   lastScroll = currentScroll
 
-  console.log(currentScroll)
-
   // scroll to top
   if (currentScroll !== 0) {
     isShowScrollToTop.value = true
@@ -99,15 +111,12 @@ const handleScroll = () => {
     isShowScrollToTop.value = false
   }
 
-  if (postsElement.getBoundingClientRect().bottom < window.innerHeight) {
-    loadMorePosts()
+  // infinite scroll
+  if (!isLastPage && !moreLoading.value && postsElement.getBoundingClientRect().bottom < window.innerHeight) {
+    moreLoading.value = true
+    await loadMorePosts()
+    moreLoading.value = false
   }
-}
-
-const loadMorePosts = () => {
-  // let newPosts = getPosts(10)
-  // console.log(newPosts)
-  // posts.value.push(...newPosts)
 }
 
 const scrollToTop = () => {
@@ -163,14 +172,16 @@ const scrollToTop = () => {
       </router-link>
     </header>
     <div class="mt-12 scroll-smooth" ref="scrollComponent">
-      <router-link :to="`/board/post/${post.id}`" v-for="post in posts" :key="post.id">
+      <router-link :to="`/board/post/${post.id}`" v-for="post in boardStore.posts" :key="post.id">
         <PostCard class="flex flex-col" :post="post" :menu="instance.proxy.$route.params.menu as string" />
       </router-link>
+      <div v-if="moreLoading" class="flex justify-center items-center mt-4">
+        <SpinnerIcon class="w-16 h-16 animate-spin" />
+      </div>
     </div>
     <div :class="{ 'showToTop': isShowScrollToTop }"
-      class="fixed right-8 bottom-20 w-10 h-10 rounded-lg bg-gray-500 opacity-0 transition duration-300 transform cursor-pointer">
-      <ArrowUpCircleIcon @click="scrollToTop" />
-
+      class="fixed right-8 bottom-20 w-10 h-10 rounded-lg bg-gray-300 dark:bg-gray-500 opacity-0 transition duration-300 transform cursor-pointer">
+      <ArrowUpCircleIcon @click="scrollToTop" class="opacity-70" />
     </div>
   </div>
 </template>

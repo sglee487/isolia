@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getCurrentInstance, onBeforeMount, ref, watch } from 'vue'
+import { getCurrentInstance, onBeforeMount, ref } from 'vue'
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import Popper from 'vue3-popper'
 
@@ -16,10 +16,7 @@ import {
   ClockIcon,
   NewspaperIcon,
   UserIcon,
-  HomeIcon,
-  BellIcon,
-  CogIcon,
-  ChevronLeftIcon
+  CogIcon
 } from '@heroicons/vue/24/outline'
 import { AxiosError } from 'axios'
 

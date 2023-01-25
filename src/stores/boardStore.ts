@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 
 // @ts-ignore
-export const useUserStore = defineStore('board', {
+export const useBoardStore = defineStore('board', {
   state: () => {
     return {
       posts: []
@@ -11,7 +11,7 @@ export const useUserStore = defineStore('board', {
     addPosts(posts) {
       this.posts.push(...posts)
     },
-    emptyPosts() {
+    clearPosts() {
       this.posts = []
     }
   },

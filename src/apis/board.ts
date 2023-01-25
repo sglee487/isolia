@@ -17,8 +17,11 @@ const uploadImages = async (userToken: string, files: [File]) => {
   return response
 }
 
-const getListBoard = async (menu: string) => {
+const getListBoard = async (menu: string, page: number) => {
   const response = await axios.get(`${SERVER_URL}/board/${menu}/`, {
+    params: {
+      page: page
+    },
     headers: {
       Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`
     }

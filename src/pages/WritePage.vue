@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getCurrentInstance, ref, watch } from 'vue'
+import { getCurrentInstance, ref } from 'vue'
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import {

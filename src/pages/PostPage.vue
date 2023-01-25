@@ -51,13 +51,13 @@ watch(() => instance.proxy.$route.params.id, async (id) => {
   <div class="p-4 w-[62rem] mb-12">
     <div class="mt-14 md:mt-0 px-2 py-1 flex flex-col space-y-2 divide-y divide-gray-200 dark:divide-gray-700">
       <div>
-        <small class="p-1 rounded-md bg-slate-400 dark:bg-slate-600 w-fit text-app-600 dark:text-app-300">
+        <small class="p-1 rounded-md bg-slate-300 dark:bg-slate-600 w-fit text-app-600 dark:text-app-300">
           {{ boardNames[postData.board_type] }}
         </small>
         <div class="font-extrabold my-1">
           {{ postData.title }}
         </div>
-        <small class="self-end text-gray-300 dark:text-gray-400">
+        <small class="self-end text-gray-600 dark:text-gray-400">
           {{ dayjs(postData.created_at).format('YY.MM.DD HH:mm:ss ddd') }} | 조회수 {{ postData.hits }}
         </small>
         <div>
