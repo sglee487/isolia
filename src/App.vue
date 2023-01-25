@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getCurrentInstance, onBeforeMount, ref } from 'vue'
+import { getCurrentInstance, onBeforeMount, ref, watch } from 'vue'
 import VueCountdown from '@chenfengyuan/vue-countdown'
 import Popper from 'vue3-popper'
 
@@ -25,6 +25,8 @@ import BottomNavBar from './components/BottomNavBar.vue'
 const instance = getCurrentInstance()
 const user = useUserStore()
 const settings = useSettingsStore()
+
+const isShowBottomNavBar = ref<boolean>(true)
 
 if (settings.themeLightDark === 'dark' || (settings.themeLightDark === 'default' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
   document.documentElement.classList.add('dark')
@@ -111,27 +113,19 @@ const getRemainTime = () => {
   return remainTime
 }
 
-// const rootPaths = ['/', '/logout', '/user', '/register', '/board/list', '/board/write', '/calculator', '/notification', '/settings']
-// const isRootPath = () => {
-//   console.log(instance?.proxy?.$route.path)
-//   for (const path of rootPaths) {
-//     if (instance?.proxy?.$route.path === path) {
-//       return true
-//     }
-//   }
-//   return false
-// }
-
-// const navNotVisiblePaths = ['board/write/free']
-
-// watch(() => instance.proxy.$route, async (name) => {
-//   console.log(instance.proxy.$route)
-// })
-
-
-const goBack = () => {
-  instance?.proxy?.$router.back()
+const showBottomNavBar = () => {
+  if (instance.proxy.$route.name === 'write') {
+    return false
+  }
+  if (instance.proxy.$route.name === 'post') {
+    return false
+  }
+  return true
 }
+
+watch(() => instance.proxy.$route, () => {
+  isShowBottomNavBar.value = showBottomNavBar()
+})
 
 </script>
 
@@ -207,7 +201,7 @@ const goBack = () => {
     <router-view />
   </div>
 
-  <BottomNavBar v-if="instance.proxy.$route.name !== 'write'" />
+  <BottomNavBar v-if="isShowBottomNavBar" />
 
   <!-- <footer>
     <div class="h-16 flex justify-center items-center">

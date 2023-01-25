@@ -2,20 +2,64 @@
 import { getCurrentInstance, ref, watch } from 'vue'
 import {
   ChevronLeftIcon,
-  EllipsisVerticalIcon
+  UserIcon,
 } from '@heroicons/vue/24/outline'
 import dayjs from 'dayjs'
 
 import boardNames from '@/pages/menuDict'
-import { getPost } from '@/apis/board'
+import { getPost, postComment } from '@/apis/board'
 import { goBack } from '@/utils/routerUtils'
+import { useUserStore } from '@/stores/userStore'
+import InputAreaBox from '@/components/InputAreaBox.vue'
+import ButtonBox from '@/components/ButtonBox.vue'
 
 const instance = getCurrentInstance()
 
-const postData = ref<any>([])
+const user = useUserStore()
 
-const routerParams = instance.proxy.$route.params
-console.log(instance.proxy.$route.params)
+interface Post {
+  board_type: string
+  comments: []
+  content: string
+  created_at: string
+  created_at_1: string
+  deleted_at: string | null
+  deleted_at_1: string | null
+  dislike: number
+  display_name: string
+  email: string
+  hits: number
+  id: Number
+  id_1: Number
+  is_active: Boolean
+  is_active_1: Boolean
+  like: Number
+  login_type: String
+  picture_96: String
+}
+
+const postData = ref<Post>({
+  board_type: '',
+  comments: [],
+  content: '',
+  created_at: '',
+  created_at_1: '',
+  deleted_at: '',
+  deleted_at_1: '',
+  dislike: 0,
+  display_name: '',
+  email: '',
+  hits: 0,
+  id: 0,
+  id_1: 0,
+  is_active: false,
+  is_active_1: false,
+  like: 0,
+  login_type: '',
+  picture_96: ''
+})
+
+const writeCommentText = ref<string>('')
 
 if ('postId' in instance.proxy.$route.params) {
   const postId = parseInt(instance.proxy.$route.params.postId)
@@ -25,13 +69,9 @@ if ('postId' in instance.proxy.$route.params) {
   });
 }
 
-watch(() => instance.proxy.$route.params.id, async (id) => {
-  console.log(instance.proxy.$route.params)
-  getPost(id).then((res) => {
-    console.log(res.data)
-    postData.value = res.data
-  })
-})
+const saveComment = () => {
+  console.log(writeCommentText.value)
+}
 
 </script>
 
@@ -46,11 +86,10 @@ watch(() => instance.proxy.$route.params.id, async (id) => {
         Isolia
       </div>
     </div>
-    <!-- <EllipsisVerticalIcon class="flex-none w-8 h-8 cursor-pointer text-black dark:text-white" /> -->
   </header>
   <div class="p-4 w-[62rem] mb-12">
-    <div class="mt-14 md:mt-0 px-2 py-1 flex flex-col space-y-2 divide-y divide-gray-200 dark:divide-gray-700">
-      <div>
+    <div class="mt-14 md:mt-0 px-2 py-1 flex flex-col space-y-4 divide-gray-200 dark:divide-gray-700">
+      <div class="space-y-2">
         <small class="p-1 rounded-md bg-slate-300 dark:bg-slate-600 w-fit text-app-600 dark:text-app-300">
           {{ boardNames[postData.board_type] }}
         </small>
@@ -60,12 +99,37 @@ watch(() => instance.proxy.$route.params.id, async (id) => {
         <small class="self-end text-gray-600 dark:text-gray-400">
           {{ dayjs(postData.created_at).format('YY.MM.DD HH:mm:ss ddd') }} | 조회수 {{ postData.hits }}
         </small>
-        <div>
+        <div class="flex space-x-2 items-center">
+          <img class="w-10 h-10 inline-block mb-1 rounded-full shadow-lg" :src="postData.picture_96" alt="pic96">
+          <div>
+            {{ postData.display_name }}
+          </div>
+        </div>
+      </div>
+      <hr />
+      <article class="break-all prose dark:prose-invert" v-html="postData.content" />
+      <hr />
+      <div>
+        댓글 개수: {{ postData.comments.length }}
+      </div>
+      <div class="divide-y-2 divide-gray-300 dark:divide-gray-500">
+        <div v-for="comment in postData.comments" :key="comment.id">
 
         </div>
       </div>
-      <article class="break-all prose dark:prose-invert" v-html="postData.content" />
     </div>
   </div>
 
+  <div v-if="user.isLogined"
+    class="fixed flex items-center bottom-0 w-full py-1 px-2 space-x-2 border-t border-gray-200 dark:border-gray-700 bg-[#f5f5f5] dark:bg-[#121212] z-10">
+    <img class="flex-none w-8 h-8 inline-block mb-1 rounded-full shadow-lg" :src="user.data.picture_96" alt="pic96">
+    <InputAreaBox class="grow" v-model="writeCommentText" :placeholder="`${user.data.display_name} (으)로 댓글 입력...`" />
+    <ButtonBox class="flex-none" @click="saveComment" color="app">등록</ButtonBox>
+  </div>
+  <div v-else
+    class="fixed flex items-center bottom-0 w-full py-1 px-2 space-x-2 border-t border-gray-200 dark:border-gray-700 bg-[#f5f5f5] dark:bg-[#121212] z-10">
+    <UserIcon class="flex-none w-8 h-8 inline-block mb-1 rounded-full shadow-lg" />
+    <InputAreaBox class="grow" v-model="writeCommentText" placeholder="댓글을 입력하시려면 로그인하세요..." disabled />
+    <ButtonBox class="flex-none" color="app">로그인</ButtonBox>
+  </div>
 </template>

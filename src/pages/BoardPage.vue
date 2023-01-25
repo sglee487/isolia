@@ -172,7 +172,7 @@ const scrollToTop = () => {
       </router-link>
     </header>
     <div class="mt-12 scroll-smooth" ref="scrollComponent">
-      <router-link :to="`/board/post/${post.id}`" v-for="post in boardStore.posts" :key="post.id">
+      <router-link :to="`/board/post/${post.id}/`" v-for="post in boardStore.posts" :key="post.id">
         <PostCard class="flex flex-col" :post="post" :menu="instance.proxy.$route.params.menu as string" />
       </router-link>
       <div v-if="moreLoading" class="flex justify-center items-center mt-4">
