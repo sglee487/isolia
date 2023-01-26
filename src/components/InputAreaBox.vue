@@ -30,14 +30,21 @@ const value = computed<string | number>({
       v-if="props.label">
       {{ props.label }}
     </label>
-    <textarea
-      class="inline-block bg-zinc-50 dark:bg-zinc-800 border ring-app-300 dark:ring-app-500 text-gray-900 dark:text-gray-100 text-sm rounded-b-lg ring-1 outline-none focus:ring-app-400 dark:focus:ring-app-600 p-2.5"
+    <textarea ref="textareaRef"
+      class="inline-block bg-zinc-50 dark:bg-zinc-800 ring-app-300 dark:ring-app-500 text-gray-900 dark:text-gray-100 text-sm rounded-b-lg ring-1 outline-none focus:ring-app-400 dark:focus:ring-app-600 p-2.5"
       :class="[
         props.label ? 'rounded-t-none' : 'rounded-t-lg',
         props.disabled ? 'bg-gray-200 dark:bg-gray-500' : ''
       ]" v-model="value" :id="props.inputId" :type="props.type" :placeholder="props.placeholder"
-      :readonly="props.readonly" :disabled="props.disabled">
+      :readonly="props.readonly" :disabled="props.disabled" rows="1" style="height: 40px; max-height: 40vh"
+      onkeydown="this.style.height = '40px'; this.style.height = this.scrollHeight + 'px';">
     <slot />
     </textarea>
   </div>
 </template>
+
+<style scoped>
+textarea {
+  resize: none;
+}
+</style>

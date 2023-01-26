@@ -3,6 +3,7 @@ import { getCurrentInstance, ref, watch } from 'vue'
 import {
   ChevronLeftIcon,
   UserIcon,
+  HeartIcon
 } from '@heroicons/vue/24/outline'
 import dayjs from 'dayjs'
 
@@ -71,17 +72,19 @@ if ('postId' in instance.proxy.$route.params) {
 
 const saveComment = async () => {
   try {
-    const commentResponse = postComment(postData.value.id, writeCommentText.value, user.data.token)
+    const commentResponse = await postComment(postData.value.id, writeCommentText.value, user.data.token)
+    if (commentResponse.status === 201) {
+      writeCommentText.value = ''
+      const postId = parseInt(instance.proxy.$route.params.postId)
+      getPost(postId).then((res) => {
+        postData.value = res.data
+      })
+    }
   } catch (error) {
     axiosErrorHandler(instance, error)
     return
   }
-  writeCommentText.value = ''
 
-  const postId = parseInt(instance.proxy.$route.params.postId)
-  getPost(postId).then((res) => {
-    postData.value = res.data
-  })
 }
 
 </script>
@@ -121,8 +124,9 @@ const saveComment = async () => {
       <article class="break-all prose dark:prose-invert" v-html="postData.content" />
       <hr />
       <div>
-        댓글 개수: {{ postData.comments.length }}
+        댓글 {{ postData.comments.length }} 개
       </div>
+      <hr />
       <div class="space-y-8">
         <div v-for="comment in postData.comments" :key="comment.id"
           class="space-y-4 divide-gray-300 dark:divide-gray-500">
@@ -140,30 +144,24 @@ const saveComment = async () => {
           <div>
             {{ comment.content }}
           </div>
-          <div class="flex flex-col w-full">
-            <div class="flex space-x-2">
-              <div class="flex-grow">
-                <ButtonBox @click="likeComment(comment.id)" color="green" class="w-full">
-                  좋아요 {{ comment.like }}
-                </ButtonBox>
-              </div>
-              <div class="flex-grow">
-                <ButtonBox @click="dislikeComment(comment.id)" color="red" class="w-full">
-                  싫어요 {{ comment.dislike }}
-                </ButtonBox>
-              </div>
+          <!-- <div class="flex flex-col w-full px-2">
+            <div class="self-end space-x">
+              <HeartIcon class="w-6 h-6 inline-block" />
+              <span class="text-sm">{{ comment.like }}</span>
             </div>
-          </div>
+          </div> -->
           <hr />
         </div>
       </div>
     </div>
   </div>
 
+  <!-- comment -->
   <div v-if="user.isLogined"
     class="fixed flex items-center bottom-0 w-full py-1 px-2 space-x-2 border-t border-gray-200 dark:border-gray-700 bg-[#f5f5f5] dark:bg-[#121212] z-10">
     <img class="flex-none w-8 h-8 inline-block mb-1 rounded-full shadow-lg" :src="user.data.picture_96" alt="pic96">
-    <InputAreaBox class="grow" v-model="writeCommentText" :placeholder="`${user.data.display_name} (으)로 댓글 입력...`" />
+    <InputAreaBox class="grow max-h-[40vh]" v-model="writeCommentText"
+      :placeholder="`${user.data.display_name} (으)로 댓글 입력...`" />
     <ButtonBox class="flex-none" @click="saveComment" color="app">등록</ButtonBox>
   </div>
   <div v-else
