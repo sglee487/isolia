@@ -39,6 +39,7 @@ const loadMorePosts = async () => {
   const res = await getListBoard(boardType.value, currentPage.value + 1)
   if (res.status === 200) {
     if (res.data.length > 0) {
+      console.log(res.data)
       currentPage.value += 1
       boardStore.addPosts(res.data)
     } else {

@@ -46,10 +46,10 @@ const props = defineProps<{
         {{ dayjs(props.post.created_at).format('MM.DD HH:mm') }}
       </small>
       <div class="flex space-x-2">
-        <div>
+        <!-- <div>
           <HeartIcon class="w-5 h-5 inline-block" />
           {{ props.post.like }}
-        </div>
+        </div> -->
         <div>
           <ChatBubbleOvalLeftIcon class="w-5 h-5 inline-block" />
           {{ props.post.comment_length }}
