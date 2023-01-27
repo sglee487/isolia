@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
 import {
 	ChevronLeftIcon
 } from '@heroicons/vue/24/outline'
@@ -20,7 +20,17 @@ const dose = ref<number | null>(null)
 const weight = ref<number | null>(null)
 const drug = ref<number | null>(null)
 const afterShuffleIV = ref<number | null>(null)
-const calculated = ref<number | null>(null)
+const calculated = computed<number | null>(() => {
+	if (dose.value === null || weight.value === null || drug.value === null || afterShuffleIV.value === null) {
+		return null
+	}
+
+	if (!drug.value || drug.value !== 0) {
+		return dose.value * afterShuffleIV.value * weight.value / drug.value
+	} else {
+		return null
+	}
+})
 
 onMounted(() => {
 	window.addEventListener('scroll', handleScroll)
@@ -45,7 +55,6 @@ const reset = () => {
 	weight.value = null
 	drug.value = null
 	afterShuffleIV.value = null
-	calculated.value = null
 
 	document.getElementById('doseFocus')?.focus()
 }
@@ -79,33 +88,28 @@ const save = () => {
 	calculateHistory.addResult(result)
 }
 
-const decideValues = () => {
-	if (dose.value === null || weight.value === null || drug.value === null || afterShuffleIV.value === null) {
-		calculated.value = null
-		return
-	}
-
-	if (!drug.value || drug.value !== 0) {
-		calculated.value = dose.value * afterShuffleIV.value * weight.value / drug.value
-	} else {
-		calculated.value = null
-	}
-}
-
 watch(() => dose.value, async () => {
-	decideValues()
+	if ((typeof dose.value) === 'string') {
+		dose.value = null
+	}
 })
 
 watch(() => weight.value, async () => {
-	decideValues()
+	if ((typeof weight.value) === 'string') {
+		weight.value = null
+	}
 })
 
 watch(() => drug.value, async () => {
-	decideValues()
+	if ((typeof drug.value) === 'string') {
+		drug.value = null
+	}
 })
 
 watch(() => afterShuffleIV.value, async () => {
-	decideValues()
+	if ((typeof afterShuffleIV.value) === 'string') {
+		afterShuffleIV.value = null
+	}
 })
 
 </script>
@@ -120,7 +124,7 @@ watch(() => afterShuffleIV.value, async () => {
 				<div class="text-xl">
 					Epinephrine Rate
 				</div>
-				<div class="text-lg">
+				<div class="text-base">
 					에피네프린 속도
 				</div>
 			</div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
 import {
   ChevronLeftIcon
 } from '@heroicons/vue/24/outline'
@@ -18,7 +18,17 @@ let lastScroll = 0
 
 const weight = ref<number | null>(null)
 const height = ref<number | null>(null)
-const calculated = ref<number | null>(null)
+const calculated = computed<number | null>(() => {
+  if (height.value === null || weight.value === null) {
+    return null
+  }
+
+  if (!height.value || height.value !== 0) {
+    return weight.value / (height.value * height.value) * 10000
+  } else {
+    return null
+  }
+})
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
@@ -41,7 +51,6 @@ const handleScroll = async () => {
 const reset = () => {
   weight.value = null
   height.value = null
-  calculated.value = null
 
   document.getElementById('heightFocus')?.focus()
 }
@@ -65,7 +74,7 @@ const save = () => {
       weight: weight.value
     },
     output: {
-      label: 'BMI',
+      label: '체질량지수',
       value: calculated.value.toFixed(2),
       unit: 'kg/m^2'
     }
@@ -73,24 +82,16 @@ const save = () => {
   calculateHistory.addResult(result)
 }
 
-const decideValues = () => {
-  if (height.value === null || weight.value === null) {
-    calculated.value = null
-    return
-  }
-
-  if (!height.value || height.value !== 0) {
-    calculated.value = weight.value / (height.value * height.value) * 10000
-  } else {
-    calculated.value = null
-  }
-}
 watch(() => height.value, async () => {
-  decideValues()
+  if ((typeof height.value) === 'string') {
+    height.value = null
+  }
 })
 
 watch(() => weight.value, async () => {
-  decideValues()
+  if ((typeof weight.value) === 'string') {
+    weight.value = null
+  }
 })
 
 </script>
@@ -105,7 +106,7 @@ watch(() => weight.value, async () => {
         <div class="text-xl">
           BMI
         </div>
-        <div class="text-lg">
+        <div class="text-base">
           체질량 지수
         </div>
       </div>
@@ -116,11 +117,11 @@ watch(() => weight.value, async () => {
       <InputBox label="체중(kg)" v-model="weight" type="number" @keyup.enter="save" placeholder="0.00" />
     </div>
     <div class="md:hidden block fixed inset-x-0 text-center bottom-14 bg-white dark:bg-black py-2">
-      주입 속도는
+      BMI는
       <span class="font-bold text-app-600">
         {{ calculated === null ? '0.00' : calculated.toFixed(2) }}
       </span>
-      <small>cc/hr</small> 입니다.
+      <small>kg/m^2</small> 입니다.
     </div>
     <div class="py-4 flex space-x-1">
       <ButtonBox class="text-sm w-32" @click="reset" color="red">초기화</ButtonBox>
