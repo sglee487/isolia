@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import {
+	ChevronLeftIcon
+} from '@heroicons/vue/24/outline'
 
 import { useCalculateStore } from '@/stores/calculateStore'
 
 import InputBox from '@/components/InputBox.vue'
 import ButtonBox from '@/components/ButtonBox.vue'
+
+import { goBack } from '@/utils/routerUtils'
 
 const calculateHistory = useCalculateStore()
 
@@ -86,16 +91,19 @@ watch(() => afterShuffleIV.value, async () => {
 
 <template>
 	<div class="flex flex-col">
-		<div
-			class="pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-500 to-app-300 dark:from-app-400 dark:to-app-200">
-			<div class="text-2xl">
-				Epinephrine Rate
+		<header
+			class="fixed flex space-x-4 justify-between items-center top-0 left-0 w-full font-bold text-transparent bg-gradient-to-r from-app-500 to-app-300 dark:from-app-400 dark:to-app-200">
+			<ChevronLeftIcon class="flex-none w-8 h-8 cursor-pointer text-black dark:text-white" @click="goBack($router)" />
+			<div class="flex flex-col">
+				<div class="text-2xl">
+					Epinephrine Rate
+				</div>
+				<div class="text-xl">
+					에피네프린 속도
+				</div>
 			</div>
-			<div class="text-xl">
-				에피네프린 속도
-			</div>
-		</div>
-		<div class="space-y-4">
+		</header>
+		<div class="pt-20 space-y-4">
 			<InputBox label="주입용량단위(mcg/kg/min)" v-model="dose" type="number" @keyup.enter="save" inputId="doseFocus"
 				placeholder="0.00" />
 			<InputBox label="체중(kg)" v-model="weight" type="number" @keyup.enter="save" placeholder="0.00" />

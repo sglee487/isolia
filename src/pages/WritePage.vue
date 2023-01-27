@@ -42,10 +42,6 @@ boardRoutes.push(
 )
 
 const post = () => {
-  console.log()
-  console.log(content.value)
-  console.log(routerParams)
-  console.log(routerParams.menu as string)
   postBoard(routerParams.menu as string, title.value, content.value, user.data.token)
     .then((res) => {
       instance?.proxy?.$router.push(`/board/list/${routerParams.menu}`)
