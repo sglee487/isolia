@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import {
 	ChevronLeftIcon
 } from '@heroicons/vue/24/outline'
@@ -13,11 +13,32 @@ import { goBack } from '@/utils/routerUtils'
 
 const calculateHistory = useCalculateStore()
 
+const isHideHeader = ref<boolean>(false)
+let lastScroll = 0
+
 const dose = ref<number | null>(null)
 const weight = ref<number | null>(null)
 const drug = ref<number | null>(null)
 const afterShuffleIV = ref<number | null>(null)
 const calculated = ref<number | null>(null)
+
+onMounted(() => {
+	window.addEventListener('scroll', handleScroll)
+})
+onUnmounted(() => {
+	window.removeEventListener('scroll', handleScroll)
+})
+
+const handleScroll = async () => {
+	// header hide and show
+	const currentScroll = window.scrollY
+	if (currentScroll > lastScroll) {
+		isHideHeader.value = true
+	} else {
+		isHideHeader.value = false
+	}
+	lastScroll = currentScroll
+}
 
 const reset = () => {
 	dose.value = null
@@ -91,19 +112,20 @@ watch(() => afterShuffleIV.value, async () => {
 
 <template>
 	<div class="flex flex-col">
-		<header
-			class="fixed flex space-x-4 justify-between items-center top-0 left-0 w-full font-bold text-transparent bg-gradient-to-r from-app-500 to-app-300 dark:from-app-400 dark:to-app-200">
+		<header :class="{ 'hiddenHeader': isHideHeader }"
+			class="transition duration-300 transform fixed flex w-full space-x-4 py-1 justify-between items-center top-0 left-0 font-bold bg-[#f5f5f5] dark:bg-[#222222] z-50 border-b border-gray-300 dark:border-gray-700">
 			<ChevronLeftIcon class="flex-none w-8 h-8 cursor-pointer text-black dark:text-white" @click="goBack($router)" />
-			<div class="flex flex-col">
-				<div class="text-2xl">
+			<div
+				class="grow flex flex-col bg-clip-text text-transparent bg-gradient-to-r from-app-500 to-app-300 dark:from-app-400 dark:to-app-200">
+				<div class="text-xl">
 					Epinephrine Rate
 				</div>
-				<div class="text-xl">
+				<div class="text-lg">
 					에피네프린 속도
 				</div>
 			</div>
 		</header>
-		<div class="pt-20 space-y-4">
+		<div class="pt-16 space-y-4">
 			<InputBox label="주입용량단위(mcg/kg/min)" v-model="dose" type="number" @keyup.enter="save" inputId="doseFocus"
 				placeholder="0.00" />
 			<InputBox label="체중(kg)" v-model="weight" type="number" @keyup.enter="save" placeholder="0.00" />
@@ -131,3 +153,9 @@ watch(() => afterShuffleIV.value, async () => {
 		</div>
 	</div>
 </template>
+
+<style scoped>
+.hiddenHeader {
+	transform: translateY(-100%);
+}
+</style>
