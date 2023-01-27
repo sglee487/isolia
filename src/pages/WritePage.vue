@@ -12,7 +12,7 @@ import { useUserStore } from '@/stores/userStore'
 import InputBox from '@/components/InputBox.vue'
 import ButtonBox from '@/components/ButtonBox.vue'
 import Tiptap from '@/components/Tiptap.vue'
-import boardNames from '@/pages/menuDict'
+import boardNames from '@/enums/menuDict'
 
 import { goBack, routerTo } from '@/utils/routerUtils'
 

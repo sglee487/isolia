@@ -4,14 +4,17 @@ import {
 	ChevronLeftIcon
 } from '@heroicons/vue/24/outline'
 
-import { useCalculateStore } from '@/stores/calculateStore'
+import { useCalculateStoreHistory, useLastCalculatedStore } from '@/stores/calculateStore'
 
 import InputBox from '@/components/InputBox.vue'
 import ButtonBox from '@/components/ButtonBox.vue'
 
 import { goBack } from '@/utils/routerUtils'
 
-const calculateHistory = useCalculateStore()
+import CalculatorTypes from '@/enums/calculateTypes'
+
+const calculateHistory = useCalculateStoreHistory()
+const lastCalculated = useLastCalculatedStore()
 
 const isHideHeader = ref<boolean>(false)
 let lastScroll = 0
@@ -20,6 +23,16 @@ const dose = ref<number | null>(null)
 const weight = ref<number | null>(null)
 const drug = ref<number | null>(null)
 const afterShuffleIV = ref<number | null>(null)
+const variables = [dose, weight, drug, afterShuffleIV]
+
+const lastSaved = lastCalculated.getLastCalculated(CalculatorTypes.EpinephrineRate)
+if (lastSaved) {
+	dose.value = lastSaved.dose
+	weight.value = lastSaved.weight
+	drug.value = lastSaved.drug
+	afterShuffleIV.value = lastSaved.afterShuffleIV
+}
+
 const calculated = computed<number | null>(() => {
 	if (dose.value === null || weight.value === null || drug.value === null || afterShuffleIV.value === null) {
 		return null
@@ -88,28 +101,18 @@ const save = () => {
 	calculateHistory.addResult(result)
 }
 
-watch(() => dose.value, async () => {
-	if ((typeof dose.value) === 'string') {
-		dose.value = null
-	}
-})
-
-watch(() => weight.value, async () => {
-	if ((typeof weight.value) === 'string') {
-		weight.value = null
-	}
-})
-
-watch(() => drug.value, async () => {
-	if ((typeof drug.value) === 'string') {
-		drug.value = null
-	}
-})
-
-watch(() => afterShuffleIV.value, async () => {
-	if ((typeof afterShuffleIV.value) === 'string') {
-		afterShuffleIV.value = null
-	}
+variables.forEach(variable => {
+	watch(() => variable.value, async () => {
+		if ((typeof variable.value) === 'string') {
+			variable.value = null
+		}
+		lastCalculated.setLastCalculated(CalculatorTypes.EpinephrineRate, {
+			dose: dose.value,
+			weight: weight.value,
+			drug: drug.value,
+			afterShuffleIV: afterShuffleIV.value
+		})
+	})
 })
 
 </script>

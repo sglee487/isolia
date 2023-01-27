@@ -6,7 +6,7 @@ import {
 } from '@heroicons/vue/24/outline'
 import dayjs from 'dayjs'
 
-import menuDict from '@/pages/menuDict'
+import menuDict from '@/enums/menuDict'
 
 const props = defineProps<{
   post: Object,

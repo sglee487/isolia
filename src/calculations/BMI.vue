@@ -4,20 +4,31 @@ import {
   ChevronLeftIcon
 } from '@heroicons/vue/24/outline'
 
-import { useCalculateStore } from '@/stores/calculateStore'
+import { useCalculateStoreHistory, useLastCalculatedStore } from '@/stores/calculateStore'
 
 import InputBox from '@/components/InputBox.vue'
 import ButtonBox from '@/components/ButtonBox.vue'
 
 import { goBack } from '@/utils/routerUtils'
 
-const calculateHistory = useCalculateStore()
+import CalculatorTypes from '@/enums/calculateTypes'
+
+const calculateHistory = useCalculateStoreHistory()
+const lastCalculated = useLastCalculatedStore()
 
 const isHideHeader = ref<boolean>(false)
 let lastScroll = 0
 
 const weight = ref<number | null>(null)
 const height = ref<number | null>(null)
+const variables = [weight, height]
+
+const lastSaved = lastCalculated.getLastCalculated(CalculatorTypes.BMI)
+if (lastSaved) {
+  weight.value = lastSaved.weight
+  height.value = lastSaved.height
+}
+
 const calculated = computed<number | null>(() => {
   if (height.value === null || weight.value === null) {
     return null
@@ -82,16 +93,16 @@ const save = () => {
   calculateHistory.addResult(result)
 }
 
-watch(() => height.value, async () => {
-  if ((typeof height.value) === 'string') {
-    height.value = null
-  }
-})
-
-watch(() => weight.value, async () => {
-  if ((typeof weight.value) === 'string') {
-    weight.value = null
-  }
+variables.forEach((variable) => {
+  watch(() => variable.value, async () => {
+    if ((typeof variable.value) === 'string') {
+      variable.value = null
+    }
+    lastCalculated.setLastCalculated(CalculatorTypes.BMI, {
+      height: height.value,
+      weight: weight.value
+    })
+  })
 })
 
 </script>

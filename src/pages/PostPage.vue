@@ -7,7 +7,7 @@ import {
 } from '@heroicons/vue/24/outline'
 import dayjs from 'dayjs'
 
-import boardNames from '@/pages/menuDict'
+import boardNames from '@/enums/menuDict'
 import { getPost, postComment } from '@/apis/board'
 import { goBack } from '@/utils/routerUtils'
 import { useUserStore } from '@/stores/userStore'

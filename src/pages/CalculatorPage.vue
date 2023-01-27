@@ -4,18 +4,14 @@ import {
 	TrashIcon
 } from '@heroicons/vue/24/outline'
 
-import { useCalculateStore } from '@/stores/calculateStore'
+import { useCalculateStoreHistory } from '@/stores/calculateStore'
 
 import Epinephrine from '@/calculations/EpinephrineRate.vue'
 import BMI from '@/calculations/BMI.vue'
-
-const CalculatorTypes = {
-	Epinephrine: 'epinephrine',
-	BMI: 'bmi'
-}
+import CalculatorTypes from '@/enums/calculateTypes'
 
 const instance = getCurrentInstance()
-const calculateHistory = useCalculateStore()
+const calculateHistory = useCalculateStoreHistory()
 
 const calculatorType = ref<any>()
 
@@ -31,7 +27,7 @@ watch(() => instance.proxy.$route.params.name, async (name) => {
 
 const routes = [
 	{
-		to: '/calculator/epinephrine',
+		to: '/calculator/epinephrineRate',
 		name: 'Epinephrine',
 		nameKo: '에피네프린',
 		detailUnits: 'mcg/kg/min -> ml/hr'
@@ -79,7 +75,7 @@ const units = {
 			</ul>
 			<div class="w-full md:w-1/3 font-naverNeo pt-4 pr-10 md:p-10">
 				<div v-if="calculatorType" class="pl-10">
-					<Epinephrine v-if="calculatorType === CalculatorTypes.Epinephrine" />
+					<Epinephrine v-if="calculatorType === CalculatorTypes.EpinephrineRate" />
 					<BMI v-if="calculatorType === CalculatorTypes.BMI" />
 				</div>
 				<div v-else class="flex flex-col pl-8 pb-2">

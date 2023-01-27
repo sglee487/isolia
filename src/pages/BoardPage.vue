@@ -13,7 +13,7 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { getListBoard } from '@/apis/board'
 import { useBoardStore } from '@/stores/boardStore'
 import { routerTo } from '@/utils/routerUtils'
-import boardNames from '@/pages/menuDict'
+import boardNames from '@/enums/menuDict'
 import PostCard from '@/components/PostCard.vue'
 import SpinnerIcon from '@/icons/Spinner.vue'
 
