@@ -52,7 +52,7 @@ const props = defineProps<{
         </div> -->
         <div>
           <ChatBubbleOvalLeftIcon class="w-5 h-5 inline-block" />
-          {{ props.post.comment_length }}
+          {{ props.post.comment_count }}
         </div>
       </div>
     </div>
