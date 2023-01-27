@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import {
-  ChatBubbleOvalLeftIcon,
-  HeartIcon
+  EyeIcon,
+  HeartIcon,
+  ChatBubbleOvalLeftIcon
 } from '@heroicons/vue/24/outline'
 import dayjs from 'dayjs'
 
@@ -46,6 +47,10 @@ const props = defineProps<{
         {{ dayjs(props.post.created_at).format('MM.DD HH:mm') }}
       </small>
       <div class="flex space-x-2">
+        <div>
+          <EyeIcon class="w-5 h-5 inline-block" />
+          {{ props.post.hits }}
+        </div>
         <!-- <div>
           <HeartIcon class="w-5 h-5 inline-block" />
           {{ props.post.like }}
