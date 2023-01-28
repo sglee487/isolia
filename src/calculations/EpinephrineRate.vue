@@ -120,7 +120,7 @@ variables.forEach(variable => {
 <template>
 	<div class="flex flex-col">
 		<header :class="{ 'hiddenHeader': isHideHeader }"
-			class="transition duration-300 transform fixed flex w-full space-x-4 py-1 justify-between items-center top-0 left-0 font-bold bg-[#f5f5f5] dark:bg-[#222222] z-50 border-b border-gray-300 dark:border-gray-700">
+			class="md:hidden transition duration-300 transform fixed flex w-full space-x-4 py-1 justify-between items-center top-0 left-0 font-bold bg-[#f5f5f5] dark:bg-[#222222] z-50 border-b border-gray-300 dark:border-gray-700">
 			<ChevronLeftIcon class="flex-none w-8 h-8 cursor-pointer text-black dark:text-white" @click="goBack($router)" />
 			<div
 				class="grow flex flex-col bg-clip-text text-transparent bg-gradient-to-r from-app-500 to-app-300 dark:from-app-400 dark:to-app-200">

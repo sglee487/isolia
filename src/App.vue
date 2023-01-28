@@ -15,7 +15,6 @@ import {
   CalculatorIcon,
   ClockIcon,
   NewspaperIcon,
-  UserIcon,
   CogIcon
 } from '@heroicons/vue/24/outline'
 import { AxiosError } from 'axios'
@@ -66,8 +65,8 @@ const navRoutes = [
 
 const modalRoutes = [
   {
-    to: '/settings/user_edit',
-    name: 'My Account',
+    to: '/settings',
+    name: 'Settings',
     icon: CogIcon
   },
   {
@@ -166,18 +165,17 @@ watch(() => instance.proxy.$route, () => {
             <VueCountdown :time="getRemainTime()" v-slot="{ hours, minutes }" :interval="1000 * 60" class="mt-2">
               <Popper :hover="true" :arrow="true">
                 <template #content>
-                  <div class="bg-slate-300 p-1 rounded-md text-sm">남은 세션 시간</div>
+                  <div class="bg-slate-300 dark:bg-slate-700 p-1 rounded-md text-sm">남은 세션 시간</div>
                 </template>
                 <div class="flex flex-row space-x-4 items-center cursor-default">
                   <ClockIcon class="w-5 h-5 mr-1" />
                   {{ hours * 60 + minutes }} 분
                 </div>
               </Popper>
-
             </VueCountdown>
             <div class="flex flex-row h-16 px-4 items-center cursor-pointer hover:bg-app-400 hover:text-white"
               @click="profileModal = true">
-              <UserIcon class="w-6 h-6 'inline-block mr-2" />
+              <img :src="user.data.picture_32" v-if="user.isLogined()" class="w-6 h-6 inline-block mr-2 rounded-full" />
               <span class="font-semibold">{{ user.data.display_name }}</span>
             </div>
             <!-- <UserIcon /> -->
@@ -219,7 +217,8 @@ watch(() => instance.proxy.$route, () => {
     <div
       class="mb-12 w-64 bg-neutral-100 dark:bg-neutral-900 rounded-xl mx-2 divide-y divide-gray-300 dark:divide-gray-400 shadow-md absolute right-3 top-20 max-w-xs">
       <div class="flex flex-row gap-2 p-5 items-start">
-        <UserIcon class="w-12 h-12" />
+        <img :src="user.data.picture_96" v-if="user.isLogined()"
+          class="w-12 h-12 inline-block mb-1 rounded-full shadow-lg" />
         <div class="flex flex-col">
           <span class="font-medium text-ellipsis">{{ user.data.display_name }}</span>
           <span class="text-sm text-ellipsis">{{ user.data.email }}</span>

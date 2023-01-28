@@ -62,7 +62,7 @@ const units = {
 	<div class="flex flex-col w-full h-full mb-24 md:mb-0">
 		<div class="flex flex-col md:flex-row justify-between w-full h-full">
 			<ul
-				class="h-full hidden md:flex flex-col items-center w-64 border-r border-gray-300 text-xl font-bold overflow-y-auto">
+				class="h-full flex-none hidden md:flex flex-col items-center w-[255px] border-r border-gray-300 text-xl font-bold overflow-y-auto">
 				<li v-for="route in routes" :key="route.to" class="w-full">
 					<router-link :to="route.to" class="block text-center py-2 hover:bg-app-400 hover:text-white">
 						{{ route.name }}
@@ -73,7 +73,7 @@ const units = {
 					</router-link>
 				</li>
 			</ul>
-			<div class="w-full md:w-1/3 font-naverNeo pt-4 pr-10 md:p-10">
+			<div class="grow font-naverNeo pt-4 pr-10 md:p-10">
 				<div v-if="calculatorType" class="pl-10">
 					<Epinephrine v-if="calculatorType === CalculatorTypes.EpinephrineRate" />
 					<BMI v-if="calculatorType === CalculatorTypes.BMI" />

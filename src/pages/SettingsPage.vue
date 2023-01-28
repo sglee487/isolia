@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import VueCountdown from '@chenfengyuan/vue-countdown'
+import Popper from 'vue3-popper'
 import {
   NewspaperIcon,
   UserIcon,
+  ClockIcon,
   Cog6ToothIcon,
   PresentationChartLineIcon,
   SunIcon,
@@ -19,6 +22,17 @@ import { useSettingsStore } from '@/stores/settingsStore'
 const user = useUserStore()
 const settings = useSettingsStore()
 // const currentSvg = ref<any>(ThemeLightDarkVueIcon)
+
+const getRemainTime = () => {
+  if (!user.isLogined()) {
+    return 0
+  }
+  const now = new Date()
+  const exp = new Date(user.data.exp * 1000)
+  const diff = exp.getTime() - now.getTime()
+  const remainTime = Math.floor(diff)
+  return remainTime
+}
 
 const changeLightDarkTheme = () => {
   if (settings.themeLightDark === 'default') {
@@ -59,6 +73,17 @@ const changeLightDarkTheme = () => {
         <div class="grow flex flex-col h-full justify-end space-y-1 ml-1">
           <span class="font-bold text-ellipsis">{{ user.data.display_name }}</span>
           <span class="text-sm text-ellipsis">{{ user.data.email }}</span>
+          <VueCountdown :time="getRemainTime()" v-slot="{ hours, minutes }" :interval="1000 * 60" class="mt-2">
+            <Popper :hover="true" :arrow="true">
+              <template #content>
+                <div class="bg-slate-300 dark:bg-slate-700 p-1 rounded-md text-sm">남은 세션 시간</div>
+              </template>
+              <div class="flex flex-row space-x-4 items-center cursor-default">
+                <ClockIcon class="w-5 h-5 mr-1" />
+                {{ hours * 60 + minutes }} 분
+              </div>
+            </Popper>
+          </VueCountdown>
         </div>
         <router-link to="/settings/user_edit" class="flex-none">
           <ButtonBox color="app" size="xs">

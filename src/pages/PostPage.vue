@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getCurrentInstance, ref, watch } from 'vue'
+import { getCurrentInstance, ref, onMounted, onUnmounted } from 'vue'
 import {
   ChevronLeftIcon,
   UserIcon,
@@ -20,28 +20,28 @@ const instance = getCurrentInstance()
 
 const user = useUserStore()
 
-interface Post {
-  board_type: string
-  comments: []
-  content: string
-  created_at: string
-  created_at_1: string
-  deleted_at: string | null
-  deleted_at_1: string | null
-  dislike: number
-  display_name: string
-  email: string
-  hits: number
-  id: Number
-  id_1: Number
-  is_active: Boolean
-  is_active_1: Boolean
-  like: Number
-  login_type: String
-  picture_96: String
+const isHideHeader = ref<boolean>(false)
+let lastScroll = 0
+
+const handleScroll = async () => {
+  // header hide and show
+  const currentScroll = window.scrollY
+  if (currentScroll > lastScroll) {
+    isHideHeader.value = true
+  } else {
+    isHideHeader.value = false
+  }
+  lastScroll = currentScroll
 }
 
-const postData = ref<Post>({
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+
+const postData = ref<any>({
   board_type: '',
   comments: [],
   content: '',
@@ -85,14 +85,13 @@ const saveComment = async () => {
     axiosErrorHandler(instance, error)
     return
   }
-
 }
 
 </script>
 
 <template>
-  <header
-    class="fixed px-4 w-full h-14 flex space-x-4 justify-between items-center font-extrabold bg-[#f2f2f2] dark:bg-[#222222] border-b border-gray-300 dark:border-gray-700">
+  <header :class="{ 'hiddenHeader': isHideHeader }"
+    class="md:hidden transition duration-300 transform fixed px-4 w-full h-14 flex space-x-4 justify-between items-center font-extrabold bg-[#f2f2f2] dark:bg-[#222222] border-b border-gray-300 dark:border-gray-700">
     <ChevronLeftIcon class="flex-none w-8 h-8 cursor-pointer text-black dark:text-white" @click="goBack($router)" />
     <div class="flex-grow flex">
       <img src="../assets/line-chart.png" class="w-10 p-1 inline-block rounded-md" />
@@ -102,7 +101,7 @@ const saveComment = async () => {
       </div>
     </div>
   </header>
-  <div class="p-4 w-[62rem] mb-12">
+  <div class="p-4 w-[62rem] mb-8">
     <div class="mt-14 md:mt-0 px-2 py-1 flex flex-col space-y-4 divide-gray-200 dark:divide-gray-700">
       <div class="space-y-2">
         <small class="p-1 rounded-md bg-slate-300 dark:bg-slate-600 w-fit text-app-600 dark:text-app-300">
@@ -156,8 +155,8 @@ const saveComment = async () => {
   </div>
 
   <!-- comment -->
-  <div v-if="user.isLogined"
-    class="fixed flex items-center bottom-0 w-full py-1 px-2 space-x-2 border-t border-gray-200 dark:border-gray-700 bg-[#f5f5f5] dark:bg-[#121212] z-10">
+  <div v-if="user.isLogined" :class="{ 'hiddenComment': isHideHeader }"
+    class="transition duration-300 transform fixed flex items-center bottom-0 w-full py-1 px-2 space-x-2 border-t border-gray-200 dark:border-gray-700 bg-[#f5f5f5] dark:bg-[#121212] z-10">
     <img class="flex-none w-8 h-8 inline-block mb-1 rounded-full shadow-lg" :src="user.data.picture_96" alt="pic96">
     <!-- <InputAreaBox class="grow max-h-[40vh]" v-model="writeCommentText"
       :placeholder="`${user.data.display_name} (으)로 댓글 입력...`" /> -->
@@ -165,10 +164,20 @@ const saveComment = async () => {
       :placeholder="`${user.data.display_name} (으)로 댓글 입력...`" />
     <ButtonBox class="flex-none w-18" @click="saveComment" color="app">등록</ButtonBox>
   </div>
-  <div v-else
-    class="fixed flex items-center bottom-0 w-full py-1 px-2 space-x-2 border-t border-gray-200 dark:border-gray-700 bg-[#f5f5f5] dark:bg-[#121212] z-10">
+  <div v-else :class="{ 'hiddenComment': isHideHeader }"
+    class="transition duration-300 transform fixed flex items-center bottom-0 w-full py-1 px-2 space-x-2 border-t border-gray-200 dark:border-gray-700 bg-[#f5f5f5] dark:bg-[#121212] z-10">
     <UserIcon class="flex-none w-8 h-8 inline-block mb-1 rounded-full shadow-lg" />
     <InputAreaBox class="grow" v-model="writeCommentText" placeholder="댓글을 입력하시려면 로그인하세요..." disabled />
     <ButtonBox class="flex-none" color="app">로그인</ButtonBox>
   </div>
 </template>
+
+<style scoped>
+.hiddenHeader {
+  transform: translateY(-100%);
+}
+
+.hiddenComment {
+  transform: translateY(100%);
+}
+</style>
