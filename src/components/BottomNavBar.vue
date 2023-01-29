@@ -39,7 +39,7 @@ const user = useUserStore()
       <div id="nav"
         class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
         <QuestionMarkCircleIcon class="w-6 h-6 inline-block mb-1" />
-        <span class="tab tab-kategori block text-xs line-through">뭘 넣을지 고민중</span>
+        <span class="tab tab-kategori block text-xs line-through">뭘 넣지?</span>
       </div>
       <router-link to="/settings" id="nav"
         class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">

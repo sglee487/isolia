@@ -39,8 +39,6 @@ const getPost = async (id: number) => {
 }
 
 const postBoard = async (boardType: string, boardTitle: string, boardContent: string, userToken: string) => {
-  console.log(boardType, boardTitle, boardContent, userToken)
-  console.log(SERVER_URL)
 
   const data = {
     'board_type': boardType,
