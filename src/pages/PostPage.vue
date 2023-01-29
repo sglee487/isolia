@@ -2,14 +2,13 @@
 import { getCurrentInstance, ref, onMounted, onUnmounted } from 'vue'
 import {
   ChevronLeftIcon,
-  UserIcon,
-  HeartIcon
+  UserIcon
 } from '@heroicons/vue/24/outline'
 import dayjs from 'dayjs'
 
 import boardNames from '@/enums/menuDict'
 import { getPost, postComment } from '@/apis/board'
-import { goBack } from '@/utils/routerUtils'
+import { goBack, routerTo } from '@/utils/routerUtils'
 import { useUserStore } from '@/stores/userStore'
 import InputAreaBox from '@/components/InputAreaBox.vue'
 import TiptapComment from '@/components/TiptapComment.vue'
@@ -155,20 +154,20 @@ const saveComment = async () => {
   </div>
 
   <!-- comment -->
-  <div v-if="user.isLogined" :class="{ 'hiddenComment': isHideHeader }"
-    class="transition duration-300 transform fixed flex items-center bottom-0 w-full py-1 px-2 space-x-2 border-t border-gray-200 dark:border-gray-700 bg-[#f5f5f5] dark:bg-[#121212] z-10">
-    <img class="flex-none w-8 h-8 inline-block mb-1 rounded-full shadow-lg" :src="user.data.picture_96" alt="pic96">
-    <!-- <InputAreaBox class="grow max-h-[40vh]" v-model="writeCommentText"
-      :placeholder="`${user.data.display_name} (으)로 댓글 입력...`" /> -->
-    <TiptapComment v-model="writeCommentText" class="grow w-16"
-      :placeholder="`${user.data.display_name} (으)로 댓글 입력...`" />
-    <ButtonBox class="flex-none w-18" @click="saveComment" color="app">등록</ButtonBox>
-  </div>
-  <div v-else :class="{ 'hiddenComment': isHideHeader }"
-    class="transition duration-300 transform fixed flex items-center bottom-0 w-full py-1 px-2 space-x-2 border-t border-gray-200 dark:border-gray-700 bg-[#f5f5f5] dark:bg-[#121212] z-10">
-    <UserIcon class="flex-none w-8 h-8 inline-block mb-1 rounded-full shadow-lg" />
-    <InputAreaBox class="grow" v-model="writeCommentText" placeholder="댓글을 입력하시려면 로그인하세요..." disabled />
-    <ButtonBox class="flex-none" color="app">로그인</ButtonBox>
+  <div :class="{ 'hiddenComment': isHideHeader }"
+    class="transition duration-300 transform justify-center w-full fixed flex bottom-0 py-1 px-2 border-t border-gray-200 dark:border-gray-700 bg-[#f5f5f5] dark:bg-[#121212] z-10">
+    <div v-if="user.isLogined()" class="flex items-center w-[58rem] space-x-2">
+      <img class="flex-none w-8 h-8 inline-block mb-1 rounded-full shadow-lg" :src="user.data.picture_96" alt="pic96">
+      <!-- <InputAreaBox class="grow max-h-[40vh]" v-model="writeCommentText"
+        :placeholder="`${user.data.display_name} (으)로 댓글 입력...`" /> -->
+      <TiptapComment v-model="writeCommentText" class="grow" :placeholder="`${user.data.display_name} (으)로 댓글 입력...`" />
+      <ButtonBox class="flex-none w-18" @click="saveComment" color="app">등록</ButtonBox>
+    </div>
+    <div v-else :class="{ 'hiddenComment': isHideHeader }" class="flex items-center w-[58rem] space-x-2">
+      <UserIcon class="flex-none w-8 h-8 inline-block mb-1 rounded-full shadow-lg" />
+      <InputAreaBox class="grow" v-model="writeCommentText" placeholder="댓글을 입력하시려면 로그인하세요..." disabled />
+      <ButtonBox class="flex-none" color="app" @click="routerTo($router, '/settings/login')">로그인</ButtonBox>
+    </div>
   </div>
 </template>
 

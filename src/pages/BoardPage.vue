@@ -132,45 +132,47 @@ const scrollToTop = () => {
 <template>
   <div class="p-4 w-[62rem] mb-12">
     <header ref="headerComponent" :class="{ 'hiddenHeader': isHideHeader }"
-      class="w-full pr-6 top-0 md:top-16 pt-2 bg-[#f2f2f2] dark:bg-[#222222] transition duration-300 transform fixed flex flex-row justify-between items-center font-extrabold pb-2 border-b border-gray-300 dark:border-gray-700">
-      <Menu as="div" class="relative inline-block text-left">
-        <div>
-          <MenuButton
-            class="inline-flex w-full justify-center rounded-md bg-white dark:bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-black dark:text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-            {{ boardNames[$route.params.menu] }}
-            <ChevronDownIcon class="ml-2 -mr-1 h-5 w-5 text-violet-200 hover:text-violet-100" aria-hidden="true" />
-          </MenuButton>
-        </div>
+      class="flex justify-center w-full px-6 fixed top-0 md:top-16 left-0 pt-2 bg-[#f2f2f2] dark:bg-[#222222] transition duration-300 transform pb-2 border-b border-gray-300 dark:border-gray-700">
+      <div class="w-[62rem] flex flex-row justify-between items-center font-extrabold">
+        <Menu as="div" class="relative inline-block text-left">
+          <div>
+            <MenuButton
+              class="inline-flex w-full justify-center rounded-md bg-white dark:bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-black dark:text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+              {{ boardNames[$route.params.menu] }}
+              <ChevronDownIcon class="ml-2 -mr-1 h-5 w-5 text-violet-200 hover:text-violet-100" aria-hidden="true" />
+            </MenuButton>
+          </div>
 
-        <transition enter-active-class="transition duration-100 ease-out"
-          enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100"
-          leave-active-class="transition duration-75 ease-in" leave-from-class="transform scale-100 opacity-100"
-          leave-to-class="transform scale-95 opacity-0">
-          <MenuItems
-            class="absolute left-0 mt-2 w-32 px-2 origin-top-right divide-y divide-gray-200 dark:divide-gray-500 rounded-md bg-white dark:bg-black shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-            <div class="px-1 py-1">
-              <MenuItem>
-              <button @click="routerTo($router, '/board/list/all')"
-                class="group flex w-full items-center rounded-md px-2 py-2 text-sm text-gray-900 dark:text-gray-50">
-                전체
-              </button>
-              </MenuItem>
-            </div>
-            <div class="px-1 py-1">
-              <MenuItem v-for="boardRoute in boardRoutes" :key="boardRoute.to">
-              <button
-                class="group flex w-full items-center rounded-md px-2 py-2 text-sm text-gray-900 dark:text-gray-50"
-                @click="routerTo($router, boardRoute.to)">
-                {{ boardRoute.name }}
-              </button>
-              </MenuItem>
-            </div>
-          </MenuItems>
-        </transition>
-      </Menu>
-      <router-link :to="`/board/write/${getWriteMenu()}`" class="mr-2" v-if="$route.params.menu !== 'notice'">
-        <PlusCircleIcon class="w-8 h-8" />
-      </router-link>
+          <transition enter-active-class="transition duration-100 ease-out"
+            enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100"
+            leave-active-class="transition duration-75 ease-in" leave-from-class="transform scale-100 opacity-100"
+            leave-to-class="transform scale-95 opacity-0">
+            <MenuItems
+              class="absolute left-0 mt-2 w-32 px-2 origin-top-right divide-y divide-gray-200 dark:divide-gray-500 rounded-md bg-white dark:bg-black shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <div class="px-1 py-1">
+                <MenuItem>
+                <button @click="routerTo($router, '/board/list/all')"
+                  class="group flex w-full items-center rounded-md px-2 py-2 text-sm text-gray-900 dark:text-gray-50">
+                  전체
+                </button>
+                </MenuItem>
+              </div>
+              <div class="px-1 py-1">
+                <MenuItem v-for="boardRoute in boardRoutes" :key="boardRoute.to">
+                <button
+                  class="group flex w-full items-center rounded-md px-2 py-2 text-sm text-gray-900 dark:text-gray-50"
+                  @click="routerTo($router, boardRoute.to)">
+                  {{ boardRoute.name }}
+                </button>
+                </MenuItem>
+              </div>
+            </MenuItems>
+          </transition>
+        </Menu>
+        <router-link :to="`/board/write/${getWriteMenu()}`" class="mr-2" v-if="$route.params.menu !== 'notice'">
+          <PlusCircleIcon class="w-8 h-8" />
+        </router-link>
+      </div>
     </header>
     <div class="mt-12 scroll-smooth" ref="scrollComponent">
       <router-link :to="`/board/post/${post.id}/`" v-for="post in boardStore.posts" :key="post.id">
