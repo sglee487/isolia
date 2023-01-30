@@ -127,7 +127,14 @@ variables.forEach((variable) => {
         inputId="heightFocus" />
       <InputBox label="체중(kg)" v-model="weight" type="number" @keyup.enter="save" placeholder="0.00" />
     </div>
-    <div class="md:hidden block fixed inset-x-0 text-center bottom-14 bg-white dark:bg-black py-2">
+    <!-- <div class="fixed inset-x-0 text-center bottom-14 bg-white dark:bg-black py-2">
+      BMI는
+      <span class="font-bold text-app-600">
+        {{ calculated === null ? '0.00' : calculated.toFixed(2) }}
+      </span>
+      <small>kg/m^2</small> 입니다.
+    </div> -->
+    <div class="p-4 text-center">
       BMI는
       <span class="font-bold text-app-600">
         {{ calculated === null ? '0.00' : calculated.toFixed(2) }}
