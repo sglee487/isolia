@@ -201,18 +201,6 @@ watch(() => instance.proxy.$route, () => {
 
   <BottomNavBar v-if="isShowBottomNavBar" />
 
-  <!-- <footer>
-    <div class="h-16 flex justify-center items-center">
-      <div class="text-sm text-gray-500">
-        <span>© 2021 Isolia</span>
-        <span class="mx-2">|</span>
-        <span>개인정보처리방침</span>
-        <span class="mx-2">|</span>
-        <span>이용약관</span>
-      </div>
-    </div>
-  </footer> -->
-
   <vue-final-modal v-model="profileModal" :hide-overlay="true">
     <div
       class="mb-12 w-64 bg-neutral-100 dark:bg-neutral-900 rounded-xl mx-2 divide-y divide-gray-300 dark:divide-gray-400 shadow-md absolute right-3 top-20 max-w-xs">

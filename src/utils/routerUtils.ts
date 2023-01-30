@@ -8,4 +8,8 @@ const routerTo = (router: Router, to: string) => {
   router.push(to)
 }
 
-export { goBack, routerTo }
+const openNewTab = (url: string) => {
+  window.open(url, "_blank")
+}
+
+export { goBack, routerTo, openNewTab }

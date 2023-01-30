@@ -18,6 +18,9 @@ import ButtonBox from '@/components/ButtonBox.vue'
 import { useUserStore } from '@/stores/userStore'
 
 import { useSettingsStore } from '@/stores/settingsStore'
+import { openNewTab } from '@/utils/routerUtils'
+
+const privacyPolicyURL = 'https://isolia.shop/isolia\'s+privacy+policy.html'
 
 const user = useUserStore()
 const settings = useSettingsStore()
@@ -176,6 +179,17 @@ const changeLightDarkTheme = () => {
         </ButtonBox>
       </router-link>
     </div>
+    <footer>
+      <div class="h-16 flex justify-center items-center">
+        <div class="text-sm text-gray-500">
+          <span>© 2023 Isolia</span>
+          <span class="mx-2">|</span>
+          <span class="cursor-pointer" @click=openNewTab(privacyPolicyURL)>개인정보처리방침</span>
+          <!-- <span class="mx-2">|</span>
+          <span>이용약관</span> -->
+        </div>
+      </div>
+    </footer>
   </div>
 
 </template>
