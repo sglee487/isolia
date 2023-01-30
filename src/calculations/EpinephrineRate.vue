@@ -140,14 +140,14 @@ variables.forEach(variable => {
 			<InputBox label="혼합 후 수액량(ml)" v-model="afterShuffleIV" type="number" @keyup.enter="save" placeholder="0.00" />
 		</div>
 
-		<div class="md:hidden block fixed inset-x-0 text-center bottom-14 bg-white dark:bg-black py-2">
+		<!-- <div class="md:hidden block fixed inset-x-0 text-center top-14 bg-white dark:bg-black py-2">
 			주입 속도는
 			<span class="font-bold text-app-600">
 				{{ calculated === null ? '0.00' : calculated.toFixed(2) }}
 			</span>
 			<small>cc/hr</small> 입니다.
-		</div>
-		<div class="hidden md:block p-4 text-center">
+		</div> -->
+		<div class="p-4 text-center">
 			주입 속도는
 			<span class="font-bold text-app-600">
 				{{ calculated === null ? '0.00' : calculated.toFixed(2) }}
