@@ -51,7 +51,6 @@ const post = () => {
     })
 }
 
-
 // TODO: Ctrl + S 누르면 저장되게 하기
 </script>
 
