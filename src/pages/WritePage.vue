@@ -3,7 +3,7 @@ import { getCurrentInstance, ref } from 'vue'
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import {
-  ChevronLeftIcon,
+  ArrowSmallLeftIcon,
   ChevronDownIcon
 } from '@heroicons/vue/24/outline'
 
@@ -51,15 +51,14 @@ const post = () => {
     })
 }
 
-
 // TODO: Ctrl + S 누르면 저장되게 하기
 </script>
 
 <template>
   <div class="p-4 w-[46.5rem]">
-    <header
-      class="flex space-x-4 justify-between items-center font-extrabold pb-2 mb-2 border-b border-gray-300 dark:border-gray-700">
-      <ChevronLeftIcon class="flex-none w-8 h-8 cursor-pointer text-black dark:text-white" @click="goBack($router)" />
+    <header class="flex space-x-4 justify-between items-center font-extrabold pb-2 mb-2 ">
+      <ArrowSmallLeftIcon class="flex-none w-8 h-8 pl-2 cursor-pointer text-black dark:text-white"
+        @click="goBack($router)" />
       <div
         class="grow text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-500 to-app-300 dark:from-app-400 dark:to-app-200">
         게시글 쓰기

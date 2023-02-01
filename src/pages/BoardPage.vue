@@ -29,20 +29,18 @@ const isHideHeader = ref<boolean>(false)
 const isShowScrollToTop = ref<boolean>(false)
 let lastScroll = 0
 
-const currentPage = ref<number>(0)
 const moreLoading = ref<Boolean>(false)
-let isLastPage = false
 
 const scrollComponent = ref<any>(null)
 
-const loadMorePosts = async () => {
-  const res = await getListBoard(boardType.value, currentPage.value + 1)
+const loadMorePosts = async (boardType: string) => {
+  const res = await getListBoard(boardType, boardStore.currentPage + 1)
   if (res.status === 200) {
     if (res.data.length > 0) {
-      currentPage.value += 1
+      boardStore.incresePage()
       boardStore.addPosts(res.data)
     } else {
-      isLastPage = true
+      boardStore.endIsLastPage()
     }
   }
 }
@@ -50,16 +48,16 @@ const loadMorePosts = async () => {
 if (routerParams && Object.keys(routerParams).includes('menu')) {
   boardType.value = routerParams.menu
   if (boardStore.posts.length === 0) {
-    loadMorePosts()
+    loadMorePosts(boardType.value)
   }
 }
 
 watch(() => instance.proxy.$route.params.menu, async (menu) => {
   if (menu) {
     boardStore.clearPosts()
-    currentPage.value = 0
+    boardStore.resetPage()
     boardType.value = menu
-    loadMorePosts()
+    loadMorePosts(boardType.value)
   }
 })
 
@@ -112,9 +110,9 @@ const handleScroll = async () => {
   }
 
   // infinite scroll
-  if (!isLastPage && !moreLoading.value && postsElement.getBoundingClientRect().bottom < window.innerHeight) {
+  if (!boardStore.isLastPage && !moreLoading.value && postsElement.getBoundingClientRect().bottom < window.innerHeight) {
     moreLoading.value = true
-    await loadMorePosts()
+    await loadMorePosts(boardType.value)
     moreLoading.value = false
   }
 }
@@ -131,7 +129,7 @@ const scrollToTop = () => {
 <template>
   <div class="p-4 w-[62rem] mb-12">
     <header ref="headerComponent" :class="{ 'hiddenHeader': isHideHeader }"
-      class="flex justify-center w-full px-6 fixed top-0 md:top-16 left-0 pt-2 bg-[#f2f2f2] dark:bg-[#222222] transition duration-300 transform pb-2 border-b border-gray-300 dark:border-gray-700">
+      class="flex justify-center w-full px-6 fixed top-0 md:top-16 left-0 pt-2 bg-[#f2f2f2] dark:bg-[#18171c] transition duration-300 transform pb-2 ">
       <div class="w-[62rem] flex flex-row justify-between items-center font-extrabold">
         <Menu as="div" class="relative inline-block text-left">
           <div>

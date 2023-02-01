@@ -4,7 +4,9 @@ import { defineStore } from 'pinia'
 export const useBoardStore = defineStore('board', {
   state: () => {
     return {
-      posts: []
+      posts: [],
+      currentPage: 0,
+      isLastPage: false,
     }
   },
   actions: {
@@ -13,6 +15,18 @@ export const useBoardStore = defineStore('board', {
     },
     clearPosts() {
       this.posts = []
+    },
+    incresePage() {
+      this.currentPage++
+    },
+    resetPage() {
+      this.currentPage = 0
+    },
+    endIsLastPage() {
+      this.isLastPage = true
+    },
+    resetIsLastPage() {
+      this.isLastPage = false
     }
   },
   persist: false,

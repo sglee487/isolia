@@ -130,7 +130,7 @@ watch(() => instance.proxy.$route, () => {
 
 <template>
   <header class="hidden md:block fixed w-full bg-[#f5f5f5] dark:bg-[#121212] z-50">
-    <nav class="border-b border-gray-300 dark:border-gray-700">
+    <nav class="">
       <div class="h-16 ml-4 flex justify-between items-center">
         <router-link to="/" class="hidden md:inline-block p-1 cursor-pointer rounded-md">
           <div class="flex flex-row space-x-2 items-center">
@@ -191,7 +191,7 @@ watch(() => instance.proxy.$route, () => {
   <!-- <header class="md:hidden fixed mt-4 mx-2">
     <nav v-if="!isRootPath()" class="cursor-pointer bg-gray-500 bg-opacity-10 rounded-full bg-transparent "
       @click="goBack()">
-      <ChevronLeftIcon class="w-8 h-8 pr-1 text-app-400" />
+      <ArrowSmallLeftIcon class="w-8 h-8 pr-1 text-app-400" />
     </nav>
   </header> -->
 

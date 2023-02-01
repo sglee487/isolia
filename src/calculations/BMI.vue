@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
+import { ref, watch, computed } from 'vue'
 import {
-  ChevronLeftIcon
+  ArrowSmallLeftIcon
 } from '@heroicons/vue/24/outline'
 
 import { useCalculateStoreHistory, useLastCalculatedStore } from '@/stores/calculateStore'
@@ -15,9 +15,6 @@ import CalculatorTypes from '@/enums/calculateTypes'
 
 const calculateHistory = useCalculateStoreHistory()
 const lastCalculated = useLastCalculatedStore()
-
-const isHideHeader = ref<boolean>(false)
-let lastScroll = 0
 
 const weight = ref<number | null>(null)
 const height = ref<number | null>(null)
@@ -40,24 +37,6 @@ const calculated = computed<number | null>(() => {
     return null
   }
 })
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-})
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-})
-
-const handleScroll = async () => {
-  // header hide and show
-  const currentScroll = window.scrollY
-  if (currentScroll > lastScroll) {
-    isHideHeader.value = true
-  } else {
-    isHideHeader.value = false
-  }
-  lastScroll = currentScroll
-}
 
 const reset = () => {
   weight.value = null
@@ -109,9 +88,10 @@ variables.forEach((variable) => {
 
 <template>
   <div class="flex flex-col">
-    <header :class="{ 'hiddenHeader': isHideHeader }"
-      class="md:hidden transition duration-300 transform fixed flex w-full space-x-4 py-1 justify-between items-center top-0 left-0 font-bold bg-[#f5f5f5] dark:bg-[#222222] z-50 border-b border-gray-300 dark:border-gray-700">
-      <ChevronLeftIcon class="flex-none w-8 h-8 cursor-pointer text-black dark:text-white" @click="goBack($router)" />
+    <header
+      class="md:hidden transition duration-300 transform fixed flex w-full space-x-4 py-1 justify-between items-center top-0 left-0 font-bold bg-[#f5f5f5] dark:bg-[#18171c] z-50">
+      <ArrowSmallLeftIcon class="flex-none w-8 h-8 pl-2 cursor-pointer text-black dark:text-white"
+        @click="goBack($router)" />
       <div
         class="grow flex flex-col bg-clip-text text-transparent bg-gradient-to-r from-app-500 to-app-300 dark:from-app-400 dark:to-app-200">
         <div class="text-xl">
@@ -147,9 +127,3 @@ variables.forEach((variable) => {
     </div>
   </div>
 </template>
-
-<style scoped>
-.hiddenHeader {
-  transform: translateY(-100%);
-}
-</style>

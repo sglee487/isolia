@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref, onMounted, onUnmounted } from 'vue'
 import {
-  ChevronLeftIcon,
+  ArrowSmallLeftIcon,
   UserIcon
 } from '@heroicons/vue/24/outline'
 import dayjs from 'dayjs'
@@ -40,26 +40,7 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
 
-const postData = ref<any>({
-  board_type: '',
-  comments: [],
-  content: '',
-  created_at: '',
-  created_at_1: '',
-  deleted_at: '',
-  deleted_at_1: '',
-  dislike: 0,
-  display_name: '',
-  email: '',
-  hits: 0,
-  id: 0,
-  id_1: 0,
-  is_active: false,
-  is_active_1: false,
-  like: 0,
-  login_type: '',
-  picture_96: ''
-})
+const postData = ref<any>({})
 
 const writeCommentText = ref<string>('')
 
@@ -67,7 +48,7 @@ if ('postId' in instance.proxy.$route.params) {
   const postId = parseInt(instance.proxy.$route.params.postId)
   getPost(postId).then((res) => {
     postData.value = res.data
-  });
+  })
 }
 
 const saveComment = async () => {
@@ -82,7 +63,6 @@ const saveComment = async () => {
     }
   } catch (error) {
     axiosErrorHandler(instance, error)
-    return
   }
 }
 
@@ -90,8 +70,9 @@ const saveComment = async () => {
 
 <template>
   <header :class="{ 'hiddenHeader': isHideHeader }"
-    class="md:hidden transition duration-300 transform fixed px-4 w-full h-14 flex space-x-4 justify-between items-center font-extrabold bg-[#f2f2f2] dark:bg-[#222222] border-b border-gray-300 dark:border-gray-700">
-    <ChevronLeftIcon class="flex-none w-8 h-8 cursor-pointer text-black dark:text-white" @click="goBack($router)" />
+    class="md:hidden transition duration-300 transform fixed px-4 w-full h-14 flex space-x-4 justify-between items-center font-extrabold bg-[#f2f2f2] dark:bg-[#18171c] ">
+    <ArrowSmallLeftIcon class="flex-none w-8 h-8 cursor-pointer pl-2 text-black dark:text-white"
+      @click="goBack($router)" />
     <div class="flex-grow flex">
       <img src="../assets/line-chart.png" class="w-10 p-1 inline-block rounded-md" />
       <div
@@ -123,11 +104,11 @@ const saveComment = async () => {
       <article class="break-all prose dark:prose-invert" v-html="postData.content" />
       <hr />
       <div>
-        댓글 {{ postData.comments.length }} 개
+        댓글 {{ postData.comments?.length || 0 }} 개
       </div>
       <hr />
       <div class="space-y-8">
-        <div v-for="comment in postData.comments" :key="comment.id"
+        <div v-for="comment in postData.comments" :key="comment.comment_id"
           class="space-y-4 divide-gray-300 dark:divide-gray-500">
           <div class="flex space-x-2 items-center">
             <img class="w-8 h-8 inline-block mb-1 rounded-full shadow-lg" :src="comment.picture_96" alt="pic96">
@@ -165,7 +146,7 @@ const saveComment = async () => {
     </div>
     <div v-else :class="{ 'hiddenComment': isHideHeader }" class="flex items-center w-[58rem] space-x-2">
       <UserIcon class="flex-none w-8 h-8 inline-block mb-1 rounded-full shadow-lg" />
-      <InputAreaBox class="grow" v-model="writeCommentText" placeholder="댓글을 입력하시려면 로그인하세요..." disabled />
+      <InputAreaBox class="grow" v-model="writeCommentText" placeholder="댓글을 입력하시려면 로그인하세요" disabled />
       <ButtonBox class="flex-none" color="app" @click="routerTo($router, '/settings/login')">로그인</ButtonBox>
     </div>
   </div>
