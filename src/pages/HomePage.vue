@@ -22,6 +22,10 @@
       <br />
       근데 원래 이런걸 수도 있고 창 조절도 잘 안하니까...
       <br />
+      -> 게시판, 게시물(포스트) 로딩 시 스켈레톤 로딩
+      <br />
+      https://learnvue.co/tutorials/vue-skeleton-loading
+      <br />
       <br />
       계산기
       <br />
