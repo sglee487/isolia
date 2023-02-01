@@ -63,7 +63,6 @@ const saveComment = async () => {
     }
   } catch (error) {
     axiosErrorHandler(instance, error)
-    return
   }
 }
 
