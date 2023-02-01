@@ -129,7 +129,7 @@ const scrollToTop = () => {
 <template>
   <div class="p-4 w-[62rem] mb-12">
     <header ref="headerComponent" :class="{ 'hiddenHeader': isHideHeader }"
-      class="flex justify-center w-full px-6 fixed top-0 md:top-16 left-0 pt-2 bg-[#f2f2f2] dark:bg-[#222222] transition duration-300 transform pb-2 border-b border-gray-300 dark:border-gray-700">
+      class="flex justify-center w-full px-6 fixed top-0 md:top-16 left-0 pt-2 bg-[#f2f2f2] dark:bg-[#18171c] transition duration-300 transform pb-2 ">
       <div class="w-[62rem] flex flex-row justify-between items-center font-extrabold">
         <Menu as="div" class="relative inline-block text-left">
           <div>

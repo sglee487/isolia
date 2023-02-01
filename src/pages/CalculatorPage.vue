@@ -106,7 +106,7 @@ const units = {
 			<div
 				class="flex flex-col w-full md:w-80 md:border-l border-gray-300 dark:border-gray-700 overflow-visible md:overflow-y-auto">
 				<ul v-for="(result, index) in calculateHistory.results" :key="index">
-					<li class="block text-center p-5 border-b border-gray-300 dark:border-gray-700">
+					<li class="block text-center p-5 ">
 						<div class="flex flex-col items-start">
 							<div class="flex flex-row w-full justify-between">
 								<div class="text-xs font-bold text-gray-600 pt-1">

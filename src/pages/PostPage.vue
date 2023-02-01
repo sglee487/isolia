@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getCurrentInstance, ref, onMounted, onUnmounted } from 'vue'
 import {
-  ChevronLeftIcon,
+  ArrowSmallLeftIcon,
   UserIcon
 } from '@heroicons/vue/24/outline'
 import dayjs from 'dayjs'
@@ -71,8 +71,9 @@ const saveComment = async () => {
 
 <template>
   <header :class="{ 'hiddenHeader': isHideHeader }"
-    class="md:hidden transition duration-300 transform fixed px-4 w-full h-14 flex space-x-4 justify-between items-center font-extrabold bg-[#f2f2f2] dark:bg-[#222222] border-b border-gray-300 dark:border-gray-700">
-    <ChevronLeftIcon class="flex-none w-8 h-8 cursor-pointer text-black dark:text-white" @click="goBack($router)" />
+    class="md:hidden transition duration-300 transform fixed px-4 w-full h-14 flex space-x-4 justify-between items-center font-extrabold bg-[#f2f2f2] dark:bg-[#18171c] ">
+    <ArrowSmallLeftIcon class="flex-none w-8 h-8 cursor-pointer pl-2 text-black dark:text-white"
+      @click="goBack($router)" />
     <div class="flex-grow flex">
       <img src="../assets/line-chart.png" class="w-10 p-1 inline-block rounded-md" />
       <div

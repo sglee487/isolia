@@ -3,7 +3,7 @@ import { getCurrentInstance, ref } from 'vue'
 import {
   ArrowPathRoundedSquareIcon,
   PlusCircleIcon,
-  ChevronLeftIcon
+  ArrowSmallLeftIcon
 } from '@heroicons/vue/24/outline'
 import {
   TransitionRoot,
@@ -184,9 +184,8 @@ const update = async () => {
 
 <template>
   <div class="p-4">
-    <header
-      class="flex space-x-4 justify-between items-center font-extrabold pb-2 border-b border-gray-300 dark:border-gray-700">
-      <ChevronLeftIcon class="flex-none w-8 h-8 cursor-pointer text-black dark:text-white" @click="goBack()" />
+    <header class="flex space-x-4 justify-between items-center font-extrabold pb-2 ">
+      <ArrowSmallLeftIcon class="flex-none w-8 h-8 pl-2 cursor-pointer text-black dark:text-white" @click="goBack()" />
       <div
         class="grow text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-500 to-app-300 dark:from-app-400 dark:to-app-200">
         사용자 변경

@@ -12,7 +12,7 @@ import WritePage from '@/pages/WritePage.vue'
 import PostPage from '@/pages/PostPage.vue'
 import CalculatorPage from '@/pages/CalculatorPage.vue'
 import AccountSettingPage from '@/pages/AccountSettingPage.vue'
-import NotificationPage from '@/pages/NotificationPage.vue'
+import QuestionPage from '@/pages/QuestionPage.vue'
 import SettingsPage from '@/pages/SettingsPage.vue'
 
 const $toast = useToast()
@@ -55,8 +55,8 @@ const routes = [
     ]
   },
   {
-    path: '/notification',
-    component: NotificationPage
+    path: '/question',
+    component: QuestionPage
   },
   {
     path: '/settings',

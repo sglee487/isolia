@@ -71,7 +71,7 @@ const changeLightDarkTheme = () => {
     <div class="flex flex-col space-y-1">
       <div v-if="user.isLogined()" class="flex flex-row gap-2 p-5 items-start">
         <img :src="user.data.picture_96" v-if="user.isLogined()"
-          class="flex-none w-14 h-14 inline-block mb-1 rounded-full shadow-md shadow-[#222222]/20 dark:shadow-[#f2f2f2]/20" />
+          class="flex-none w-14 h-14 inline-block mb-1 rounded-full shadow-md shadow-[#18171c]/20 dark:shadow-[#f2f2f2]/20" />
         <UserIcon v-else class="w-14 h-14 inline-block mb-1" />
         <div class="grow flex flex-col h-full justify-end space-y-1 ml-1">
           <span class="font-bold text-ellipsis">{{ user.data.display_name }}</span>
@@ -96,7 +96,7 @@ const changeLightDarkTheme = () => {
       </div>
       <div v-else class="flex flex-row gap-2 p-5 items-start">
         <UserIcon
-          class="flex-none w-14 h-14 inline-block mb-1 rounded-full shadow-md shadow-[#222222]/20 dark:shadow-[#f2f2f2]/20" />
+          class="flex-none w-14 h-14 inline-block mb-1 rounded-full shadow-md shadow-[#18171c]/20 dark:shadow-[#f2f2f2]/20" />
         <router-link to="/settings/login" class="grow flex flex-col h-full justify-end space-y-1 ml-1">
           <span class="font-bold text-ellipsis">로그인이 필요해요</span>
           <span class="text-sm text-ellipsis text-gray-400">(~˘▾˘)~</span>
@@ -144,7 +144,7 @@ const changeLightDarkTheme = () => {
               <span class="font-bold text-ellipsis">알림</span>
               <span class="text-sm text-ellipsis">알림 설정을 변경할 수 있습니다.</span>
             </div>
-            <ChevronLeftIcon class="flex-none w-6 h-6 inline-block mb-1" />
+            <ArrowSmallLeftIcon class="flex-none w-6 h-6 inline-block mb-1" />
           </router-link>
           <router-link to="/settings/privacy" class="flex flex-row gap-2 p-5 items-start">
             <CalculatorIcon class="w-14 h-14 inline-block mb-1" />
@@ -152,7 +152,7 @@ const changeLightDarkTheme = () => {
               <span class="font-bold text-ellipsis">개인정보</span>
               <span class="text-sm text-ellipsis">개인정보 설정을 변경할 수 있습니다.</span>
             </div>
-            <ChevronLeftIcon class="flex-none w-6 h-6 inline-block mb-1" />
+            <ArrowSmallLeftIcon class="flex-none w-6 h-6 inline-block mb-1" />
           </router-link>
           <router-link to="/settings/privacy" class="flex flex-row gap-2 p-5 items-start">
             <ClockIcon class="w-14 h-14 inline-block mb-1" />
@@ -160,7 +160,7 @@ const changeLightDarkTheme = () => {
               <span class="font-bold text-ellipsis">약관</span>
               <span class="text-sm text-ellipsis">이용약관 및 개인정보 처리방침을 확인할 수 있습니다.</span>
             </div>
-            <ChevronLeftIcon class="flex-none w-6 h-6 inline-block mb-1" />
+            <ArrowSmallLeftIcon class="flex-none w-6 h-6 inline-block mb-1" />
           </router-link>
           <router-link to="/settings/privacy" class="flex flex-row gap-2 p-5 items-start">
             <NewspaperIcon class="w-14 h-14 inline-block mb-1" />
