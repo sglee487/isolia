@@ -15,6 +15,8 @@ export const useBoardStore = defineStore('board', {
     },
     clearPosts() {
       this.posts = []
+      this.currentPage = 0
+      this.isLastPage = false
     },
     incresePage() {
       this.currentPage++

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getCurrentInstance, ref } from 'vue'
+import { getCurrentInstance, ref, nextTick } from 'vue'
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import {
@@ -9,6 +9,7 @@ import {
 
 import { postBoard } from '@/apis/board'
 import { useUserStore } from '@/stores/userStore'
+import { useBoardStore } from '@/stores/boardStore'
 import InputBox from '@/components/InputBox.vue'
 import ButtonBox from '@/components/ButtonBox.vue'
 import Tiptap from '@/components/Tiptap.vue'
@@ -18,6 +19,7 @@ import { goBack, routerTo } from '@/utils/routerUtils'
 
 const instance = getCurrentInstance()
 const user = useUserStore()
+const boardStore = useBoardStore()
 
 const routerParams = instance.proxy.$route.params
 
@@ -44,7 +46,8 @@ boardRoutes.push(
 const post = () => {
   postBoard(routerParams.menu as string, title.value, content.value, user.data.token)
     .then((res) => {
-      instance?.proxy?.$router.push(`/board/list/${routerParams.menu}`)
+      boardStore.clearPosts()
+      instance?.proxy?.$router.push(`/board/post/${res.data}/`)
     })
     .catch((err) => {
       console.log(err)
@@ -55,8 +58,8 @@ const post = () => {
 </script>
 
 <template>
-  <div class="p-4 w-[46.5rem]">
-    <header class="flex space-x-4 justify-between items-center font-extrabold pb-2 mb-2 ">
+  <div class="px-4 w-[46.5rem]">
+    <header class="flex space-x-4 justify-between items-center font-extrabold py-1 mb-1">
       <ArrowSmallLeftIcon class="flex-none w-8 h-8 pl-2 cursor-pointer text-black dark:text-white"
         @click="goBack($router)" />
       <div

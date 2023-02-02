@@ -22,23 +22,15 @@ const user = useUserStore()
 const isHideHeader = ref<boolean>(false)
 let lastScroll = 0
 
-const handleScroll = async () => {
-  // header hide and show
-  const currentScroll = window.scrollY
-  if (currentScroll > lastScroll) {
+const handleScroll = (e) => {
+  const currentScroll = e.changedTouches[0].clientY
+  if (currentScroll < lastScroll) {
     isHideHeader.value = true
   } else {
     isHideHeader.value = false
   }
-  lastScroll = currentScroll
+  lastScroll = e.changedTouches[0].clientY
 }
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-})
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-})
 
 const postData = ref<any>({})
 
@@ -70,19 +62,19 @@ const saveComment = async () => {
 
 <template>
   <header :class="{ 'hiddenHeader': isHideHeader }"
-    class="md:hidden transition duration-300 transform fixed px-4 w-full h-14 flex space-x-4 justify-between items-center font-extrabold bg-[#f2f2f2] dark:bg-[#18171c] ">
+    class="md:hidden transition duration-300 transform fixed px-4 w-full h-10 flex space-x-4 justify-between items-center font-extrabold bg-[#f2f2f2] dark:bg-[#18171c] ">
     <ArrowSmallLeftIcon class="flex-none w-8 h-8 cursor-pointer pl-2 text-black dark:text-white"
       @click="goBack($router)" />
     <div class="flex-grow flex">
-      <img src="../assets/line-chart.png" class="w-10 p-1 inline-block rounded-md" />
+      <img src="../assets/line-chart.png" class="w-10 px-1 inline-block rounded-md" />
       <div
         class="inline-block place-self-center text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-white">
         Isolia
       </div>
     </div>
   </header>
-  <div class="p-4 w-[62rem] mb-8">
-    <div class="mt-14 md:mt-0 px-2 py-1 flex flex-col space-y-4 divide-gray-200 dark:divide-gray-700">
+  <div class="p-4 w-[62rem] mb-8" @touchmove="handleScroll">
+    <div class="mt-6 md:mt-0 px-2 py-1 flex flex-col space-y-4 divide-gray-200 dark:divide-gray-700">
       <div class="space-y-2">
         <small class="p-1 rounded-md bg-slate-300 dark:bg-slate-600 w-fit text-app-600 dark:text-app-300">
           {{ boardNames[postData.board_type] }}
@@ -147,7 +139,7 @@ const saveComment = async () => {
     <div v-else :class="{ 'hiddenComment': isHideHeader }" class="flex items-center w-[58rem] space-x-2">
       <UserIcon class="flex-none w-8 h-8 inline-block mb-1 rounded-full shadow-lg" />
       <InputAreaBox class="grow" v-model="writeCommentText" placeholder="댓글을 입력하시려면 로그인하세요" disabled />
-      <ButtonBox class="flex-none" color="app" @click="routerTo($router, '/settings/login')">로그인</ButtonBox>
+      <ButtonBox size="sm" class="flex-none" color="app" @click="routerTo($router, '/settings/login')">로그인</ButtonBox>
     </div>
   </div>
 </template>

@@ -16,9 +16,23 @@ import CalculatorTypes from '@/enums/calculateTypes'
 const calculateHistory = useCalculateStoreHistory()
 const lastCalculated = useLastCalculatedStore()
 
+const isHideHeader = ref<boolean>(false)
+let lastScroll = 0
+
 const weight = ref<number | null>(null)
 const height = ref<number | null>(null)
 const variables = [weight, height]
+
+const handleScroll = (e) => {
+  // header hide and show
+  const currentScroll = e.changedTouches[0].clientY
+  if (currentScroll < lastScroll) {
+    isHideHeader.value = true
+  } else {
+    isHideHeader.value = false
+  }
+  lastScroll = e.changedTouches[0].clientY
+}
 
 const lastSaved = lastCalculated.getLastCalculated(CalculatorTypes.BMI)
 if (lastSaved) {
@@ -87,8 +101,8 @@ variables.forEach((variable) => {
 </script>
 
 <template>
-  <div class="flex flex-col">
-    <header
+  <div class="flex flex-col" @touchmove="handleScroll">
+    <header :class="{ 'hiddenHeader': isHideHeader }"
       class="md:hidden transition duration-300 transform fixed flex w-full space-x-4 py-1 justify-between items-center top-0 left-0 font-bold bg-[#f5f5f5] dark:bg-[#18171c] z-50">
       <ArrowSmallLeftIcon class="flex-none w-8 h-8 pl-2 cursor-pointer text-black dark:text-white"
         @click="goBack($router)" />
@@ -127,3 +141,9 @@ variables.forEach((variable) => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.hiddenHeader {
+  transform: translateY(-100%);
+}
+</style>
