@@ -86,9 +86,11 @@ const getWriteMenu = () => {
 
 onMounted(() => {
   window.addEventListener('scroll', handleMoreLoading)
+  document.addEventListener('touchmove', handleScroll)
 })
 onUnmounted(() => {
   window.removeEventListener('scroll', handleMoreLoading)
+  document.removeEventListener('touchmove', handleScroll)
 })
 
 const handleMoreLoading = async () => {
@@ -134,7 +136,7 @@ const scrollToTop = () => {
 </script>
 
 <template>
-  <div class="p-4 w-[62rem] mb-12" @touchmove="handleScroll">
+  <div class="p-4 w-[62rem] mb-12">
     <header ref="headerComponent" :class="{ 'hiddenHeader': isHideHeader }"
       class="flex justify-center w-full px-6 fixed top-0 md:top-16 left-0 pt-1 bg-[#f2f2f2] dark:bg-[#18171c] transition duration-300 transform pb-1">
       <div class="w-[62rem] flex flex-row justify-between items-center font-extrabold">
