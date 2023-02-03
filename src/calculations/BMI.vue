@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, onMounted, onUnmounted } from 'vue'
 import {
   ArrowSmallLeftIcon
 } from '@heroicons/vue/24/outline'
@@ -16,9 +16,31 @@ import CalculatorTypes from '@/enums/calculateTypes'
 const calculateHistory = useCalculateStoreHistory()
 const lastCalculated = useLastCalculatedStore()
 
+const isHideHeader = ref<boolean>(false)
+let lastScroll = 0
+
 const weight = ref<number | null>(null)
 const height = ref<number | null>(null)
 const variables = [weight, height]
+
+onMounted(() => {
+  document.addEventListener('touchmove', handleScroll)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('touchmove', handleScroll)
+})
+
+const handleScroll = (e) => {
+  // header hide and show
+  const currentScroll = e.changedTouches[0].clientY
+  if (currentScroll < lastScroll) {
+    isHideHeader.value = true
+  } else {
+    isHideHeader.value = false
+  }
+  lastScroll = e.changedTouches[0].clientY
+}
 
 const lastSaved = lastCalculated.getLastCalculated(CalculatorTypes.BMI)
 if (lastSaved) {
@@ -88,7 +110,7 @@ variables.forEach((variable) => {
 
 <template>
   <div class="flex flex-col">
-    <header
+    <header :class="{ 'hiddenHeader': isHideHeader }"
       class="md:hidden transition duration-300 transform fixed flex w-full space-x-4 py-1 justify-between items-center top-0 left-0 font-bold bg-[#f5f5f5] dark:bg-[#18171c] z-50">
       <ArrowSmallLeftIcon class="flex-none w-8 h-8 pl-2 cursor-pointer text-black dark:text-white"
         @click="goBack($router)" />
@@ -102,7 +124,7 @@ variables.forEach((variable) => {
         </div>
       </div>
     </header>
-    <div class="pt-16 space-y-4">
+    <div class="pt-12 space-y-4">
       <InputBox label="키(cm)" v-model="height" type="number" @keyup.enter="save" placeholder="0"
         inputId="heightFocus" />
       <InputBox label="체중(kg)" v-model="weight" type="number" @keyup.enter="save" placeholder="0.00" />
@@ -127,3 +149,9 @@ variables.forEach((variable) => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.hiddenHeader {
+  transform: translateY(-100%);
+}
+</style>

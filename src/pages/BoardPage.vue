@@ -3,7 +3,8 @@ import { getCurrentInstance, ref, watch, onMounted, onUnmounted } from 'vue'
 import {
   ChevronDownIcon,
   PlusCircleIcon,
-  ArrowUpCircleIcon
+  ArrowUpCircleIcon,
+  ArrowPathIcon
 } from '@heroicons/vue/24/outline'
 
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
@@ -84,36 +85,44 @@ const getWriteMenu = () => {
 }
 
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
+  window.addEventListener('scroll', handleMoreLoading)
+  document.addEventListener('touchmove', handleScroll)
 })
 onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('scroll', handleMoreLoading)
+  document.removeEventListener('touchmove', handleScroll)
 })
 
-const handleScroll = async () => {
+const handleMoreLoading = async () => {
   const postsElement = scrollComponent.value
+  // infinite scroll
+  if (!boardStore.isLastPage && !moreLoading.value && postsElement.getBoundingClientRect().bottom < window.innerHeight) {
+    moreLoading.value = true
+    await loadMorePosts(boardType.value)
+    moreLoading.value = false
+  }
+}
 
+const reloadingBoard = () => {
+  boardStore.clearPosts()
+  loadMorePosts(boardType.value)
+}
+
+const handleScroll = (e) => {
   // header hide and show
-  const currentScroll = window.scrollY
-  if (currentScroll > lastScroll) {
+  const currentScroll = e.changedTouches[0].clientY
+  if (currentScroll < lastScroll) {
     isHideHeader.value = true
   } else {
     isHideHeader.value = false
   }
-  lastScroll = currentScroll
+  lastScroll = e.changedTouches[0].clientY
 
   // scroll to top
   if (currentScroll !== 0) {
     isShowScrollToTop.value = true
   } else {
     isShowScrollToTop.value = false
-  }
-
-  // infinite scroll
-  if (!boardStore.isLastPage && !moreLoading.value && postsElement.getBoundingClientRect().bottom < window.innerHeight) {
-    moreLoading.value = true
-    await loadMorePosts(boardType.value)
-    moreLoading.value = false
   }
 }
 
@@ -129,7 +138,7 @@ const scrollToTop = () => {
 <template>
   <div class="p-4 w-[62rem] mb-12">
     <header ref="headerComponent" :class="{ 'hiddenHeader': isHideHeader }"
-      class="flex justify-center w-full px-6 fixed top-0 md:top-16 left-0 pt-2 bg-[#f2f2f2] dark:bg-[#18171c] transition duration-300 transform pb-2 ">
+      class="flex justify-center w-full px-6 fixed top-0 md:top-16 left-0 pt-1 bg-[#f2f2f2] dark:bg-[#18171c] transition duration-300 transform pb-1">
       <div class="w-[62rem] flex flex-row justify-between items-center font-extrabold">
         <Menu as="div" class="relative inline-block text-left">
           <div>
@@ -166,12 +175,15 @@ const scrollToTop = () => {
             </MenuItems>
           </transition>
         </Menu>
-        <router-link :to="`/board/write/${getWriteMenu()}`" class="mr-2" v-if="$route.params.menu !== 'notice'">
-          <PlusCircleIcon class="w-8 h-8" />
-        </router-link>
+        <div class="flex space-x-4">
+          <ArrowPathIcon class="w-8 h-8" @click="reloadingBoard" />
+          <router-link :to="`/board/write/${getWriteMenu()}`" class="mr-2" v-if="$route.params.menu !== 'notice'">
+            <PlusCircleIcon class="w-8 h-8" />
+          </router-link>
+        </div>
       </div>
     </header>
-    <div class="mt-12 scroll-smooth" ref="scrollComponent">
+    <div class="mt-8 scroll-smooth" ref="scrollComponent">
       <router-link :to="`/board/post/${post.id}/`" v-for="post in boardStore.posts" :key="post.id">
         <PostCard class="flex flex-col" :post="post" :menu="instance.proxy.$route.params.menu as string" />
       </router-link>
