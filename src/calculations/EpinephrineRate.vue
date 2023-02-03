@@ -77,7 +77,7 @@ const save = () => {
 			unit: 'mcg/kg/min'
 		}
 	}
-	calculateHistory.addResult(result)
+	calculateHistory.addHistory(result)
 }
 
 variables.forEach(variable => {
@@ -104,10 +104,10 @@ variables.forEach(variable => {
 				@click="goBack($router)" />
 			<div
 				class="grow flex flex-col bg-clip-text text-transparent bg-gradient-to-r from-app-500 to-app-300 dark:from-app-400 dark:to-app-200">
-				<div class="text-xl">
+				<div class="text-lg">
 					Epinephrine Rate
 				</div>
-				<div class="text-base">
+				<div class="text-xs">
 					에피네프린 속도
 				</div>
 			</div>

@@ -9,7 +9,7 @@ const useCalculateStoreHistory = defineStore('history', {
 	},
 
 	actions: {
-		addResult(result) {
+		addHistory(result) {
 			this.results.unshift(result)
 		},
 		removeResult(index) {

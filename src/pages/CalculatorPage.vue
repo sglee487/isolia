@@ -6,6 +6,7 @@ import {
 
 import { useCalculateStoreHistory } from '@/stores/calculateStore'
 
+import DripRate from '@/calculations/DripRate.vue'
 import Epinephrine from '@/calculations/EpinephrineRate.vue'
 import BMI from '@/calculations/BMI.vue'
 import CalculatorTypes from '@/enums/calculateTypes'
@@ -26,6 +27,12 @@ watch(() => instance.proxy.$route.params.name, async (name) => {
 })
 
 const routes = [
+	{
+		to: '/calculator/dripRate',
+		name: 'Drip Rate',
+		nameKo: '수액주입 속도',
+		detailUnits: 'mcg,mg,kg,min,hr -> ml/hr'
+	},
 	{
 		to: '/calculator/epinephrineRate',
 		name: 'Epinephrine',
@@ -75,6 +82,7 @@ const units = {
 			</ul>
 			<div class="grow font-naverNeo pt-4 pr-10 md:p-10">
 				<div v-if="calculatorType" class="pl-10">
+					<DripRate v-if="calculatorType === CalculatorTypes.DripRate" />
 					<Epinephrine v-if="calculatorType === CalculatorTypes.EpinephrineRate" />
 					<BMI v-if="calculatorType === CalculatorTypes.BMI" />
 				</div>
