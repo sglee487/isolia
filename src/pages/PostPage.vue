@@ -5,6 +5,8 @@ import {
   UserIcon
 } from '@heroicons/vue/24/outline'
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
 
 import boardNames from '@/enums/menuDict'
 import { getPost, postComment } from '@/apis/board'
@@ -14,6 +16,9 @@ import InputAreaBox from '@/components/InputAreaBox.vue'
 import TiptapComment from '@/components/TiptapComment.vue'
 import ButtonBox from '@/components/ButtonBox.vue'
 import { axiosErrorHandler } from '@/handler/axiosErrorHandler'
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 const instance = getCurrentInstance()
 
@@ -83,7 +88,7 @@ const saveComment = async () => {
           {{ postData.title }}
         </div>
         <small class="self-end text-gray-600 dark:text-gray-400">
-          {{ dayjs(postData.created_at).format('YY.MM.DD HH:mm:ss ddd') }} | 조회수 {{ postData.hits }}
+          {{ dayjs(postData.created_at).tz('Asia/Seoul').format('YY.MM.DD HH:mm:ss ddd') }} | 조회수 {{ postData.hits }}
         </small>
         <div class="flex space-x-2 items-center">
           <img class="w-10 h-10 inline-block mb-1 rounded-full shadow-lg" :src="postData.picture_96" alt="pic96">
@@ -109,7 +114,7 @@ const saveComment = async () => {
                 {{ comment.display_name }}
               </div>
               <div class="text-gray-600 dark:text-gray-400 text-xs">
-                {{ dayjs(comment.created_at).format('YY.MM.DD HH:mm:ss ddd') }}
+                {{ dayjs(comment.created_at).tz('Asia/Seoul').format('YY.MM.DD HH:mm:ss ddd') }}
               </div>
             </div>
           </div>

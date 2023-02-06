@@ -5,8 +5,12 @@ import {
   ChatBubbleOvalLeftIcon
 } from '@heroicons/vue/24/outline'
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
 
 import menuDict from '@/enums/menuDict'
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 const props = defineProps<{
   post: Object,
@@ -44,7 +48,7 @@ const props = defineProps<{
     <hr />
     <div class="flex justify-between">
       <small class="self-end">
-        {{ dayjs(props.post.created_at).format('MM.DD HH:mm') }}
+        {{ dayjs(props.post.created_at).tz('Asia/Seoul').format('MM.DD HH:mm') }}
       </small>
       <div class="flex space-x-2">
         <div>
