@@ -140,13 +140,13 @@ const units = {
 							<hr class="border-0 h-2">
 							<div class="flex items-center">
 								<div class="text-sm text-left text-app-600 font-bold w-28 ">
-									{{ result.output.label }}
+									{{ result.output?.label }}
 								</div>
 								<div class="text-left mr-1">
-									{{ result.output.value }}
+									{{ result.output?.value }}
 								</div>
 								<div class="text-xs">
-									{{ result.output.unit }}
+									{{ result.output?.unit }}
 								</div>
 							</div>
 						</div>
