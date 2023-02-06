@@ -20,12 +20,12 @@ module.exports = {
     'hover:bg-sky-500',
     'border-violet-500',
     'text-violet-500',
-    'hover:bg-violet-500'
-    // {
-    //   pattern:
-    //     /(bg|border|text)-(slate|gray|zinc|neutral|stone|red|app|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(100|200|300|400|500|600|900)/,
-    //   variants: ['lg', 'hover', 'focus', 'lg:hover']
-    // }
+    'hover:bg-violet-500',
+    {
+      pattern:
+        /(bg)-(app)-(600)/,
+      variants: ['lg', 'hover', 'focus', 'lg:hover']
+    }
   ],
   theme: {
     extend: {
