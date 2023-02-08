@@ -43,9 +43,13 @@ const handleScroll = (e) => {
 }
 
 const lastSaved = lastCalculated.getLastCalculated(CalculatorTypes.BMI)
-if (lastSaved) {
-  weight.value = lastSaved.weight
-  height.value = lastSaved.height
+try {
+  if (lastSaved) {
+    weight.value = lastSaved.weight
+    height.value = lastSaved.height
+  }
+} catch (e) {
+  console.log(e)
 }
 
 const calculated = computed<number | null>(() => {
@@ -82,8 +86,16 @@ const save = () => {
     }),
     type: 'BMI',
     input: {
-      height: height.value,
-      weight: weight.value
+      height: {
+        label: '키',
+        value: height.value,
+        unit: 'cm'
+      },
+      weight: {
+        label: '체중',
+        value: weight.value,
+        unit: 'kg'
+      }
     },
     output: {
       label: '체질량지수',

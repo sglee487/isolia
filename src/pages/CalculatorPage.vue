@@ -47,22 +47,6 @@ const routes = [
 	}
 ]
 
-const labels = {
-	dose: '주입용량단위',
-	weight: '체중',
-	drug: '약물의 용량',
-	afterShuffleIV: '혼합 후 수액량',
-	height: '키'
-}
-
-const units = {
-	dose: 'mcg/kg/min',
-	weight: 'kg',
-	drug: 'mg',
-	afterShuffleIV: 'ml',
-	height: 'cm',
-	bmi: 'kg/m^2'
-}
 </script>
 
 <template>
@@ -126,16 +110,18 @@ const units = {
 							<div class="font-bold text-app-600">
 								{{ result['type'] }}
 							</div>
-							<div v-for="(value, key) in result.input" :key="key" class="flex items-center">
-								<div class="text-sm text-left font-bold w-28">
-									{{ labels[key] }}
-								</div>
-								<div class="text-left mr-1">
-									{{ value }}
-								</div>
-								<div class="text-xs">
-									{{ units[key] }}
-								</div>
+							<div v-for="inputType in result.input" :key="inputType" class="flex items-center">
+								<template v-if="inputType !== null">
+									<div class="text-sm text-left font-bold w-28">
+										{{ inputType.label }}
+									</div>
+									<div class="text-left mr-1">
+										{{ inputType.value }}
+									</div>
+									<div class="text-xs">
+										{{ inputType.unit }}
+									</div>
+								</template>
 							</div>
 							<hr class="border-0 h-2">
 							<div class="flex items-center">

@@ -45,11 +45,15 @@ const handleScroll = (e) => {
 }
 
 const lastSaved = lastCalculated.getLastCalculated(CalculatorTypes.EpinephrineRate)
-if (lastSaved) {
-	dose.value = lastSaved.dose
-	weight.value = lastSaved.weight
-	drug.value = lastSaved.drug
-	afterShuffleIV.value = lastSaved.afterShuffleIV
+try {
+	if (lastSaved) {
+		dose.value = lastSaved.dose
+		weight.value = lastSaved.weight
+		drug.value = lastSaved.drug
+		afterShuffleIV.value = lastSaved.afterShuffleIV
+	}
+} catch (e) {
+	console.log(e)
 }
 
 const calculated = computed<number | null>(() => {
@@ -88,10 +92,26 @@ const save = () => {
 		}),
 		type: 'Epinephrine',
 		input: {
-			dose: dose.value,
-			weight: weight.value,
-			drug: drug.value,
-			afterShuffleIV: afterShuffleIV.value
+			dose: {
+				label: '주입용량단위',
+				value: dose.value,
+				unit: 'mcg/kg/min'
+			},
+			weight: {
+				label: '체중',
+				value: weight.value,
+				unit: 'kg'
+			},
+			drug: {
+				label: '주입약물',
+				value: drug.value,
+				unit: 'mg'
+			},
+			afterShuffleIV: {
+				label: '혼합 후 수액량',
+				value: afterShuffleIV.value,
+				unit: 'ml'
+			}
 		},
 		output: {
 			label: '주입속도',

@@ -29,6 +29,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      screens: {
+        xs: '350px',
+        mld: '820px'
+      },
       fontFamily: {
         gothica1: ['GothicA1', 'malgun gothic'],
         naverNeo: ['NaverNeo', 'malgun gothic']
