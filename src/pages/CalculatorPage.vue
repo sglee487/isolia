@@ -31,7 +31,7 @@ const routes = [
 		to: '/calculator/dripRate',
 		name: 'Drip Rate',
 		nameKo: '수액주입 속도',
-		detailUnits: 'mcg,mg,kg,min,hr -> ml/hr'
+		detailUnits: 'mcg,mg,kg,min,hr -> cc/hr'
 	},
 	{
 		to: '/calculator/epinephrineRate',

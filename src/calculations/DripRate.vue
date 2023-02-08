@@ -164,8 +164,8 @@ const save = () => {
     },
     output: {
       label: '주입속도',
-      value: calculated.value.toFixed(4),
-      unit: 'ml/hr'
+      value: calculated.value.toFixed(2),
+      unit: 'cc/hr'
     }
   }
   calculateHistory.addHistory(result)
@@ -317,9 +317,9 @@ const save = () => {
             수액 주입속도는
             <div>
               <span class="font-bold text-app-600">
-                {{ calculated === null ? '0.0000' : calculated.toFixed(4) }}
+                {{ calculated === null ? '0.00' : calculated.toFixed(2) }}
               </span>
-              <small>ml/hr</small> 입니다.
+              <small>cc/hr</small> 입니다.
             </div>
           </div>
           <div class="pb-4 flex space-x-1">
