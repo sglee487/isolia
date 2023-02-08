@@ -37,7 +37,6 @@ const ivBagConcentration = computed<number | null>(() => {
 })
 
 const dosageUnitSelected = (unit: string) => {
-  console.log(unit)
   if (!unit.includes('kg')) {
     kg.value = 1
   } else {
