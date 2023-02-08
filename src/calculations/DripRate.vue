@@ -28,7 +28,6 @@ const ml = ref<number | null>(null)
 const kg = ref<number | null>(null)
 const variables = [dosage, selectedDoseUnit, mg, ml, kg]
 
-
 const ivBagConcentration = computed<number | null>(() => {
   if (mg.value === null || ml.value === null) {
     return null
@@ -38,6 +37,7 @@ const ivBagConcentration = computed<number | null>(() => {
 })
 
 const dosageUnitSelected = (unit: string) => {
+  console.log(unit)
   if (!unit.includes('kg')) {
     kg.value = 1
   } else {
@@ -68,13 +68,13 @@ const handleScroll = (e) => {
 const lastSaved = lastCalculated.getLastCalculated(CalculatorTypes.DripRate)
 try {
   if (lastSaved) {
+    dosageUnitSelected(lastSaved.selectedDoseUnit)
+
     dosage.value = lastSaved.dosage
     selectedDoseUnit.value = lastSaved.selectedDoseUnit
     mg.value = lastSaved.mg
     ml.value = lastSaved.ml
     kg.value = lastSaved.kg
-
-    dosageUnitSelected(selectedDoseUnit.value)
   }
 } catch (e) {
   console.log(e)
