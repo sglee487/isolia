@@ -8,8 +8,10 @@ import { useCalculateStoreHistory } from '@/stores/calculateStore'
 
 import DripRate from '@/calculations/DripRate.vue'
 import BSA from '@/calculations/BSA.vue'
+import FENa from '@/calculations/FENa.vue'
 import Epinephrine from '@/calculations/EpinephrineRate.vue'
 import BMI from '@/calculations/BMI.vue'
+
 import CalculatorTypes from '@/enums/calculateTypes'
 
 const instance = getCurrentInstance()
@@ -39,6 +41,12 @@ const routes = [
 		name: 'BSA',
 		nameKo: '체표면적',
 		detailUnits: 'cm,kg -> m²'
+	},
+	{
+		to: '/calculator/fena',
+		name: 'FENa',
+		nameKo: '나트륨 분획 배설률',
+		detailUnits: 'UNa,UCr,PNa,PCr -> %'
 	},
 	{
 		to: '/calculator/epinephrineRate',
@@ -75,6 +83,7 @@ const routes = [
 				<div v-if="calculatorType" class="pl-10">
 					<DripRate v-if="calculatorType === CalculatorTypes.DripRate" />
 					<BSA v-if="calculatorType === CalculatorTypes.BSA" />
+					<FENa v-if="calculatorType === CalculatorTypes.FENa" />
 					<Epinephrine v-if="calculatorType === CalculatorTypes.EpinephrineRate" />
 					<BMI v-if="calculatorType === CalculatorTypes.BMI" />
 				</div>
