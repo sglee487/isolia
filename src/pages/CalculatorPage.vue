@@ -7,6 +7,7 @@ import {
 import { useCalculateStoreHistory } from '@/stores/calculateStore'
 
 import DripRate from '@/calculations/DripRate.vue'
+import BSA from '@/calculations/BSA.vue'
 import Epinephrine from '@/calculations/EpinephrineRate.vue'
 import BMI from '@/calculations/BMI.vue'
 import CalculatorTypes from '@/enums/calculateTypes'
@@ -34,6 +35,12 @@ const routes = [
 		detailUnits: 'mcg,mg,kg,min,hr -> cc/hr'
 	},
 	{
+		to: '/calculator/bsa',
+		name: 'BSA',
+		nameKo: '체표면적',
+		detailUnits: 'cm,kg -> m²'
+	},
+	{
 		to: '/calculator/epinephrineRate',
 		name: 'Epinephrine',
 		nameKo: '에피네프린',
@@ -43,7 +50,7 @@ const routes = [
 		to: '/calculator/bmi',
 		name: 'BMI',
 		nameKo: '체질량지수',
-		detailUnits: 'kg/cm -> kg/m^2'
+		detailUnits: 'kg/cm -> kg/m²'
 	}
 ]
 
@@ -67,6 +74,7 @@ const routes = [
 			<div class="grow font-naverNeo pt-4 pr-10 md:p-10">
 				<div v-if="calculatorType" class="pl-10">
 					<DripRate v-if="calculatorType === CalculatorTypes.DripRate" />
+					<BSA v-if="calculatorType === CalculatorTypes.BSA" />
 					<Epinephrine v-if="calculatorType === CalculatorTypes.EpinephrineRate" />
 					<BMI v-if="calculatorType === CalculatorTypes.BMI" />
 				</div>

@@ -100,7 +100,7 @@ const save = () => {
     output: {
       label: '체질량지수',
       value: calculated.value.toFixed(2),
-      unit: 'kg/m^2'
+      unit: 'kg/m²'
     }
   }
   calculateHistory.addHistory(result)
@@ -146,14 +146,14 @@ variables.forEach((variable) => {
       <span class="font-bold text-app-600">
         {{ calculated === null ? '0.00' : calculated.toFixed(2) }}
       </span>
-      <small>kg/m^2</small> 입니다.
+      <small>kg/m²</small> 입니다.
     </div> -->
     <div class="p-4 text-center">
       BMI는
       <span class="font-bold text-app-600">
         {{ calculated === null ? '0.00' : calculated.toFixed(2) }}
       </span>
-      <small>kg/m^2</small> 입니다.
+      <small>kg/m²</small> 입니다.
     </div>
     <div class="py-4 flex space-x-1">
       <ButtonBox class="text-sm w-32" @click="reset" color="red">초기화</ButtonBox>
