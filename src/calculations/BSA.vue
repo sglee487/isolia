@@ -19,20 +19,12 @@ const lastCalculated = useLastCalculatedStore()
 const isHideHeader = ref<boolean>(false)
 let lastScroll = 0
 
-const formula = ['Mosteller', 'DuBois']
+const formulaUnits = ['Mosteller', 'DuBois']
 
 const cm = ref<number | null>(null)
 const kg = ref<number | null>(null)
 const selectedFormula = ref<string | null>(null)
 const variables = [cm, kg, selectedFormula]
-
-const ivBagConcentration = computed<number | null>(() => {
-  if (mg.value === null || ml.value === null) {
-    return null
-  }
-
-  return mg.value / ml.value
-})
 
 const formulaSelected = (unit: string) => {
   selectedFormula.value = unit
@@ -106,7 +98,7 @@ const reset = () => {
   kg.value = null
   selectedFormula.value = null
 
-  document.getElementById('doseFocus')?.focus()
+  document.getElementById('firstFocus')?.focus()
 }
 
 const save = () => {
@@ -171,26 +163,17 @@ const save = () => {
       <div>
         <div class="space-y-8">
           <div class="space-y-4">
-            <div class="space-y-4">
-              <div class="font-bold text-app-600 dark:text-app-500">
-                투여량 및 단위
-              </div>
-              <div class="flex space-x-2 items-center text-lg">
-                <InputBox v-model="dosage" type="number" @keyup.enter="save" placeholder="0.00" />
-                <span>
-                  {{ selectedDoseUnit ?? '??' }}
-                </span>
-              </div>
+            <div class="font-bold text-app-600 dark:text-app-500">
+              키
             </div>
-            <div
-              class="grid gap-4 grid-cols-1 xs:grid-cols-2 md:grid-cols-1 mld:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-              <ButtonBox v-for=" dosageUnit, key in dosageUnits" :key="dosageUnit" size="sm" color="app"
-                :active="dosageUnit === selectedDoseUnit" @click="dosageUnitSelected(dosageUnit)">
-                {{ dosageUnit }}
-              </ButtonBox>
+            <div class="flex space-x-2 items-center text-lg">
+              <InputBox v-model="cm" type="number" @keyup.enter="save" placeholder="0.00" inputId="topFocus" />
+              <span>
+                cm
+              </span>
             </div>
           </div>
-          <div v-if="isShowKg" class="space-y-4">
+          <div class="space-y-4">
             <div class="font-bold text-app-600 dark:text-app-500">
               몸무게
             </div>
@@ -203,29 +186,22 @@ const save = () => {
           </div>
           <div class="space-y-4">
             <div class="font-bold text-app-600 dark:text-app-500">
-              IV Bag Concentration
+              공식
             </div>
             <div class="flex space-x-2 items-center text-lg">
-              <InputBox v-model="mg" type="number" @keyup.enter="save" placeholder="0.00" />
-              <div>
-                mg
-              </div>
-              <div class="px-2">
-                /
-              </div>
-              <InputBox v-model="ml" type="number" @keyup.enter="save" placeholder="0.00" />
-              <div>
-                ml
-              </div>
+              <ButtonBox v-for=" formulaUnit, key in formulaUnits" :key="formulaUnit" size="sm" color="app"
+                :active="formulaUnit === selectedFormula" @click="formulaSelected(formulaUnit)">
+                {{ formulaUnit }}
+              </ButtonBox>
             </div>
           </div>
           <div class="text-center">
-            수액 주입속도는
+            체표면적은
             <div>
               <span class="font-bold text-app-600">
                 {{ calculated === null ? '0.00' : calculated.toFixed(2) }}
               </span>
-              <small>cc/hr</small> 입니다.
+              <small>m²</small> 입니다.
             </div>
           </div>
           <div class="pb-4 flex space-x-1">
