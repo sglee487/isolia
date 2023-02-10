@@ -98,7 +98,7 @@ const reset = () => {
   kg.value = null
   selectedFormula.value = null
 
-  document.getElementById('firstFocus')?.focus()
+  document.getElementById('topFocus')?.focus()
 }
 
 const save = () => {
@@ -149,8 +149,7 @@ const save = () => {
       class="md:hidden transition duration-300 transform fixed flex w-full space-x-4 py-1 justify-between items-center top-0 left-0 font-bold bg-[#f5f5f5] dark:bg-[#18171c] z-50">
       <ArrowSmallLeftIcon class="flex-none w-8 h-8 pl-2 cursor-pointer text-black dark:text-white"
         @click="goBack($router)" />
-      <div
-        class="grow flex flex-col bg-clip-text text-transparent bg-gradient-to-r from-app-500 to-app-300 dark:from-app-400 dark:to-app-200">
+      <div class="grow flex flex-col">
         <div class="text-lg">
           BSA
         </div>
@@ -163,7 +162,7 @@ const save = () => {
       <div>
         <div class="space-y-8">
           <div class="space-y-4">
-            <div class="font-bold text-app-600 dark:text-app-500">
+            <div class="font-bold text-app-800 dark:text-app-100">
               키
             </div>
             <div class="flex space-x-2 items-center text-lg">
@@ -174,7 +173,7 @@ const save = () => {
             </div>
           </div>
           <div class="space-y-4">
-            <div class="font-bold text-app-600 dark:text-app-500">
+            <div class="font-bold text-app-800 dark:text-app-100">
               몸무게
             </div>
             <div class="flex space-x-2 items-center text-lg">
@@ -185,7 +184,7 @@ const save = () => {
             </div>
           </div>
           <div class="space-y-4">
-            <div class="font-bold text-app-600 dark:text-app-500">
+            <div class="font-bold text-app-800 dark:text-app-100">
               공식
             </div>
             <div class="flex space-x-2 items-center text-lg">
@@ -198,7 +197,7 @@ const save = () => {
           <div class="text-center">
             체표면적은
             <div>
-              <span class="font-bold text-app-600">
+              <span class="font-extrabold text-app-600 dark:text-app-50">
                 {{ calculated === null ? '0.00' : calculated.toFixed(2) }}
               </span>
               <small>m²</small> 입니다.

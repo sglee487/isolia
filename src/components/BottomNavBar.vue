@@ -1,61 +1,75 @@
 <script setup lang="ts">
+import { getCurrentInstance, watch } from 'vue'
+
 import { useUserStore } from '@/stores/userStore'
 import {
-  CalculatorIcon,
-  NewspaperIcon,
-  UserIcon,
-  HomeIcon,
-  QuestionMarkCircleIcon
+  CalculatorIcon as CalculatorIconOutline,
+  NewspaperIcon as NewspaperIconOutline,
+  UserIcon as UserIconOutline,
+  HomeIcon as HomeIconOutline,
+  QuestionMarkCircleIcon as QuestionMarkCircleIconOutline
 } from '@heroicons/vue/24/outline'
+
+import {
+  CalculatorIcon as CalculatorIconSolid,
+  NewspaperIcon as NewspaperIconSolid,
+  UserIcon as UserIconSolid,
+  HomeIcon as HomeIconSolid,
+  QuestionMarkCircleIcon as QuestionMarkCircleIconSolid
+} from '@heroicons/vue/24/solid'
+
+const instance = getCurrentInstance()
 
 const user = useUserStore()
 </script>
 
 <template>
-  <section id="bottom-navigation" class="md:hidden block fixed inset-x-0 bottom-0 z-10 bg-neutral-50 dark:bg-[#18171c] shadow
+  <section id="bottom-navigation" class="md:hidden block fixed inset-x-0 bottom-0 z-10 bg-neutral-50 dark:bg-[#171717] shadow
     border-t border-neutral-200 dark:border-neutral-800 rounded-t-2xl
     ">
     <div id="tabs" class="flex justify-between">
-      <router-link to="/" id="nav"
-        class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
-        <HomeIcon class="w-6 h-6 inline-block mb-1" />
+      <router-link to="/" id="nav" v-slot="{ navigate }" class="w-full hover:text-app-400 text-center">
+        <span class="justify-center inline-block text-center pt-2 pb-1" @click="navigate" role="link">
+          <HomeIconSolid v-if="instance?.proxy?.$route?.matched[0]?.path === '/'" class="w-6 h-6 inline-block mb-1" />
+          <HomeIconOutline v-else class="w-6 h-6 inline-block mb-1" />
+        </span>
       </router-link>
-      <router-link to="/board" id="nav"
-        class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
-        <NewspaperIcon class="w-6 h-6 inline-block mb-1" />
+      <router-link to="/board" id="nav" v-slot="{ navigate }" class="w-full hover:text-app-400 text-center">
+        <span class="justify-center inline-block text-center pt-2 pb-1" @click="navigate" role="link">
+          <NewspaperIconSolid v-if="instance?.proxy?.$route?.matched[0]?.path === '/board'"
+            class="w-6 h-6 inline-block mb-1" />
+          <NewspaperIconOutline v-else class="w-6 h-6 inline-block mb-1" />
+        </span>
       </router-link>
-      <router-link to="/calculator" id="nav"
-        class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
-        <CalculatorIcon class="w-6 h-6 inline-block mb-1" />
+      <router-link to="/calculator" id="nav" v-slot="{ navigate }" class="w-full hover:text-app-400 text-center">
+        <span class="inline-block text-center pt-2 pb-1" @click="navigate" role="link">
+          <CalculatorIconSolid v-if="instance?.proxy?.$route?.matched[0]?.path === '/calculator'"
+            class="w-6 h-6 inline-block mb-1" />
+          <CalculatorIconOutline v-else class="w-6 h-6 inline-block mb-1" />
+        </span>
       </router-link>
-      <router-link to="/question" id="nav"
-        class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
-        <QuestionMarkCircleIcon class="w-6 h-6 inline-block mb-1" />
+      <router-link to="/question" id="nav" v-slot="{ navigate }" class="w-full hover:text-app-400 text-center">
+        <span class="justify-center inline-block text-center pt-2 pb-1" @click="navigate" role="link">
+          <QuestionMarkCircleIconSolid v-if="instance?.proxy?.$route?.matched[0]?.path === '/question'"
+            class="w-6 h-6 inline-block mb-1" />
+          <QuestionMarkCircleIconOutline v-else class="w-6 h-6 inline-block mb-1" />
+        </span>
       </router-link>
-      <router-link to="/settings" id="nav"
-        class="w-full focus:text-app-400 hover:text-app-400 justify-center inline-block text-center pt-2 pb-1">
-        <img :src="user.data.picture_32" v-if="user.isLogined()"
-          class="w-6 h-6 inline-block mb-1 rounded-full shadow-lg" />
-        <UserIcon v-else class="w-6 h-6 inline-block mb-1" />
+      <router-link to="/settings" id="nav" v-slot="{ navigate }" class="w-full hover:text-app-400 text-center">
+        <span class="justify-center inline-block text-center pt-2 pb-1" @click="navigate" role="link">
+          <img :src="user.data.picture_32" v-if="user.isLogined()"
+            class="w-6 h-6 inline-block mb-1 rounded-full shadow-lg" />
+          <UserIconSolid v-if="instance?.proxy?.$route?.matched[0]?.path === '/settings'"
+            class="w-6 h-6 inline-block mb-1" />
+          <UserIconOutline v-else class="w-6 h-6 inline-block mb-1" />
+        </span>
       </router-link>
     </div>
   </section>
 </template>
 
 <style scoped>
-#nav.router-link-active,
-#nav.router-link-exact-active {
-  border-bottom: 2px solid rgb(14 165 233);
-  /* #4EBDE5 */
-}
-
-#nav.router-link-active.dark,
-#nav.router-link-exact-active.dark {
-  border-bottom: 2px solid rgb(56 189 248);
-  /* #4EBDE5 */
-}
-
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
 
   #nav.router-link-active,
   #nav.router-link-exact-active #nav {
@@ -66,5 +80,5 @@ const user = useUserStore()
   #nav.router-link-exact-active.dark #nav.dark {
     color: rgb(56 189 248);
   }
-}
+} */
 </style>

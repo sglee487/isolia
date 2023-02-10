@@ -122,11 +122,12 @@ const calculated = computed<number | null>(() => {
 
 const reset = () => {
   dosage.value = null
+  selectedDoseUnit.value = null
   kg.value = null
   mg.value = null
   ml.value = null
 
-  document.getElementById('doseFocus')?.focus()
+  document.getElementById('topFocus')?.focus()
 }
 
 const save = () => {
@@ -171,78 +172,6 @@ const save = () => {
   calculateHistory.addHistory(result)
 }
 
-// const resultDescription = computed<string | null>(() => {
-//   if (calculated.value === null) {
-//     return null
-//   }
-
-//   if (calculated.value < 10) {
-//     return '매우 빠름'
-//   } else if (calculated.value < 20) {
-//     return '빠름'
-//   } else if (calculated.value < 30) {
-//     return '보통'
-//   } else if (calculated.value < 40) {
-//     return '느림'
-//   } else {
-//     return '매우 느림'
-//   }
-// })
-
-// const resultDescriptionColor = computed<string | null>(() => {
-//   if (calculated.value === null) {
-//     return null
-//   }
-
-//   if (calculated.value < 10) {
-//     return 'text-green-500'
-//   } else if (calculated.value < 20) {
-//     return 'text-green-400'
-//   } else if (calculated.value < 30) {
-//     return 'text-yellow-500'
-//   } else if (calculated.value < 40) {
-//     return 'text-yellow-400'
-//   } else {
-//     return 'text-red-500'
-//   }
-// })
-
-// const resultDescriptionIcon = computed<string | null>(() => {
-//   if (calculated.value === null) {
-//     return null
-//   }
-
-//   if (calculated.value < 10) {
-//     return 'fas fa-arrow-up'
-//   } else if (calculated.value < 20) {
-//     return 'fas fa-arrow-up'
-//   } else if (calculated.value < 30) {
-//     return 'fas fa-arrow-right'
-//   } else if (calculated.value < 40) {
-//     return 'fas fa-arrow-down'
-//   } else {
-//     return 'fas fa-arrow-down'
-//   }
-// })
-
-// const resultDescriptionIconColor = computed<string | null>(() => {
-//   if (calculated.value === null) {
-//     return null
-//   }
-
-//   if (calculated.value < 10) {
-//     return 'text-green-500'
-//   } else if (calculated.value < 20) {
-//     return 'text-green-400'
-//   } else if (calculated.value < 30) {
-//     return 'text-yellow-500'
-//   } else if (calculated.value < 40) {
-//     return 'text-yellow-400'
-//   } else {
-//     return 'text-red-500'
-//   }
-// })
-
 </script>
 
 <template>
@@ -251,12 +180,11 @@ const save = () => {
       class="md:hidden transition duration-300 transform fixed flex w-full space-x-4 py-1 justify-between items-center top-0 left-0 font-bold bg-[#f5f5f5] dark:bg-[#18171c] z-50">
       <ArrowSmallLeftIcon class="flex-none w-8 h-8 pl-2 cursor-pointer text-black dark:text-white"
         @click="goBack($router)" />
-      <div
-        class="grow flex flex-col bg-clip-text text-transparent bg-gradient-to-r from-app-500 to-app-300 dark:from-app-400 dark:to-app-200">
+      <div class="grow flex flex-col">
         <div class="text-lg">
           Drip Rate
         </div>
-        <div class="text-xs">
+        <div class="text-sm">
           수액주입 속도
         </div>
       </div>
@@ -266,11 +194,11 @@ const save = () => {
         <div class="space-y-8">
           <div class="space-y-4">
             <div class="space-y-4">
-              <div class="font-bold text-app-600 dark:text-app-500">
+              <div class="font-bold text-app-800 dark:text-app-100">
                 투여량 및 단위
               </div>
               <div class="flex space-x-2 items-center text-lg">
-                <InputBox v-model="dosage" type="number" @keyup.enter="save" placeholder="0.00" />
+                <InputBox v-model="dosage" type="number" @keyup.enter="save" placeholder="0.00" inputId="topFocus" />
                 <span>
                   {{ selectedDoseUnit ?? '??' }}
                 </span>
@@ -278,14 +206,14 @@ const save = () => {
             </div>
             <div
               class="grid gap-4 grid-cols-1 xs:grid-cols-2 md:grid-cols-1 mld:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-              <ButtonBox v-for=" dosageUnit, key in dosageUnits" :key="dosageUnit" size="sm" color="app"
+              <ButtonBox v-for=" dosageUnit in dosageUnits" :key="dosageUnit" size="sm" color="app"
                 :active="dosageUnit === selectedDoseUnit" @click="dosageUnitSelected(dosageUnit)">
                 {{ dosageUnit }}
               </ButtonBox>
             </div>
           </div>
           <div v-if="isShowKg" class="space-y-4">
-            <div class="font-bold text-app-600 dark:text-app-500">
+            <div class="font-bold text-app-800 dark:text-app-100">
               몸무게
             </div>
             <div class="flex space-x-2 items-center text-lg">
@@ -296,7 +224,7 @@ const save = () => {
             </div>
           </div>
           <div class="space-y-4">
-            <div class="font-bold text-app-600 dark:text-app-500">
+            <div class="font-bold text-app-800 dark:text-app-100">
               IV Bag Concentration
             </div>
             <div class="flex space-x-2 items-center text-lg">
@@ -316,7 +244,7 @@ const save = () => {
           <div class="text-center">
             수액 주입속도는
             <div>
-              <span class="font-bold text-app-600">
+              <span class="font-extrabold text-app-600 dark:text-app-50">
                 {{ calculated === null ? '0.00' : calculated.toFixed(2) }}
               </span>
               <small>cc/hr</small> 입니다.

@@ -64,10 +64,10 @@ const changeLightDarkTheme = () => {
 
 <template>
   <div class="w-full px-8 flex flex-col space-y-2 mb-16">
-    <div
-      class="text-2xl font-bold pt-4 text-transparent bg-clip-text bg-gradient-to-r from-app-500 to-app-300 dark:from-app-400 dark:to-app-200">
+    <header
+      class="text-2xl font-bold pt-4 text-transparent bg-clip-text bg-gradient-to-r from-app-500 to-app-300 dark:from-app-200 dark:to-app-100">
       나의 아이솔리아
-    </div>
+    </header>
     <div class="flex flex-col space-y-1">
       <div v-if="user.isLogined()" class="flex flex-row gap-2 p-5 items-start">
         <img :src="user.data.picture_96" v-if="user.isLogined()"

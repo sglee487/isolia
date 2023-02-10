@@ -147,8 +147,7 @@ const save = () => {
       class="md:hidden transition duration-300 transform fixed flex w-full space-x-4 py-1 justify-between items-center top-0 left-0 font-bold bg-[#f5f5f5] dark:bg-[#18171c] z-50">
       <ArrowSmallLeftIcon class="flex-none w-8 h-8 pl-2 cursor-pointer text-black dark:text-white"
         @click="goBack($router)" />
-      <div
-        class="grow flex flex-col bg-clip-text text-transparent bg-gradient-to-r from-app-500 to-app-300 dark:from-app-400 dark:to-app-200">
+      <div class="grow flex flex-col">
         <div class="text-lg">
           FENa
         </div>
@@ -161,18 +160,18 @@ const save = () => {
       <div>
         <div class="space-y-8">
           <div class="space-y-4">
-            <div class="font-bold text-app-600 dark:text-app-500">
+            <div class="font-bold text-app-800 dark:text-app-100">
               소변 나트륨 농도 (UNa)
             </div>
             <div class="flex space-x-2 items-center text-lg">
-              <InputBox v-model="una" type="number" @keyup.enter="save" placeholder="0.00" />
+              <InputBox v-model="una" type="number" @keyup.enter="save" placeholder="0.00" inputId="topFocus" />
               <span>
                 mmol/L
               </span>
             </div>
           </div>
           <div class="space-y-4">
-            <div class="font-bold text-app-600 dark:text-app-500">
+            <div class="font-bold text-app-800 dark:text-app-100">
               혈액 크레아틴 농도 (SCr)
             </div>
             <div class="flex space-x-2 items-center text-lg">
@@ -183,7 +182,7 @@ const save = () => {
             </div>
           </div>
           <div class="space-y-4">
-            <div class="font-bold text-app-600 dark:text-app-500">
+            <div class="font-bold text-app-800 dark:text-app-100">
               혈액 나트륨 농도 (SNa)
             </div>
             <div class="flex space-x-2 items-center text-lg">
@@ -194,7 +193,7 @@ const save = () => {
             </div>
           </div>
           <div class="space-y-4">
-            <div class="font-bold text-app-600 dark:text-app-500">
+            <div class="font-bold text-app-800 dark:text-app-100">
               소변 크레아틴 농도 (UCr)
             </div>
             <div class="flex space-x-2 items-center text-lg">
@@ -207,7 +206,7 @@ const save = () => {
           <div class="text-center">
             FENa는
             <div>
-              <span class="font-bold text-app-600">
+              <span class="font-extrabold text-app-600 dark:text-app-50">
                 {{ calculated === null ? '0.00' : calculated.toFixed(2) }}
               </span>
               <small>%</small> 입니다.
@@ -218,7 +217,6 @@ const save = () => {
             <ButtonBox class="w-full" @click="save" color="app">저장</ButtonBox>
           </div>
         </div>
-
       </div>
     </div>
 

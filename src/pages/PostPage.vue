@@ -73,7 +73,7 @@ const saveComment = async () => {
     <div class="flex-grow flex">
       <img src="../assets/line-chart.png" class="w-10 px-1 inline-block rounded-md" />
       <div
-        class="inline-block place-self-center text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-white">
+        class="inline-block place-self-center text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-500 to-app-300 dark:from-app-200 dark:to-app-100">
         Isolia
       </div>
     </div>

@@ -11,7 +11,6 @@ module.exports = {
     'hover:bg-red-500',
     'border-app-500',
     'text-app-500',
-    'hover:bg-app-500',
     'border-gray-500',
     'text-gray-500',
     'hover:bg-gray-500',
@@ -23,8 +22,8 @@ module.exports = {
     'hover:bg-violet-500',
     {
       pattern:
-        /(bg)-(app)-(600)/,
-      variants: ['lg', 'hover', 'focus', 'lg:hover']
+        /(bg|border)-(app)-(200|400|500|600)/,
+      variants: ['hover']
     }
   ],
   theme: {
@@ -41,16 +40,18 @@ module.exports = {
         '4/5': '80%'
       },
       colors: {
-        'app-100': '#e2f3fe',
-        'app-200': '#bae6fd',
-        'app-300': '#7dd3fc',
-        'app-400': '#38bdf8',
-        'app-500': '#0ea5e9',
-        'app-600': '#0284c7',
-        'app-700': '#0369a1',
-        'app-800': '#075985',
-        'app-900': '#0c4a6e',
-        'app-950': '#0f384a'
+        app: {
+          50: '#fafafa',
+          100: '#f5f5f5',
+          200: '#e5e5e5',
+          300: '#d4d4d4',
+          400: '#a3a3a3',
+          500: '#737373',
+          600: '#525252',
+          700: '#404040',
+          800: '#262626',
+          900: '#171717'
+        }
       }
     }
   },

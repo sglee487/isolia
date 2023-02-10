@@ -6,8 +6,8 @@
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
 
   font-family: 'naverNeo';
-  color: #18171c;
-  background-color: #f2f2f2;
+  color: rgb(23 23 23);
+  background-color: #f6f6f6;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -20,7 +20,11 @@
 
 html.dark {
   color: #f5f5f5;
-  background-color: #18171c;
+  background-color: rgb(23 23 23);
+}
+
+header {
+  font-family: gothicA1;
 }
 
 /* width */
@@ -32,6 +36,12 @@ html.dark {
 ::-webkit-scrollbar-thumb {
   background: #555;
   border-radius: 10px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 @font-face {

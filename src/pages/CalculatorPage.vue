@@ -89,19 +89,16 @@ const routes = [
 				</div>
 				<div v-else class="flex flex-col pl-8 pb-2">
 					<div class="md:hidden flex flex-col">
-						<div
-							class="pb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-500 to-app-300 dark:from-app-400 dark:to-app-200 text-2xl">
+						<header class="pb-4 font-extrabold text-2xl">
 							계산기
-						</div>
-						<ul class="grid grid-cols-2 gap-4 justify-items-center mb-2">
+						</header>
+						<ul class="grid grid-cols-1 gap-4 justify-items-center mb-2">
 							<li v-for="route in routes" :key="route.to" class="w-full">
 								<router-link :to="route.to"
-									class="block text-center py-2 hover:bg-app-500 hover:text-white rounded-xl bg-app-300 dark:bg-app-950">
-									<span class="font-bold">{{ route.name }}</span>
-									<br>
-									<small>{{ route.nameKo }}</small>
-									<br>
-									<small class="text-sm">({{ route.detailUnits }})</small>
+									class="flex space-x-2 items-center p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 hover:dark:bg-neutral-700 shadow-md shadow-app-300 dark:shadow-app-700">
+									<div class="font-bold">{{ route.name }}</div>
+									<div>{{ route.nameKo }}</div>
+									<div class="text-sm">({{ route.detailUnits }})</div>
 								</router-link>
 							</li>
 						</ul>
@@ -124,9 +121,9 @@ const routes = [
 								<TrashIcon class="w-5 h-5 text-red-400 cursor-pointer" @click="calculateHistory.removeResult(index)" />
 							</div>
 							<hr class="h-1">
-							<div class="font-bold text-app-600">
+							<header class="font-extrabold">
 								{{ result['type'] }}
-							</div>
+							</header>
 							<div v-for="inputType in result.input" :key="inputType" class="flex items-center">
 								<template v-if="inputType !== null">
 									<div class="text-sm text-left font-bold w-28">
@@ -142,7 +139,7 @@ const routes = [
 							</div>
 							<hr class="border-0 h-2">
 							<div class="flex items-center">
-								<div class="text-sm text-left text-app-600 font-bold w-28 ">
+								<div class="text-sm text-left font-extrabold w-28 ">
 									{{ result.output?.label }}
 								</div>
 								<div class="text-left mr-1">
