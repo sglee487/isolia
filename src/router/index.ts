@@ -12,7 +12,9 @@ import WritePage from '@/pages/WritePage.vue'
 import PostPage from '@/pages/PostPage.vue'
 import CalculatorPage from '@/pages/CalculatorPage.vue'
 import AccountSettingPage from '@/pages/AccountSettingPage.vue'
-import QuestionPage from '@/pages/QuestionPage.vue'
+import MorePage from '@/pages/MorePage.vue'
+import MineSweeper from '@/pages/morepages/MineSweeperPage.vue'
+import QuestionPage from '@/pages/morepages/QuestionPage.vue'
 import SettingsPage from '@/pages/SettingsPage.vue'
 
 const $toast = useToast()
@@ -55,8 +57,24 @@ const routes = [
     ]
   },
   {
-    path: '/question',
-    component: QuestionPage
+    path: '/more',
+    name: 'more',
+    children: [
+      {
+        path: '',
+        component: MorePage,
+        name: 'more'
+      },
+      {
+        path: 'minesweeper',
+        name: 'minesweeper',
+        component: MineSweeper
+      },
+      {
+        path: 'question',
+        component: QuestionPage
+      },
+    ]
   },
   {
     path: '/settings',

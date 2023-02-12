@@ -7,7 +7,8 @@ import {
   NewspaperIcon as NewspaperIconOutline,
   UserIcon as UserIconOutline,
   HomeIcon as HomeIconOutline,
-  QuestionMarkCircleIcon as QuestionMarkCircleIconOutline
+  QuestionMarkCircleIcon as QuestionMarkCircleIconOutline,
+  EllipsisHorizontalCircleIcon as EllipsisHorizontalCircleIconOutline
 } from '@heroicons/vue/24/outline'
 
 import {
@@ -15,7 +16,8 @@ import {
   NewspaperIcon as NewspaperIconSolid,
   UserIcon as UserIconSolid,
   HomeIcon as HomeIconSolid,
-  QuestionMarkCircleIcon as QuestionMarkCircleIconSolid
+  QuestionMarkCircleIcon as QuestionMarkCircleIconSolid,
+  EllipsisHorizontalCircleIcon as EllipsisHorizontalCircleIconSolid
 } from '@heroicons/vue/24/solid'
 
 const instance = getCurrentInstance()
@@ -48,11 +50,11 @@ const user = useUserStore()
           <CalculatorIconOutline v-else class="w-6 h-6 inline-block mb-1" />
         </span>
       </router-link>
-      <router-link to="/question" id="nav" v-slot="{ navigate }" class="w-full hover:text-app-400 text-center">
+      <router-link to="/more" id="nav" v-slot="{ navigate }" class="w-full hover:text-app-400 text-center">
         <span class="justify-center inline-block text-center pt-2 pb-1" @click="navigate" role="link">
-          <QuestionMarkCircleIconSolid v-if="instance?.proxy?.$route?.matched[0]?.path === '/question'"
+          <EllipsisHorizontalCircleIconSolid v-if="instance?.proxy?.$route?.matched[0]?.path === '/more'"
             class="w-6 h-6 inline-block mb-1" />
-          <QuestionMarkCircleIconOutline v-else class="w-6 h-6 inline-block mb-1" />
+          <EllipsisHorizontalCircleIconOutline v-else class="w-6 h-6 inline-block mb-1" />
         </span>
       </router-link>
       <router-link to="/settings" id="nav" v-slot="{ navigate }" class="w-full hover:text-app-400 text-center">
