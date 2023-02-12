@@ -80,18 +80,20 @@ const revealAll = () => {
 }
 
 // reveal cell
-const reveal = (x, y) => {
+const reveal = (x, y, followMode: boolean = false) => {
   if (board[x][y].isRevealed) {
     return
   }
   board[x][y].isRevealed = true
   if (board[x][y].isBomb && !isGameCompleted.value) {
-    gameStatus.value = 'miss'
-    setTimeout(() => {
-      if (!isGameCompleted.value) {
-        gameStatus.value = 'playing'
-      }
-    }, 2000)
+    if (!followMode) {
+      gameStatus.value = 'miss'
+      setTimeout(() => {
+        if (!isGameCompleted.value) {
+          gameStatus.value = 'playing'
+        }
+      }, 2000)
+    }
   } else if (board[x][y].count === 0) {
     for (let i = -1; i <= 1; i++) {
       for (let j = -1; j <= 1; j++) {
@@ -109,18 +111,20 @@ const reveal = (x, y) => {
 }
 
 // place flag
-const placeFlag = (x: number, y: number, color: string) => {
+const placeFlag = (x: number, y: number, color: string, followMode: boolean = false) => {
   if (board[x][y].isRevealed) {
     return
   }
   if (!board[x][y].isBomb) {
     reveal(x, y)
-    gameStatus.value = 'miss'
-    setTimeout(() => {
-      if (!isGameCompleted.value) {
-        gameStatus.value = 'playing'
-      }
-    }, 2000)
+    if (!followMode) {
+      gameStatus.value = 'miss'
+      setTimeout(() => {
+        if (!isGameCompleted.value) {
+          gameStatus.value = 'playing'
+        }
+      }, 2000)
+    }
   } else if (!board[x][y].isFlagged) {
     board[x][y].isFlagged = true
     console.log(color)
@@ -186,9 +190,9 @@ const render = () => {
 const followHistory = (history) => {
   for (const action of history) {
     if (action.action === 'reveal') {
-      reveal(action.x, action.y)
+      reveal(action.x, action.y, true)
     } else if (action.action === 'flag') {
-      placeFlag(action.x, action.y, action.color)
+      placeFlag(action.x, action.y, action.color, true)
     }
   }
 }
