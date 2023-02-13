@@ -5,14 +5,23 @@ import {
 } from '@heroicons/vue/20/solid'
 
 import ButtonBox from '@/components/ButtonBox.vue'
-import { io } from 'socket.io-client'
 
-const SERVER_URL = `${import.meta.env.VITE_SERVER_PROTOCOL}://${import.meta.env.VITE_SERVER_ADDRESS}:${import.meta.env.VITE_SERVER_PORT}`
+const SERVER_URL = `${import.meta.env.VITE_SERVER_ADDRESS}:${import.meta.env.VITE_SERVER_PORT}`
 
-console.log(SERVER_URL)
+// const socket = io(SERVER_URL)
+const wsConnect = new WebSocket(`ws:${SERVER_URL}/connect`)
+let wsStart = null
+let wsAction = null
+// const wsReStart = new WebSocket(`ws://${SERVER_URL}/mine_restart`)
+// const wsReveal = new WebSocket(`ws://${SERVER_URL}/mine_reveal`)
+// const wsFlag = new WebSocket(`ws://${SERVER_URL}/mine_flag`)
+interface PlayerInfo {
+  sid: string;
+  name: string;
+  color: string;
+}
 
-const socket = io(SERVER_URL)
-const myPlayerInfo = ref<Object>({})
+const myPlayerInfo = ref<PlayerInfo>({ sid: '', name: '', color: '' })
 const players = ref<any[]>([])
 const localHistory = ref<string[]>([])
 
@@ -127,7 +136,6 @@ const placeFlag = (x: number, y: number, color: string, followMode: boolean = fa
     }
   } else if (!board[x][y].isFlagged) {
     board[x][y].isFlagged = true
-    console.log(color)
     board[x][y].flagColor = color
     flags.value++
   } else {
@@ -158,13 +166,15 @@ const render = () => {
       td.style.color = 'black'
       td.addEventListener('click', function () {
         if (!board[i][j].isRevealed) {
-          socket.emit('mine_reveal', { x: i, y: j, sid: socket.id, action: 'reveal' })
+          wsAction.send(JSON.stringify({ x: i, y: j, sid: wsAction.id, action: 'reveal' }))
+          // socket.emit('mine_reveal', { x: i, y: j, sid: socket.id, action: 'reveal' })
         }
       })
       td.addEventListener('contextmenu', function (e) {
         e.preventDefault()
         if (!board[i][j].isRevealed) {
-          socket.emit('mine_flag', { x: i, y: j, sid: socket.id, action: 'flag' })
+          wsAction.send(JSON.stringify({ x: i, y: j, sid: wsAction.id, action: 'flag' }))
+          // socket.emit('mine_flag', { x: i, y: j, sid: socket.id, action: 'flag' })
         }
       })
       if (cell.isRevealed) {
@@ -176,9 +186,6 @@ const render = () => {
           td.innerHTML = (cell.count === 0) ? '' : cell.count
         }
       } else if (cell.isFlagged) {
-        // td.innerHTML = '&#128681;'
-        // td.style.backgroundColor = cell.flagColor
-        console.log(cell.flagColor)
         td.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="${cell.flagColor}" aria-hidden="true" class="inline-block w-6 h-6" style="color: rgb(255, 255, 224);"><path d="M3.5 2.75a.75.75 0 00-1.5 0v14.5a.75.75 0 001.5 0v-4.392l1.657-.348a6.449 6.449 0 014.271.572 7.948 7.948 0 005.965.524l2.078-.64A.75.75 0 0018 12.25v-8.5a.75.75 0 00-.904-.734l-2.38.501a7.25 7.25 0 01-4.186-.363l-.502-.2a8.75 8.75 0 00-5.053-.439l-1.475.31V2.75z"></path></svg>`
       }
       row.appendChild(td)
@@ -203,67 +210,86 @@ const gameSetting = (size, bombs, history) => {
     bombCoords.push({ x: bomb[0], y: bomb[1] })
   }
   gameStart(size, bombCoords)
-  console.log(history)
   followHistory(history)
   render()
 }
 
 onMounted(() => {
-  socket.on('mine_start', (boardData) => {
-    const { size, bombs, history } = boardData
-    localSize.value = size
-    localBombs.value = bombs.length
-    gameSetting(size, bombs, history)
-    localHistory.value = history
-    console.log(history)
-  })
-  socket.emit('mine_start')
+  wsConnect.onmessage = (event) => {
+    const data = JSON.parse(event.data)
+    myPlayerInfo.value = data
+    wsStart = new WebSocket(`ws:${SERVER_URL}/mine_start/${myPlayerInfo.value.sid}`)
+    wsAction = new WebSocket(`ws:${SERVER_URL}/mine_action/${myPlayerInfo.value.sid}`)
 
-  socket.on('give_player_info', (playerInfo) => {
-    myPlayerInfo.value = {
-      name: playerInfo.name,
-      color: playerInfo.color
+    wsStart.onmessage = (event) => {
+      const data = JSON.parse(event.data)
+      const { size, bombs, history } = data
+      localSize.value = size
+      localBombs.value = bombs.length
+      gameSetting(size, bombs, history)
+      localHistory.value = history
     }
-  })
 
-  socket.on('mine_players', (serverPlayers) => {
-    players.value = serverPlayers
-  })
+    wsAction.onmessage = (event) => {
+      const data = JSON.parse(event.data)
+      const { x, y, action, history } = data
+      if (action === 'reveal') {
+        reveal(x, y)
+      } else if (action === 'flag') {
+        placeFlag(x, y, myPlayerInfo.value.color)
+      }
+      followHistory(history)
+      render()
+    }
+  }
+  // socket.on('mine_start', (boardData) => {
+  //   const { size, bombs, history } = boardData
+  //   localSize.value = size
+  //   localBombs.value = bombs.length
+  //   console.log(size, bombs, history)
+  //   gameSetting(size, bombs, history)
+  //   localHistory.value = history
+  // })
+  // socket.emit('mine_start')
 
-  socket.on('give_player_info', (playerInfo) => {
-    console.log(playerInfo)
-  })
+  // socket.on('give_player_info', (playerInfo) => {
+  //   myPlayerInfo.value = {
+  //     name: playerInfo.name,
+  //     color: playerInfo.color
+  //   }
+  // })
 
-  socket.on('mine_reveal', (data) => {
-    const { x, y, history } = data
-    reveal(x, y)
-    localHistory.value = history
-    render()
-  })
+  // socket.on('mine_players', (serverPlayers) => {
+  //   players.value = serverPlayers
+  // })
 
-  socket.on('mine_flag', (data) => {
-    const { x, y, name, color, history } = data
-    console.log(data)
-    console.log(color)
-    placeFlag(x, y, color)
-    localHistory.value = history
-    render()
-  })
+  // socket.on('mine_reveal', (data) => {
+  //   const { x, y, history } = data
+  //   reveal(x, y)
+  //   localHistory.value = history
+  //   render()
+  // })
+
+  // socket.on('mine_flag', (data) => {
+  //   const { x, y, name, color, history } = data
+  //   placeFlag(x, y, color)
+  //   localHistory.value = history
+  //   render()
+  // })
 })
 
 onUnmounted(() => {
-  console.log('unmounted')
-  socket.emit('leave_mine')
-  socket.off('connect')
-  socket.off('mine_join')
-  socket.off('mine_players')
-  socket.off('mine_reveal')
-  socket.off('mine_flag')
-  socket.off('disconnect')
+  wsConnect.close()
+  // socket.emit('leave_mine')
+  // socket.off('connect')
+  // socket.off('mine_join')
+  // socket.off('mine_players')
+  // socket.off('mine_reveal')
+  // socket.off('mine_flag')
 })
 
 const reset = () => {
-  socket.emit('mine_restart')
+  // socket.emit('mine_restart')
 }
 
 </script>
