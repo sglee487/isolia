@@ -232,13 +232,11 @@ onMounted(() => {
 
     wsPlayers.onmessage = (event) => {
       const data = JSON.parse(event.data)
-      console.log(data)
       players.value = data
     }
     wsStart.onmessage = (event) => {
       const data = JSON.parse(event.data)
       const { size, bombs, history } = data
-      console.log(history)
       localSize.value = size
       localBombs.value = bombs.length
       gameSetting(size, bombs, history)
