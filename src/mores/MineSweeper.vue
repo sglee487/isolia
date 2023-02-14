@@ -6,14 +6,13 @@ import {
 
 import ButtonBox from '@/components/ButtonBox.vue'
 
-const SERVER_URL = `${import.meta.env.VITE_SERVER_ADDRESS}:${import.meta.env.VITE_SERVER_PORT}`
+const SOCKET_URL = `${import.meta.env.VITE_SOCKET_PROTOCOL}://${import.meta.env.VITE_SERVER_ADDRESS}:${import.meta.env.VITE_SERVER_PORT}`
 
-// const socket = io(SERVER_URL)
-const wsConnect = new WebSocket(`ws:${SERVER_URL}/connect`)
+const wsConnect = new WebSocket(`${SOCKET_URL}/ws/connect`)
 let wsStart = null
 let wsAction = null
 let wsPlayers = null
-const wsReStart = new WebSocket(`ws://${SERVER_URL}/mine_restart`)
+const wsReStart = new WebSocket(`${SOCKET_URL}/ws/mine_restart`)
 interface PlayerInfo {
   sid: string;
   name: string;
@@ -217,9 +216,9 @@ onMounted(() => {
   wsConnect.onmessage = (event) => {
     const data = JSON.parse(event.data)
     myPlayerInfo.value = data
-    wsPlayers = new WebSocket(`ws:${SERVER_URL}/mine_players`)
-    wsStart = new WebSocket(`ws:${SERVER_URL}/mine_start/${myPlayerInfo.value.sid}`)
-    wsAction = new WebSocket(`ws:${SERVER_URL}/mine_action/${myPlayerInfo.value.sid}`)
+    wsPlayers = new WebSocket(`${SOCKET_URL}/ws/mine_players`)
+    wsStart = new WebSocket(`${SOCKET_URL}/ws/mine_start/${myPlayerInfo.value.sid}`)
+    wsAction = new WebSocket(`${SOCKET_URL}/ws/mine_action/${myPlayerInfo.value.sid}`)
 
     // wsPlayers.open(() => {
     //   console.log('connected')
