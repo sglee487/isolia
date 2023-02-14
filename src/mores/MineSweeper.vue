@@ -12,9 +12,8 @@ const SERVER_URL = `${import.meta.env.VITE_SERVER_ADDRESS}:${import.meta.env.VIT
 const wsConnect = new WebSocket(`ws:${SERVER_URL}/connect`)
 let wsStart = null
 let wsAction = null
-// const wsReStart = new WebSocket(`ws://${SERVER_URL}/mine_restart`)
-// const wsReveal = new WebSocket(`ws://${SERVER_URL}/mine_reveal`)
-// const wsFlag = new WebSocket(`ws://${SERVER_URL}/mine_flag`)
+let wsPlayers = null
+const wsReStart = new WebSocket(`ws://${SERVER_URL}/mine_restart`)
 interface PlayerInfo {
   sid: string;
   name: string;
@@ -186,7 +185,7 @@ const render = () => {
           td.innerHTML = (cell.count === 0) ? '' : cell.count
         }
       } else if (cell.isFlagged) {
-        td.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="${cell.flagColor}" aria-hidden="true" class="inline-block w-6 h-6" style="color: rgb(255, 255, 224);"><path d="M3.5 2.75a.75.75 0 00-1.5 0v14.5a.75.75 0 001.5 0v-4.392l1.657-.348a6.449 6.449 0 014.271.572 7.948 7.948 0 005.965.524l2.078-.64A.75.75 0 0018 12.25v-8.5a.75.75 0 00-.904-.734l-2.38.501a7.25 7.25 0 01-4.186-.363l-.502-.2a8.75 8.75 0 00-5.053-.439l-1.475.31V2.75z"></path></svg>`
+        td.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="${cell.flagColor}" aria-hidden="true" class="inline-block w-fit h-fit p-1" style="color: rgb(255, 255, 224);"><path d="M3.5 2.75a.75.75 0 00-1.5 0v14.5a.75.75 0 001.5 0v-4.392l1.657-.348a6.449 6.449 0 014.271.572 7.948 7.948 0 005.965.524l2.078-.64A.75.75 0 0018 12.25v-8.5a.75.75 0 00-.904-.734l-2.38.501a7.25 7.25 0 01-4.186-.363l-.502-.2a8.75 8.75 0 00-5.053-.439l-1.475.31V2.75z"></path></svg>`
       }
       row.appendChild(td)
     }
@@ -218,12 +217,29 @@ onMounted(() => {
   wsConnect.onmessage = (event) => {
     const data = JSON.parse(event.data)
     myPlayerInfo.value = data
+    wsPlayers = new WebSocket(`ws:${SERVER_URL}/mine_players`)
     wsStart = new WebSocket(`ws:${SERVER_URL}/mine_start/${myPlayerInfo.value.sid}`)
     wsAction = new WebSocket(`ws:${SERVER_URL}/mine_action/${myPlayerInfo.value.sid}`)
 
+    // wsPlayers.open(() => {
+    //   console.log('connected')
+    //   wsPlayers.send(myPlayerInfo.value.sid)
+    // })
+
+    // 연결이 열리면
+    wsPlayers.addEventListener('open', function (event) {
+      wsPlayers.send(myPlayerInfo.value.sid)
+    })
+
+    wsPlayers.onmessage = (event) => {
+      const data = JSON.parse(event.data)
+      console.log(data)
+      players.value = data
+    }
     wsStart.onmessage = (event) => {
       const data = JSON.parse(event.data)
       const { size, bombs, history } = data
+      console.log(history)
       localSize.value = size
       localBombs.value = bombs.length
       gameSetting(size, bombs, history)
@@ -233,12 +249,12 @@ onMounted(() => {
     wsAction.onmessage = (event) => {
       const data = JSON.parse(event.data)
       const { x, y, action, history } = data
+      localHistory.value = history
       if (action === 'reveal') {
         reveal(x, y)
       } else if (action === 'flag') {
         placeFlag(x, y, myPlayerInfo.value.color)
       }
-      followHistory(history)
       render()
     }
   }
@@ -279,7 +295,11 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  wsConnect.close()
+  wsConnect?.close()
+  wsPlayers?.close()
+  wsStart?.close()
+  wsAction?.close()
+  wsReStart?.close()
   // socket.emit('leave_mine')
   // socket.off('connect')
   // socket.off('mine_join')
@@ -290,6 +310,7 @@ onUnmounted(() => {
 
 const reset = () => {
   // socket.emit('mine_restart')
+  wsReStart.send('')
 }
 
 </script>
