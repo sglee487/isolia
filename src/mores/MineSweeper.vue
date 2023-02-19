@@ -8,11 +8,7 @@ import ButtonBox from '@/components/ButtonBox.vue'
 
 const SOCKET_URL = `${import.meta.env.VITE_SOCKET_PROTOCOL}://${import.meta.env.VITE_SERVER_ADDRESS}:${import.meta.env.VITE_SERVER_PORT}`
 
-const wsConnect = new WebSocket(`${SOCKET_URL}/ws/connect`)
-let wsStart = null
-let wsAction = null
-let wsPlayers = null
-const wsReStart = new WebSocket(`${SOCKET_URL}/ws/mine_restart`)
+const wsConnect = new WebSocket(`${SOCKET_URL}/ws/mine_connect`)
 interface PlayerInfo {
   sid: string;
   name: string;
@@ -29,7 +25,24 @@ const localSize = ref<number>(0)
 const localBombs = ref<number>(0)
 let board = []
 const flags = ref<number>(0)
-const isGameCompleted = ref<boolean>(false)
+const isGameCompleted = ref<boolean>(true)
+
+const sendAction = (action: 'reveal' | 'flag', x: number, y: number) => {
+  const data = {
+    type: 'action',
+    action,
+    x,
+    y
+  }
+  wsConnect.send(JSON.stringify(data))
+}
+
+const sendReset = async () => {
+  const data = {
+    type: 'reset'
+  }
+  wsConnect.send(JSON.stringify(data))
+}
 
 const gameStart = (sizeServer: number, bombCoords: Object) => {
   localSize.value = sizeServer
@@ -164,14 +177,16 @@ const render = () => {
       td.style.color = 'black'
       td.addEventListener('click', function () {
         if (!board[i][j].isRevealed) {
-          wsAction.send(JSON.stringify({ x: i, y: j, sid: wsAction.id, action: 'reveal' }))
+          sendAction('reveal', i, j)
+          // wsAction.send(JSON.stringify({ x: i, y: j, sid: wsAction.id, action: 'reveal' }))
           // socket.emit('mine_reveal', { x: i, y: j, sid: socket.id, action: 'reveal' })
         }
       })
       td.addEventListener('contextmenu', function (e) {
         e.preventDefault()
         if (!board[i][j].isRevealed) {
-          wsAction.send(JSON.stringify({ x: i, y: j, sid: wsAction.id, action: 'flag' }))
+          sendAction('flag', i, j)
+          // wsAction.send(JSON.stringify({ x: i, y: j, sid: wsAction.id, action: 'flag' }))
           // socket.emit('mine_flag', { x: i, y: j, sid: socket.id, action: 'flag' })
         }
       })
@@ -215,45 +230,76 @@ const gameSetting = (size, bombs, history) => {
 onMounted(() => {
   wsConnect.onmessage = (event) => {
     const data = JSON.parse(event.data)
-    myPlayerInfo.value = data
-    wsPlayers = new WebSocket(`${SOCKET_URL}/ws/mine_players`)
-    wsStart = new WebSocket(`${SOCKET_URL}/ws/mine_start/${myPlayerInfo.value.sid}`)
-    wsAction = new WebSocket(`${SOCKET_URL}/ws/mine_action/${myPlayerInfo.value.sid}`)
+    switch (data.type) {
+      case 'profile':
+        myPlayerInfo.value = data
+        console.log('profile')
+        wsConnect.send(JSON.stringify({ type: 'start' }))
+        wsConnect.send(JSON.stringify({ type: 'players' }))
+        break
+      case 'players':
+        players.value = data.players
+        console.log(players.value)
+        break
+      case 'start': {
+        const { size, bombs, history } = data
+        console.log(data)
+        localSize.value = size
+        localBombs.value = bombs.length
+        gameSetting(size, bombs, history)
+        localHistory.value = history
+        break
+      }
+      case 'action': {
+        const { action, x, y, history } = data
+        if (action === 'reveal') {
+          reveal(x, y)
+        } else if (action === 'flag') {
+          placeFlag(x, y, myPlayerInfo.value.color)
+        }
+        render()
+        localHistory.value = history
+        break
+      }
+      case 'disconnect':
+        // const { sid } = data
+        // players.value = players.value.filter((player) => player.sid !== sid)
+        break
+      case 'restart':
+        gameStart(localSize.value, localBombs.value)
+        render()
+        break
+    }
 
-    // wsPlayers.open(() => {
-    //   console.log('connected')
+    // // 연결이 열리면
+    // wsPlayers.addEventListener('open', function (event) {
     //   wsPlayers.send(myPlayerInfo.value.sid)
     // })
 
-    // 연결이 열리면
-    wsPlayers.addEventListener('open', function (event) {
-      wsPlayers.send(myPlayerInfo.value.sid)
-    })
+    // wsPlayers.onmessage = (event) => {
+    //   const data = JSON.parse(event.data)
+    //   players.value = data
+    // }
+    // wsStart.onmessage = (event) => {
+    //   const data = JSON.parse(event.data)
+    //   const { size, bombs, history } = data
+    //   localSize.value = size
+    //   localBombs.value = bombs.length
+    //   gameSetting(size, bombs, history)
+    //   localHistory.value = history
+    // }
 
-    wsPlayers.onmessage = (event) => {
-      const data = JSON.parse(event.data)
-      players.value = data
-    }
-    wsStart.onmessage = (event) => {
-      const data = JSON.parse(event.data)
-      const { size, bombs, history } = data
-      localSize.value = size
-      localBombs.value = bombs.length
-      gameSetting(size, bombs, history)
-      localHistory.value = history
-    }
-
-    wsAction.onmessage = (event) => {
-      const data = JSON.parse(event.data)
-      const { x, y, action, history } = data
-      localHistory.value = history
-      if (action === 'reveal') {
-        reveal(x, y)
-      } else if (action === 'flag') {
-        placeFlag(x, y, myPlayerInfo.value.color)
-      }
-      render()
-    }
+    // wsAction.onmessage = (event) => {
+    //   const data = JSON.parse(event.data)
+    //   const { x, y, action, history } = data
+    //   localHistory.value = history
+    //   if (action === 'reveal') {
+    //     reveal(x, y)
+    //   } else if (action === 'flag') {
+    //     placeFlag(x, y, myPlayerInfo.value.color)
+    //   }
+    //   render()
+    // }
   }
   // socket.on('mine_start', (boardData) => {
   //   const { size, bombs, history } = boardData
@@ -293,10 +339,10 @@ onMounted(() => {
 
 onUnmounted(() => {
   wsConnect?.close()
-  wsPlayers?.close()
-  wsStart?.close()
-  wsAction?.close()
-  wsReStart?.close()
+  // wsPlayers?.close()
+  // wsStart?.close()
+  // wsAction?.close()
+  // wsReStart?.close()
   // socket.emit('leave_mine')
   // socket.off('connect')
   // socket.off('mine_join')
@@ -306,8 +352,9 @@ onUnmounted(() => {
 })
 
 const reset = () => {
+  sendReset()
+  // wsReStart.send('')
   // socket.emit('mine_restart')
-  wsReStart.send('')
 }
 
 </script>
@@ -335,6 +382,9 @@ const reset = () => {
           }}
         </li>
       </ul>
+      {{ myPlayerInfo }}
+      {{ players }}
+      {{ localHistory }}
       히스토리 {{ localHistory.length }}
       <ul class="w-48 h-64 overflow-y-auto bg-neutral-100 dark:bg-neutral-800 rounded-md">
         <li v-for="history in localHistory.slice().reverse()" :key="history.name">
@@ -350,5 +400,4 @@ const reset = () => {
       </ul>
     </div>
   </div>
-
 </template>
