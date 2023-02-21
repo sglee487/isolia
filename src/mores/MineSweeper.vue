@@ -1,3 +1,4 @@
+<!-- eslint-disable camelcase -->
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import {
@@ -30,6 +31,7 @@ const isGameCompleted = ref<boolean>(true)
 const sendAction = (action: 'reveal' | 'flag', x: number, y: number) => {
   const data = {
     type: 'action',
+    sid: myPlayerInfo.value.sid,
     action,
     x,
     y
@@ -233,7 +235,6 @@ onMounted(() => {
     switch (data.type) {
       case 'profile':
         myPlayerInfo.value = data
-        console.log('profile')
         wsConnect.send(JSON.stringify({ type: 'start' }))
         wsConnect.send(JSON.stringify({ type: 'players' }))
         break
@@ -242,11 +243,11 @@ onMounted(() => {
         console.log(players.value)
         break
       case 'start': {
-        const { size, bombs, history } = data
+        const { size, bomb_coords, history } = data
         console.log(data)
         localSize.value = size
-        localBombs.value = bombs.length
-        gameSetting(size, bombs, history)
+        localBombs.value = bomb_coords.length
+        gameSetting(size, bomb_coords, history)
         localHistory.value = history
         break
       }
@@ -265,10 +266,15 @@ onMounted(() => {
         // const { sid } = data
         // players.value = players.value.filter((player) => player.sid !== sid)
         break
-      case 'restart':
-        gameStart(localSize.value, localBombs.value)
+      case 'restart': {
+        console.log(data)
+        const { size, bomb_coords, history } = data
+        console.log(size, bomb_coords, history)
+        history.value = history
+        gameStart(size, bomb_coords)
         render()
         break
+      }
     }
 
     // // 연결이 열리면
