@@ -18,7 +18,7 @@ interface PlayerInfo {
 
 const myPlayerInfo = ref<PlayerInfo>({ sid: '', name: '', color: '' })
 const players = ref<any[]>([])
-const localHistory = ref<string[]>([])
+const localHistory = ref<Object[]>([])
 
 const gameStatus = ref<'playing' | 'complete' | 'fail' | 'miss'>('playing')
 const gameBoard = ref<any>(null)
@@ -201,7 +201,7 @@ const render = () => {
           td.innerHTML = (cell.count === 0) ? '' : cell.count
         }
       } else if (cell.isFlagged) {
-        td.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="${cell.flagColor}" aria-hidden="true" class="inline-block w-fit h-fit p-1" style="color: rgb(255, 255, 224);"><path d="M3.5 2.75a.75.75 0 00-1.5 0v14.5a.75.75 0 001.5 0v-4.392l1.657-.348a6.449 6.449 0 014.271.572 7.948 7.948 0 005.965.524l2.078-.64A.75.75 0 0018 12.25v-8.5a.75.75 0 00-.904-.734l-2.38.501a7.25 7.25 0 01-4.186-.363l-.502-.2a8.75 8.75 0 00-5.053-.439l-1.475.31V2.75z"></path></svg>`
+        td.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="${cell.flagColor}" stroke="#000000" stroke-width="1" aria-hidden="true" class="inline-block w-fit h-fit p-1" style="color: rgb(255, 255, 224);"><path d="M3.5 2.75a.75.75 0 00-1.5 0v14.5a.75.75 0 001.5 0v-4.392l1.657-.348a6.449 6.449 0 014.271.572 7.948 7.948 0 005.965.524l2.078-.64A.75.75 0 0018 12.25v-8.5a.75.75 0 00-.904-.734l-2.38.501a7.25 7.25 0 01-4.186-.363l-.502-.2a8.75 8.75 0 00-5.053-.439l-1.475.31V2.75z"></path></svg>`
       }
       row.appendChild(td)
     }
@@ -209,7 +209,7 @@ const render = () => {
   }
 }
 
-const followHistory = (history) => {
+const followHistory = (history: Array<any>) => {
   for (const action of history) {
     if (action.action === 'reveal') {
       reveal(action.x, action.y, true)
@@ -219,9 +219,13 @@ const followHistory = (history) => {
   }
 }
 
-const gameSetting = (size, bombs, history) => {
+const gameSetting = (size: number, bombs: number, bombsCoords: Array<number>, history: Array<Object>) => {
+  localSize.value = size
+  localBombs.value = bombs
+  localBombs.value = bombsCoords.length
+  localHistory.value = history
   const bombCoords = []
-  for (const bomb of bombs) {
+  for (const bomb of bombsCoords) {
     bombCoords.push({ x: bomb[0], y: bomb[1] })
   }
   gameStart(size, bombCoords)
@@ -244,11 +248,8 @@ onMounted(() => {
         break
       case 'start': {
         const { size, bomb_coords, history } = data
-        console.log(data)
-        localSize.value = size
-        localBombs.value = bomb_coords.length
-        gameSetting(size, bomb_coords, history)
-        localHistory.value = history
+        const bombCoordsArray = JSON.parse(bomb_coords)
+        gameSetting(size, bombCoordsArray.length, bombCoordsArray, history)
         break
       }
       case 'action': {
@@ -267,12 +268,11 @@ onMounted(() => {
         // players.value = players.value.filter((player) => player.sid !== sid)
         break
       case 'restart': {
-        console.log(data)
         const { size, bomb_coords, history } = data
-        console.log(size, bomb_coords, history)
-        history.value = history
-        gameStart(size, bomb_coords)
-        render()
+        const bombCoordsArray = JSON.parse(bomb_coords)
+        gameSetting(size, bombCoordsArray.length, bombCoordsArray, history)
+        // gameStart(size, bomb_coords)
+        // render()
         break
       }
     }
@@ -388,17 +388,19 @@ const reset = () => {
           }}
         </li>
       </ul>
-      {{ myPlayerInfo }}
-      {{ players }}
-      {{ localHistory }}
       히스토리 {{ localHistory.length }}
       <ul class="w-48 h-64 overflow-y-auto bg-neutral-100 dark:bg-neutral-800 rounded-md">
         <li v-for="history in localHistory.slice().reverse()" :key="history.name">
-          <svg v-if="history.action === 'reveal'" class="w-4 h-4 inline-block">
-            <circle cx="8" cy="8" r="6" stroke="#000000" stroke-width="1" :fill="history.color"></circle>
+          <svg v-if="history.action === 'reveal'" class="w-6 h-6 inline-block">
+            <circle cx="12" cy="12" r="6" stroke="#000000" stroke-width="2" :fill="history.color"></circle>
           </svg>
-          <FlagIcon v-else-if="history.action === 'flag'" class="inline-block w-4 h-4"
-            :style="`color: ${history.color}`" />
+          <svg v-else-if="history.action === 'flag'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+            :fill=history.color stroke="#000000" stroke-width="2" aria-hidden="true" class="inline-block w-6 h-6"
+            style="color: rgb(255, 255, 224);">
+            <path
+              d="M3.5 2.75a.75.75 0 00-1.5 0v14.5a.75.75 0 001.5 0v-4.392l1.657-.348a6.449 6.449 0 014.271.572 7.948 7.948 0 005.965.524l2.078-.64A.75.75 0 0018 12.25v-8.5a.75.75 0 00-.904-.734l-2.38.501a7.25 7.25 0 01-4.186-.363l-.502-.2a8.75 8.75 0 00-5.053-.439l-1.475.31V2.75z">
+            </path>
+          </svg>
           x: {{ history.y }} y: {{
             history.x
           }} {{ history.name }}
