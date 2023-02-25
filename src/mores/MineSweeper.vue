@@ -16,9 +16,24 @@ interface PlayerInfo {
   color: string;
 }
 
+interface History {
+  type: 'action'
+  sid: string
+  action: 'reveal' | 'flag'
+  x: number
+  y: number
+  color: string
+  name: string
+}
+
+interface Coords {
+  x: number
+  y: number
+}
+
 const myPlayerInfo = ref<PlayerInfo>({ sid: '', name: '', color: '' })
 const players = ref<any[]>([])
-const localHistory = ref<Object[]>([])
+const localHistory = ref<History[]>([])
 
 const gameStatus = ref<'playing' | 'complete' | 'fail' | 'miss'>('playing')
 const gameBoard = ref<any>(null)
@@ -46,7 +61,7 @@ const sendReset = async () => {
   wsConnect.send(JSON.stringify(data))
 }
 
-const gameStart = (sizeServer: number, bombCoords: Object) => {
+const gameStart = (sizeServer: number, bombCoords: Array<Coords>) => {
   localSize.value = sizeServer
   gameStatus.value = 'playing'
   isGameCompleted.value = false
@@ -180,16 +195,12 @@ const render = () => {
       td.addEventListener('click', function () {
         if (!board[i][j].isRevealed) {
           sendAction('reveal', i, j)
-          // wsAction.send(JSON.stringify({ x: i, y: j, sid: wsAction.id, action: 'reveal' }))
-          // socket.emit('mine_reveal', { x: i, y: j, sid: socket.id, action: 'reveal' })
         }
       })
       td.addEventListener('contextmenu', function (e) {
         e.preventDefault()
         if (!board[i][j].isRevealed) {
           sendAction('flag', i, j)
-          // wsAction.send(JSON.stringify({ x: i, y: j, sid: wsAction.id, action: 'flag' }))
-          // socket.emit('mine_flag', { x: i, y: j, sid: socket.id, action: 'flag' })
         }
       })
       if (cell.isRevealed) {
@@ -219,7 +230,7 @@ const followHistory = (history: Array<any>) => {
   }
 }
 
-const gameSetting = (size: number, bombs: number, bombsCoords: Array<number>, history: Array<Object>) => {
+const gameSetting = (size: number, bombs: number, bombsCoords: Array<Coords>, history: Array<History>) => {
   localSize.value = size
   localBombs.value = bombs
   localBombs.value = bombsCoords.length
@@ -244,7 +255,6 @@ onMounted(() => {
         break
       case 'players':
         players.value = data.players
-        console.log(players.value)
         break
       case 'start': {
         const { size, bomb_coords, history } = data
@@ -253,114 +263,34 @@ onMounted(() => {
         break
       }
       case 'action': {
-        const { action, x, y, history } = data
+        const { action, x, y, color, history } = data
         if (action === 'reveal') {
           reveal(x, y)
         } else if (action === 'flag') {
-          placeFlag(x, y, myPlayerInfo.value.color)
+          placeFlag(x, y, color)
         }
         render()
         localHistory.value = history
         break
       }
       case 'disconnect':
-        // const { sid } = data
-        // players.value = players.value.filter((player) => player.sid !== sid)
         break
       case 'restart': {
         const { size, bomb_coords, history } = data
         const bombCoordsArray = JSON.parse(bomb_coords)
         gameSetting(size, bombCoordsArray.length, bombCoordsArray, history)
-        // gameStart(size, bomb_coords)
-        // render()
         break
       }
     }
-
-    // // 연결이 열리면
-    // wsPlayers.addEventListener('open', function (event) {
-    //   wsPlayers.send(myPlayerInfo.value.sid)
-    // })
-
-    // wsPlayers.onmessage = (event) => {
-    //   const data = JSON.parse(event.data)
-    //   players.value = data
-    // }
-    // wsStart.onmessage = (event) => {
-    //   const data = JSON.parse(event.data)
-    //   const { size, bombs, history } = data
-    //   localSize.value = size
-    //   localBombs.value = bombs.length
-    //   gameSetting(size, bombs, history)
-    //   localHistory.value = history
-    // }
-
-    // wsAction.onmessage = (event) => {
-    //   const data = JSON.parse(event.data)
-    //   const { x, y, action, history } = data
-    //   localHistory.value = history
-    //   if (action === 'reveal') {
-    //     reveal(x, y)
-    //   } else if (action === 'flag') {
-    //     placeFlag(x, y, myPlayerInfo.value.color)
-    //   }
-    //   render()
-    // }
   }
-  // socket.on('mine_start', (boardData) => {
-  //   const { size, bombs, history } = boardData
-  //   localSize.value = size
-  //   localBombs.value = bombs.length
-  //   console.log(size, bombs, history)
-  //   gameSetting(size, bombs, history)
-  //   localHistory.value = history
-  // })
-  // socket.emit('mine_start')
-
-  // socket.on('give_player_info', (playerInfo) => {
-  //   myPlayerInfo.value = {
-  //     name: playerInfo.name,
-  //     color: playerInfo.color
-  //   }
-  // })
-
-  // socket.on('mine_players', (serverPlayers) => {
-  //   players.value = serverPlayers
-  // })
-
-  // socket.on('mine_reveal', (data) => {
-  //   const { x, y, history } = data
-  //   reveal(x, y)
-  //   localHistory.value = history
-  //   render()
-  // })
-
-  // socket.on('mine_flag', (data) => {
-  //   const { x, y, name, color, history } = data
-  //   placeFlag(x, y, color)
-  //   localHistory.value = history
-  //   render()
-  // })
 })
 
 onUnmounted(() => {
   wsConnect?.close()
-  // wsPlayers?.close()
-  // wsStart?.close()
-  // wsAction?.close()
-  // wsReStart?.close()
-  // socket.emit('leave_mine')
-  // socket.off('connect')
-  // socket.off('mine_join')
-  // socket.off('mine_players')
-  // socket.off('mine_reveal')
-  // socket.off('mine_flag')
 })
 
 const reset = () => {
   sendReset()
-  // wsReStart.send('')
-  // socket.emit('mine_restart')
 }
 
 </script>
@@ -386,6 +316,7 @@ const reset = () => {
           <FlagIcon class="inline-block w-6 h-6 mr-2" :style="`color: ${player.color}`" /> {{
             player.name
           }}
+          <span v-if="player.sid === myPlayerInfo.sid" class="text-xs"> (나) </span>
         </li>
       </ul>
       히스토리 {{ localHistory.length }}
