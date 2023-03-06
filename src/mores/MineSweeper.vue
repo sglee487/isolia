@@ -64,7 +64,8 @@ const sendReset = async () => {
 const gameStart = (sizeServer: number, bombCoords: Array<Coords>) => {
   localSize.value = sizeServer
   gameStatus.value = 'playing'
-  isGameCompleted.value = false
+  // isGameCompleted.value = false
+  isGameCompleted.value = true
   flags.value = 0
   board = []
   for (let i = 0; i < localSize.value; i++) {
@@ -304,7 +305,7 @@ const reset = () => {
           {{ gameStatus }}
         </div>
         <div class="w-20 h-8">
-          <ButtonBox v-if="isGameCompleted" size="xs" @click="reset">재시작</ButtonBox>
+          <ButtonBox size="xs" @click="reset">재시작</ButtonBox>
         </div>
       </div>
       <div ref="gameBoard" />
