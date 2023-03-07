@@ -15,7 +15,9 @@ import {
   CalculatorIcon,
   ClockIcon,
   NewspaperIcon,
-  CogIcon
+  CogIcon,
+  EllipsisHorizontalCircleIcon,
+  UserIcon
 } from '@heroicons/vue/24/outline'
 import { AxiosError } from 'axios'
 
@@ -60,6 +62,11 @@ const navRoutes = [
     to: '/calculator',
     name: '의료계산기',
     icon: CalculatorIcon
+  },
+  {
+    to: '/more',
+    name: '더보기',
+    icon: EllipsisHorizontalCircleIcon
   }
 ]
 
@@ -158,8 +165,10 @@ watch(() => instance.proxy.$route, () => {
           </div>
         </router-link>
         <div class="flex justify-end">
-          <router-link to="/settings/login" v-if="!user.isLogined()" class="px-4">
-            <ButtonBox color="app" size="sm">로그인</ButtonBox>
+          <router-link to="/settings" v-if="!user.isLogined()" class="px-4">
+            <ButtonBox color="app" size="sm">
+              <UserIcon class="w-5 h-5 inline-block" />내 정보
+            </ButtonBox>
           </router-link>
           <div v-else class="flex flex-row space-x-2 items-center">
             <VueCountdown :time="getRemainTime()" v-slot="{ hours, minutes }" :interval="1000 * 60" class="mt-2">

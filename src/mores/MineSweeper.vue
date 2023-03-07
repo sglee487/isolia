@@ -297,7 +297,7 @@ const reset = () => {
 </script>
 
 <template>
-  <div class="flex space-y-2">
+  <div class="flex flex-col sm:flex-row space-y-2">
     <div class="w-fit flex flex-col">
       <div class="flex justify-between items-center p-4 rounded-md bg-app-800">
         <span v-show="true">🚩 {{ localBombs - flags }} / {{ localBombs }}</span>
