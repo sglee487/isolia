@@ -322,7 +322,7 @@ const reset = () => {
       </ul>
       히스토리 {{ localHistory.length }}
       <ul class="w-48 h-64 overflow-y-auto bg-neutral-100 dark:bg-neutral-800 rounded-md">
-        <li v-for="history in localHistory.slice().reverse()" :key="history.name">
+        <li v-for="history in localHistory" :key="history.name">
           <svg v-if="history.action === 'reveal'" class="w-6 h-6 inline-block">
             <circle cx="12" cy="12" r="6" stroke="#000000" stroke-width="2" :fill="history.color"></circle>
           </svg>
