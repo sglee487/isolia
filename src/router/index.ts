@@ -14,6 +14,7 @@ import CalculatorPage from '@/pages/CalculatorPage.vue'
 import AccountSettingPage from '@/pages/AccountSettingPage.vue'
 import MorePage from '@/pages/MorePage.vue'
 import MineSweeper from '@/pages/morepages/MineSweeperPage.vue'
+import ImageUpscaling from '@/pages/morepages/ImageUpscaling.vue'
 import QuestionPage from '@/pages/morepages/QuestionPage.vue'
 import SettingsPage from '@/pages/SettingsPage.vue'
 
@@ -69,6 +70,11 @@ const routes = [
         path: 'minesweeper',
         name: 'minesweeper',
         component: MineSweeper
+      },
+      {
+        path: 'image_upscaling',
+        name: 'image_upscaling',
+        component: ImageUpscaling
       },
       {
         path: 'question',
