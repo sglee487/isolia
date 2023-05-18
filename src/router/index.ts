@@ -105,10 +105,6 @@ const router = createRouter({
 })
 
 router.beforeEach((to) => {
-  if (to.path === '/register') {
-    return '/settings/login'
-  }
-
   const user = useUserStore()
   if (to.path === '/board') {
     return '/board/list/all'
