@@ -66,20 +66,22 @@ const login = async () => {
   }
 
   try {
-    const response = await loginUser('email', email.value, password.value, null)
+    const response = await loginUser('EMAIL', email.value, password.value, null)
     if (response.status === 200) {
       instance?.proxy?.$toast.success('로그인에 성공하였습니다.')
       instance?.proxy?.$router.back()
+      console.log(response.data)
       user.login(
-        response.data.token,
+        response.data.jwt,
         response.data.exp,
-        response.data.login_type,
+        response.data.loginType,
         response.data.email,
         response.data.picture_32,
         response.data.picture_96,
         response.data.display_name,
         response.data.role === 'admin'
       )
+      console.log(user.data)
       return
     }
     instance?.proxy?.$toast.error(response.data.detail)

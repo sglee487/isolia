@@ -50,7 +50,7 @@ const register = async () => {
     return
   }
   try {
-    const response = await registerUser('email', displayName.value, email.value, password.value)
+    const response = await registerUser('EMAIL', displayName.value, email.value, password.value)
     if (response.status === 201) {
       instance?.proxy?.$toast.success('회원가입에 성공하였습니다.')
       instance?.proxy?.$router.push('/settings/login')

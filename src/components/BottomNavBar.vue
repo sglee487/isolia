@@ -59,11 +59,16 @@ const user = useUserStore()
       </router-link>
       <router-link to="/settings" id="nav" v-slot="{ navigate }" class="w-full hover:text-app-400 text-center">
         <span class="justify-center inline-block text-center pt-2 pb-1" @click="navigate" role="link">
-          <img :src="user.data.picture_32" v-if="user.isLogined()"
-            class="w-6 h-6 inline-block mb-1 rounded-full shadow-lg" />
-          <UserIconSolid v-if="instance?.proxy?.$route?.matched[0]?.path === '/settings'"
-            class="w-6 h-6 inline-block mb-1" />
-          <UserIconOutline v-else class="w-6 h-6 inline-block mb-1" />
+          <template v-if="user.isLogined()">
+            <img :src="user.data.picture_32"
+            :class="[instance?.proxy?.$route?.matched[0]?.path === '/settings' ? 'border-app-400' : 'border-transparent']"
+            class="w-6 h-6 inline-block mb-1 rounded-full shadow-lg border-spacing-3" />
+          </template>
+          <template v-else>
+            <UserIconSolid v-if="instance?.proxy?.$route?.matched[0]?.path === '/settings'"
+              class="w-6 h-6 inline-block mb-1" />
+            <UserIconOutline v-else class="w-6 h-6 inline-block mb-1" />
+          </template>
         </span>
       </router-link>
     </div>

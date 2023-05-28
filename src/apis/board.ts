@@ -18,9 +18,10 @@ const uploadImages = async (userToken: string, files: [File]) => {
 }
 
 const getListBoard = async (menu: string, page: number) => {
-  const response = await axios.get(`${SERVER_URL}/board/${menu}/`, {
+  const response = await axios.get(`${SERVER_URL}/board`, {
     params: {
-      page: page
+      boardType: menu.toUpperCase(),
+      // page: page,
     },
     headers: {
       Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`
@@ -30,7 +31,7 @@ const getListBoard = async (menu: string, page: number) => {
 }
 
 const getPost = async (id: number) => {
-  const response = await axios.get(`${SERVER_URL}/board/post/${id}/`, {
+  const response = await axios.get(`${SERVER_URL}/post/${id}`, {
     headers: {
       Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`
     }
@@ -41,12 +42,12 @@ const getPost = async (id: number) => {
 const postBoard = async (boardType: string, boardTitle: string, boardContent: string, userToken: string) => {
 
   const data = {
-    'board_type': boardType,
+    'boardType': boardType.toUpperCase(),
     'title': boardTitle,
     'content': boardContent
   }
 
-  const response = await axios.post(`${SERVER_URL}/board/`, data, {
+  const response = await axios.post(`${SERVER_URL}/board`, data, {
     headers: {
       'accept': 'application/json',
       'Authorization': `Bearer ${userToken}`
@@ -60,7 +61,7 @@ const postComment = async (boardId: number, content: string, userToken: string) 
     'content': content
   }
 
-  const response = await axios.post(`${SERVER_URL}/comment/${boardId}/`, data, {
+  const response = await axios.post(`${SERVER_URL}/comment/${boardId}`, data, {
     headers: {
       'accept': 'application/json',
       'Authorization': `Bearer ${userToken}`

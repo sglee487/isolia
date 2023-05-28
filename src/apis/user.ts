@@ -7,8 +7,8 @@ ${import.meta.env.VITE_SERVER_ADDRESS}:${import.meta.env.VITE_SERVER_PORT
 
 const registerUser = async (loginType: string, username: string, email: string, password?: string) => {
   const data = {
-    'login_type': loginType,
-    'display_name': username,
+    'loginType': loginType,
+    'displayName': username,
     'email': email,
   }
 
@@ -16,23 +16,19 @@ const registerUser = async (loginType: string, username: string, email: string, 
     data['password'] = password
   }
 
-  const response = await axios.post(`${SERVER_URL}/user/`, data, {
-    headers: {
-      Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`
-    }
-  })
+  const response = await axios.post(`${SERVER_URL}/user/`, data)
   return response
 }
 
 const loginUser = async (loginType: string, email: string, password: string, snsToken: string) => {
   const data = {
-    'login_type': loginType,
+    'loginType': loginType,
     'email': email,
     'password': password,
-    'sns_token': snsToken
+    'snsToken': snsToken
   }
 
-  const response = await axios.post(`${SERVER_URL}/user/login/`, data, {
+  const response = await axios.post(`${SERVER_URL}/user-login/`, data, {
     headers: {
       Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`
     }
