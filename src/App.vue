@@ -83,30 +83,30 @@ const modalRoutes = [
   }
 ]
 
-onBeforeMount(async () => {
-  if (!user.isLogined()) {
-    return
-  }
-  try {
-    const response = await checkToken(user.data.token)
-  } catch (error) {
-    axiosErrorHandler(instance, error as AxiosError)
-    if (error.response.statusText === 'Unauthorized') {
-      user.logout()
-    }
-  }
+// onBeforeMount(async () => {
+//   if (!user.isLogined()) {
+//     return
+//   }
+//   try {
+//     const response = await checkToken(user.data.token)
+//   } catch (error) {
+//     axiosErrorHandler(instance, error as AxiosError)
+//     if (error.response.statusText === 'Unauthorized') {
+//       user.logout()
+//     }
+//   }
 
-  // user.login(
-  //   response.data.token,
-  //   response.data.exp,
-  //   response.data.login_type,
-  //   response.data.email,
-  //   response.data.picture_32,
-  //   response.data.picture_96,
-  //   response.data.display_name,
-  //   response.data.role === 'admin'
-  // )
-})
+//   // user.login(
+//   //   response.data.token,
+//   //   response.data.exp,
+//   //   response.data.login_type,
+//   //   response.data.email,
+//   //   response.data.picture_32,
+//   //   response.data.picture_96,
+//   //   response.data.display_name,
+//   //   response.data.role === 'admin'
+//   // )
+// })
 
 const getRemainTime = () => {
   if (!user.isLogined()) {
