@@ -19,11 +19,25 @@ const stompClient = Stomp.over(socket)
 console.log(stompClient)
 stompClient.connect({}, (frame) => {
   console.log('Connected: ' + frame)
+  console.log(frame.headers)
+  console.log(frame.headers['user-name'])
+  console.log(frame.body)
+  console.log(frame['user-name'])
+  const username = frame.headers['user-name']
   stompClient.subscribe('/subscribe/mine', (greeting) => {
     console.log(`from /subscribe/mine: ${greeting}`)
   })
   stompClient.subscribe('/subscribe/mine-personal', (greeting) => {
     console.log(`from /subscribe/mine-personal: ${greeting}`)
+  })
+  stompClient.subscribe('/subscribe/queue/reply', (greeting) => {
+    console.log(`from /queue/reply: ${greeting}`)
+  })
+  stompClient.subscribe(`/subscribe/${username}/queue/reply`, (greeting) => {
+    console.log(`from /subscribe/${username}/queue/reply: ${greeting}`)
+  })
+  stompClient.subscribe(`/subscribe/user/${username}/queue/reply`, (greeting) => {
+    console.log(`from /subscribe/user/${username}/queue/reply: ${greeting}`)
   })
 })
 
@@ -33,6 +47,10 @@ const sendHello = () => {
 
 const requestName = () => {
   stompClient.send('/publish/join')
+}
+
+const requestUserReply = () => {
+  stompClient.send('/publish/message', JSON.stringify({ name: 'message' }))
 }
 
 // // console.log(wsConnect)
@@ -330,6 +348,9 @@ const requestName = () => {
     </ButtonBox>
     <ButtonBox @click="requestName">
       requestName
+    </ButtonBox>
+    <ButtonBox @click="requestUserReply">
+      requestUserReply
     </ButtonBox>
   </div>
   <!-- <div class="flex flex-col sm:flex-row space-y-2">
