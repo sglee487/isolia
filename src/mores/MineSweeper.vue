@@ -47,10 +47,13 @@ const flags = ref<number>(0)
 const isGameCompleted = ref<boolean>(true)
 
 stompClient.connect({}, (frame) => {
-  console.log(frame)
   const username = frame.headers['user-name']
   stompClient.subscribe('/subscribe-mine/restart', (data) => {
     console.log(data)
+            const { size, bomb_coords, history } = data
+  //       const bombCoordsArray = JSON.parse(bomb_coords)
+  //       gameSetting(size, bombCoordsArray.length, bombCoordsArray, history)
+  //       break
   })
   stompClient.subscribe(`/subscribe-mine/user/${username}/start`, (data) => {
     const { size, mines, bombCoords, actionHistory } = JSON.parse(data.body)
@@ -67,25 +70,14 @@ stompClient.connect({}, (frame) => {
     }
   })
   stompClient.subscribe('/subscribe-mine/action', (data) => {
-    const _players = JSON.parse(data.body)
-    players.value = _players
-
-    for (const player of _players) {
-      if (player.sid === username) {
-        myPlayerInfo.value = player
-      }
+    const { action, x, y, color, history } = JSON.parse(data.body)
+    if (action === 'reveal') {
+      reveal(x, y)
+    } else if (action === 'flag') {
+      placeFlag(x, y, color)
     }
-
-      //       const { action, x, y, color, history } = data
-  //       if (action === 'reveal') {
-  //         reveal(x, y)
-  //       } else if (action === 'flag') {
-  //         placeFlag(x, y, color)
-  //       }
-  //       render()
-  //       localHistory.value = history
-  //       break
-  //     }
+    render()
+    localHistory.value = history
   })
 
   stompClient.send('/publish-mine/join')
@@ -110,8 +102,8 @@ const sendPlayers = async () => {
   stompClient.send('/publish-mine/players')
 }
 
-const sendReset = async () => {
-  stompClient.send('/publish-mine/reset')
+const sendRestart = async () => {
+  stompClient.send('/publish-mine/restart')
 }
 
 const gameStart = (sizeServer: number, bombCoords: Array<Coords>) => {
@@ -289,7 +281,7 @@ const gameSetting = (size: number, bombCoords: Array<Coords>, history: Array<His
   localBombs.value = bombCoords.length
   localHistory.value = history
   gameStart(size, bombCoords)
-  // followHistory(history)
+  followHistory(history)
   render()
 }
 
@@ -340,7 +332,7 @@ onUnmounted(() => {
 })
 
 const reset = () => {
-  sendReset()
+  sendRestart()
 }
 
 </script>
