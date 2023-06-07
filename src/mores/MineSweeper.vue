@@ -49,13 +49,11 @@ const isGameCompleted = ref<boolean>(true)
 stompClient.connect({}, (frame) => {
   const username = frame.headers['user-name']
   stompClient.subscribe('/subscribe-mine/restart', (data) => {
-    console.log(data)
-            const { size, bomb_coords, history } = data
-  //       const bombCoordsArray = JSON.parse(bomb_coords)
-  //       gameSetting(size, bombCoordsArray.length, bombCoordsArray, history)
-  //       break
+    const { size, bombCoords, actionHistory } = JSON.parse(data.body)
+    gameSetting(size, bombCoords, actionHistory)
   })
   stompClient.subscribe(`/subscribe-mine/user/${username}/start`, (data) => {
+    console.log(data.body)
     const { size, mines, bombCoords, actionHistory } = JSON.parse(data.body)
     gameSetting(size, bombCoords, actionHistory)
   })
@@ -92,14 +90,6 @@ const sendAction = (action: 'reveal' | 'flag', x: number, y: number) => {
   }
   console.log(data)
   stompClient.send('/publish-mine/action', JSON.stringify(data))
-}
-
-const sendStart = async () => {
-  stompClient.send('/publish-mine/start')
-}
-
-const sendPlayers = async () => {
-  stompClient.send('/publish-mine/players')
 }
 
 const sendRestart = async () => {
@@ -285,49 +275,7 @@ const gameSetting = (size: number, bombCoords: Array<Coords>, history: Array<His
   render()
 }
 
-onMounted(() => {
-  // wsConnect.onmessage = (event) => {
-  //   const data = JSON.parse(event.data)
-  //   switch (data.type) {
-  //     case 'profile':
-  //       myPlayerInfo.value = data
-  //       wsConnect.send(JSON.stringify({ type: 'start' }))
-  //       wsConnect.send(JSON.stringify({ type: 'players' }))
-  //       break
-  //     case 'players':
-  //       players.value = data.players
-  //       break
-  //     case 'start': {
-  //       const { size, bomb_coords, history } = data
-  //       const bombCoordsArray = JSON.parse(bomb_coords)
-  //       gameSetting(size, bombCoordsArray.length, bombCoordsArray, history)
-  //       break
-  //     }
-  //     case 'action': {
-  //       const { action, x, y, color, history } = data
-  //       if (action === 'reveal') {
-  //         reveal(x, y)
-  //       } else if (action === 'flag') {
-  //         placeFlag(x, y, color)
-  //       }
-  //       render()
-  //       localHistory.value = history
-  //       break
-  //     }
-  //     case 'disconnect':
-  //       break
-  //     case 'restart': {
-  //       const { size, bomb_coords, history } = data
-  //       const bombCoordsArray = JSON.parse(bomb_coords)
-  //       gameSetting(size, bombCoordsArray.length, bombCoordsArray, history)
-  //       break
-  //     }
-  //   }
-  // }
-})
-
 onUnmounted(() => {
-  // wsConnect?.close()
   stompClient.disconnect()
 })
 
@@ -363,7 +311,7 @@ const reset = () => {
       </ul>
       히스토리 {{ localHistory.length }}
       <ul class="w-48 h-64 overflow-y-auto bg-neutral-100 dark:bg-neutral-800 rounded-md">
-        <li v-for="history in localHistory" :key="history.name">
+        <li v-for="history in localHistory.slice().reverse()" :key="history.name">
           <svg v-if="history.action === 'reveal'" class="w-6 h-6 inline-block">
             <circle cx="12" cy="12" r="6" stroke="#000000" stroke-width="2" :fill="history.color"></circle>
           </svg>
