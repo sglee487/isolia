@@ -4,6 +4,7 @@ import { useToast } from 'vue-toast-notification'
 import { useUserStore } from '@/stores/userStore'
 
 import HomePage from '@/pages/HomePage.vue'
+import AuthPage from '@/pages/AuthPage.vue'
 import LoginPage from '@/pages/LoginPage.vue'
 import LogoutPage from '@/pages/LogoutPage.vue'
 import RegisterPage from '@/pages/RegisterPage.vue'
@@ -23,6 +24,7 @@ const $toast = useToast()
 const routes = [
   { path: '/', component: HomePage },
   // { path: '/settings/user_edit', component: AccountSettingPage },
+  { path: '/auth/callback/', component: AuthPage },
   { path: '/register', component: RegisterPage },
   {
     path: '/board',

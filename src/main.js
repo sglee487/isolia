@@ -5,7 +5,6 @@ import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 import { vfmPlugin } from 'vue-final-modal'
-import GoogleSignInPlugin from 'vue3-google-signin'
 
 import router from '@/router'
 
@@ -15,6 +14,4 @@ import './style.css'
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
-createApp(App).use(router).use(pinia).use(VueToast).use(vfmPlugin).use(GoogleSignInPlugin, {
-  clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID
-}).mount('#app')
+createApp(App).use(router).use(pinia).use(VueToast).use(vfmPlugin).mount('#app')
