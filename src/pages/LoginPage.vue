@@ -19,23 +19,6 @@ const password = ref<string>('')
 
 const SERVER_URL = `${import.meta.env.VITE_SERVER_PROTOCOL}://${import.meta.env.VITE_SERVER_ADDRESS}:${import.meta.env.VITE_SERVER_PORT}`
 
-console.log(SERVER_URL)
-
-const google = {
-  authorizeUrl: 'https://accounts.google.com/o/oauth2/auth',
-  scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
-  clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-  redirectUri: `${SERVER_URL}/login/oauth2/code/google`,
-  userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo'
-}
-
-const query = qs.stringify({
-  response_type: 'code',
-  client_id: google.clientId,
-  redirect_uri: google.redirectUri,
-  scope: google.scope
-})
-
 const login = async () => {
   if (!email.value.match(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/)) {
     useAnimateElement(document.getElementById('inputEmail') as HTMLElement)
@@ -103,7 +86,7 @@ const register = () => {
         간편 로그인
       </div>
       <div class="flex flex-wrap">
-        <a :href="`${google.authorizeUrl}?${query}`"
+        <a :href="`${SERVER_URL}/socialLogin/google`"
           class="flex items-center justify-center bg-blue-500 text-white font-bold py-2 px-4 rounded">
           <span class="mr-2">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px">

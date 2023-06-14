@@ -20,6 +20,7 @@ if (routerQuery && Object.keys(routerQuery).includes('userLoginResponse')) {
     data.display_name,
     data.role === 'admin'
   )
+  instance?.proxy?.$toast.success('로그인에 성공하였습니다.')
   routerTo(instance.proxy.$router, '/')
 }
 
