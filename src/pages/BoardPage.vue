@@ -37,7 +37,6 @@ const scrollComponent = ref<any>(null)
 const loadMorePosts = async (boardType: string) => {
   const res = await getListBoard(boardType, boardStore.currentPage + 1)
   if (res.status === 200) {
-    console.log(res.data)
     if (res.data.length > 0) {
       boardStore.incresePage()
       boardStore.addPosts(res.data)

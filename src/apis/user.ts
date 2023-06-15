@@ -60,11 +60,11 @@ const uploadProfilePicture = async (user: any, blob: Blob) => {
 
 const updateUser = async (user: any, picture32: string, picture96: string, displayName: string, password: string, newPassword: string) => {
   const data = {
-    'login_type': user.data.login_type,
-    'picture_32': picture32,
-    'picture_96': picture96,
+    'loginType': user.data.loginType,
+    'picture32': picture32,
+    'picture96': picture96,
     'email': user.data.email,
-    'display_name': displayName,
+    'displayName': displayName,
     'password': password,
     'new_password': newPassword
   }

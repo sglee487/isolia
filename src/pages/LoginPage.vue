@@ -37,15 +37,14 @@ const login = async () => {
     if (response.status === 200) {
       instance?.proxy?.$toast.success('로그인에 성공하였습니다.')
       instance?.proxy?.$router.back()
-      console.log(response.data)
       user.login(
         response.data.jwt,
         response.data.exp,
         response.data.loginType,
         response.data.email,
-        response.data.picture_32,
-        response.data.picture_96,
-        response.data.display_name,
+        response.data.picture32,
+        response.data.picture96,
+        response.data.displayName,
         response.data.role === 'admin'
       )
       return

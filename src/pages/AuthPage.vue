@@ -17,7 +17,7 @@ if (routerQuery && Object.keys(routerQuery).includes('userLoginResponse')) {
     data.email,
     data.picture32,
     data.picture96,
-    data.display_name,
+    data.displayName,
     data.role === 'admin'
   )
   instance?.proxy?.$toast.success('로그인에 성공하였습니다.')

@@ -60,7 +60,7 @@ const user = useUserStore()
       <router-link to="/settings" id="nav" v-slot="{ navigate }" class="w-full hover:text-app-400 text-center">
         <span class="justify-center inline-block text-center pt-2 pb-1" @click="navigate" role="link">
           <template v-if="user.isLogined()">
-            <img :src="user.data.picture_32"
+            <img :src="user.data.picture32"
             :class="[instance?.proxy?.$route?.matched[0]?.path === '/settings' ? 'border-app-400' : 'border-transparent']"
             class="w-6 h-6 inline-block mb-1 rounded-full shadow-lg border-spacing-3" />
           </template>

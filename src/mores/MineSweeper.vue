@@ -53,7 +53,6 @@ stompClient.connect({}, (frame) => {
     gameSetting(size, bombCoords, actionHistory)
   })
   stompClient.subscribe(`/subscribe-mine/user/${username}/start`, (data) => {
-    console.log(data.body)
     const { size, mines, bombCoords, actionHistory } = JSON.parse(data.body)
     gameSetting(size, bombCoords, actionHistory)
   })
@@ -88,7 +87,6 @@ const sendAction = (action: 'reveal' | 'flag', x: number, y: number) => {
     x,
     y
   }
-  console.log(data)
   stompClient.send('/publish-mine/action', JSON.stringify(data))
 }
 

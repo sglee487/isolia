@@ -17,8 +17,6 @@ const props = defineProps<{
   menu: string | null
 }>()
 
-// console.log(props.post)
-
 </script>
 
 <template>
@@ -40,9 +38,9 @@ const props = defineProps<{
         class="w-32 h-24 object-cover" />
     </div>
     <div class="flex">
-      <img class="w-6 h-6 inline-block mb-1 rounded-full shadow-lg" :src="props.post.picture_32" alt="pic32">
+      <img class="w-6 h-6 inline-block mb-1 rounded-full shadow-lg" :src="props.post.boardUserInfo.picture32" alt="pic32">
       <div>
-        {{ props.post.displayName }}
+        {{ props.post.boardUserInfo.displayName }}
       </div>
     </div>
     <hr />

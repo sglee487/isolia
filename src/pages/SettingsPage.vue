@@ -70,11 +70,11 @@ const changeLightDarkTheme = () => {
     </header>
     <div class="flex flex-col space-y-1">
       <div v-if="user.isLogined()" class="flex flex-row gap-2 p-5 items-start">
-        <img :src="user.data.picture_96" v-if="user.isLogined()"
+        <img :src="user.data.picture96" v-if="user.isLogined()"
           class="flex-none w-14 h-14 inline-block mb-1 rounded-full shadow-md shadow-[#18171c]/20 dark:shadow-[#f2f2f2]/20" />
         <UserIcon v-else class="w-14 h-14 inline-block mb-1" />
         <div class="grow flex flex-col h-full justify-end space-y-1 ml-1">
-          <span class="font-bold text-ellipsis">{{ user.data.display_name }}</span>
+          <span class="font-bold text-ellipsis">{{ user.data.displayName }}</span>
           <span class="text-sm text-ellipsis">{{ user.data.email }}</span>
           <VueCountdown :time="getRemainTime()" v-slot="{ hours, minutes }" :interval="1000 * 60" class="mt-2">
             <Popper :hover="true" :arrow="true">

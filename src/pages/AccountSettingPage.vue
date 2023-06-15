@@ -31,12 +31,12 @@ const user = useUserStore()
 
 const candidatePictures32 = [...defaultProfilePicture32List]
 const candidatePictures96 = ref<string[]>([...defaultProfilePicture96List])
-candidatePictures32.push(user.data.picture_32)
-candidatePictures96.value.push(user.data.picture_96)
-const selectedPictureIndex = ref<number>(candidatePictures96.value.indexOf(user.data.picture_96))
+candidatePictures32.push(user.data.picture32)
+candidatePictures96.value.push(user.data.picture96)
+const selectedPictureIndex = ref<number>(candidatePictures96.value.indexOf(user.data.picture96))
 const cropImageModal = ref<boolean>(false)
 const email = user.data.email
-const displayName = ref<string>(user.data.display_name)
+const displayName = ref<string>(user.data.displayName)
 const password = ref<string>('')
 const newPassword = ref<string>('')
 const newPasswordConfirm = ref<string>('')
@@ -83,8 +83,8 @@ const crop = () => {
   canvas.toBlob(async (blob) => {
     destroyed()
     const response = await uploadProfilePicture(user, blob)
-    candidatePictures32.push(response.picture_32)
-    candidatePictures96.value.push(response.picture_96)
+    candidatePictures32.push(response.picture32)
+    candidatePictures96.value.push(response.picture96)
     selectedPictureIndex.value = candidatePictures96.value.length - 1
   }, fileImage.value.type)
 }
@@ -123,7 +123,7 @@ const generateRandomName = () => {
 }
 
 const update = async () => {
-  if (user.data.login_type === 'email') {
+  if (user.data.loginType === 'email') {
     if (!password.value.match(/^.*(?=.{8,255})(?=.*[0-9])(?=.*[a-zA-Z]).*$/)) {
       useAnimateElement(document.getElementById('inputPassword') as HTMLElement)
       instance?.proxy?.$toast.error('현재 패스워드 형식이 올바르지 않습니다.')
@@ -162,11 +162,11 @@ const update = async () => {
     user.login(
       response.data.token,
       response.data.exp,
-      response.data.login_type,
+      response.data.loginType,
       response.data.email,
-      response.data.picture_32,
-      response.data.picture_96,
-      response.data.display_name,
+      response.data.picture32,
+      response.data.picture96,
+      response.data.displayName,
       response.data.role === 'admin'
     )
     instance?.proxy?.$toast.success('사용자 정보가 변경되었습니다.')
@@ -211,7 +211,7 @@ const update = async () => {
             class="absolute w-8 bottom-1 right-1 cursor-pointer p-1 text-app-600 text-sm font-bold"
             @click="generateRandomName" />
         </div>
-        <div v-if="user.data.login_type === 'email'">
+        <div v-if="user.data.loginType === 'email'">
           <InputBox label="현재 비밀번호" v-model="password" id="inputPassword" type="password" @keyup.enter="update" />
           <InputBox label="새 비밀번호" v-model="newPassword" id="inputNewPassword" type="password" />
           <InputBox label="새 비밀번호 확인" v-model="newPasswordConfirm" id="inputNewPasswordConfirm" type="password"

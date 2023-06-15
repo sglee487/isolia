@@ -5,10 +5,10 @@ const SERVER_URL = `${import.meta.env.VITE_SERVER_PROTOCOL}://${import.meta.env.
 const uploadImages = async (userToken: string, files: [File]) => {
   const formData = new FormData()
   for (var i = 0; i < files.length; i++) {
-    formData.append('files', files[i]);
+    formData.append('imageFiles', files[i]);
   }
 
-  const response = await axios.post(`${SERVER_URL}/board/images/`, formData, {
+  const response = await axios.post(`${SERVER_URL}/post/images/`, formData, {
     headers: {
       Authorization: `Bearer ${userToken}`,
       'Content-Type': 'multipart/form-data'
