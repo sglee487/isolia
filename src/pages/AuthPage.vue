@@ -12,7 +12,7 @@ if (routerQuery && Object.keys(routerQuery).includes('userLoginResponse')) {
   const data = JSON.parse(routerQuery.userLoginResponse as string)
   user.login(
     data.jwt,
-    data.exp,
+    Number(data.exp),
     data.loginType,
     data.email,
     data.picture32,

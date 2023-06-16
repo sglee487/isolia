@@ -113,7 +113,7 @@ const getRemainTime = () => {
     return 0
   }
   const now = new Date()
-  const exp = new Date(user.data.exp * 1000)
+  const exp = new Date(user.data.exp)
   const diff = exp.getTime() - now.getTime()
   const remainTime = Math.floor(diff)
   return remainTime
