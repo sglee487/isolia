@@ -23,7 +23,7 @@ const props = defineProps<{
   <div class="mx-2 my-4 p-4 ring-2 ring-slate-400 dark:ring-slate-500 rounded-md space-y-2">
     <div class="flex space-x-2 items-center">
       <div v-if="menu === 'all'"
-        class="px-2 py-1 rounded-md bg-slate-300 dark:bg-slate-600 w-fit text-app-600 dark:text-app-300">
+        class="px-2 py-1 rounded-md text-sm bg-slate-300 dark:bg-slate-600 w-fit text-app-600 dark:text-app-300">
         {{ menuDict[props.post['boardType']] }}
       </div>
       <div class="font-extrabold my-1">

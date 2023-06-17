@@ -21,7 +21,7 @@ const getListBoard = async (menu: string, page: number) => {
   const response = await axios.get(`${SERVER_URL}/board`, {
     params: {
       boardType: menu.toUpperCase(),
-      // page: page,
+      page: page,
     },
     headers: {
       Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`
