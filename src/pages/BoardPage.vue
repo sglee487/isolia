@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getCurrentInstance, ref, watch, onMounted, onUnmounted } from 'vue'
+import { getCurrentInstance, ref, watch, onMounted } from 'vue'
 import {
   ChevronDownIcon,
   PlusCircleIcon,
@@ -12,53 +12,73 @@ import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
 import { getListBoard } from '@/apis/board'
-import { useBoardStore } from '@/stores/boardStore'
+// import { useBoardStore } from '@/stores/boardStore'
 import { routerTo } from '@/utils/routerUtils'
 import boardNames from '@/enums/menuDict'
 import PostCard from '@/components/PostCard.vue'
-import SpinnerIcon from '@/icons/Spinner.vue'
+import ButtonBox from '@/components/ButtonBox.vue'
 
 const instance = getCurrentInstance()
-const boardStore = useBoardStore()
+// const boardStore = useBoardStore()
+const posts = ref<any>([])
 
 const boardType = ref<any>()
 
 const routerParams = instance.proxy.$route.params
 
+const routerQuery = instance.proxy.$route.query
+
 const headerComponent = ref<any>(null)
 const isHideHeader = ref<boolean>(false)
 const isShowScrollToTop = ref<boolean>(false)
-let lastScroll = 0
-
-const moreLoading = ref<Boolean>(false)
 
 const scrollComponent = ref<any>(null)
 
-const loadMorePosts = async (boardType: string) => {
-  const res = await getListBoard(boardType, boardStore.currentPage + 1)
-  if (res.status === 200) {
-    if (res.data.length > 0) {
-      boardStore.incresePage()
-      boardStore.addPosts(res.data)
-    } else {
-      boardStore.endIsLastPage()
-    }
-  }
+const nowPage = ref<number>(1)
+const pageInform = ref<any>(null)
+
+if (routerQuery && Object.keys(routerQuery).includes('page')) {
+  console.log(routerQuery.page)
+  nowPage.value = Number(routerQuery.page)
+}
+
+const loadPosts = async (boardType: string) => {
+  const res = await getListBoard(boardType, nowPage.value)
+  console.log(res)
+  posts.value = res.data.content
+  pageInform.value = res.data
+  // if (res.status === 200) {
+  //   if (res.data.length > 0) {
+  //     boardStore.incresePage()
+  //     boardStore.addPosts(res.data)
+  //   } else {
+  //     boardStore.endIsLastPage()
+  //   }
+  // }
 }
 
 if (routerParams && Object.keys(routerParams).includes('menu')) {
   boardType.value = routerParams.menu
-  if (boardStore.posts.length === 0) {
-    loadMorePosts(boardType.value)
-  }
+  // if (boardStore.posts.length === 0) {
+  //   loadPosts(boardType.value)
+  // }
 }
 
 watch(() => instance.proxy.$route.params.menu, async (menu) => {
   if (menu) {
-    boardStore.clearPosts()
-    boardStore.resetPage()
+    // boardStore.clearPosts()
+    // boardStore.resetPage()
     boardType.value = menu
-    loadMorePosts(boardType.value)
+    loadPosts(boardType.value)
+  }
+})
+
+watch(() => instance.proxy.$route.query.page, async (page) => {
+  if (page) {
+    // boardStore.clearPosts()
+    // boardStore.resetPage()
+    nowPage.value = Number(page)
+    loadPosts(boardType.value)
   }
 })
 
@@ -84,46 +104,9 @@ const getWriteMenu = () => {
   return instance.proxy.$route.params.menu
 }
 
-onMounted(() => {
-  window.addEventListener('scroll', handleMoreLoading)
-  document.addEventListener('touchmove', handleScroll)
-})
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleMoreLoading)
-  document.removeEventListener('touchmove', handleScroll)
-})
-
-const handleMoreLoading = async () => {
-  const postsElement = scrollComponent.value
-  // infinite scroll
-  if (!boardStore.isLastPage && !moreLoading.value && postsElement.getBoundingClientRect().bottom < window.innerHeight) {
-    moreLoading.value = true
-    await loadMorePosts(boardType.value)
-    moreLoading.value = false
-  }
-}
-
 const reloadingBoard = () => {
-  boardStore.clearPosts()
-  loadMorePosts(boardType.value)
-}
-
-const handleScroll = (e) => {
-  // header hide and show
-  const currentScroll = e.changedTouches[0].clientY
-  if (currentScroll < lastScroll) {
-    isHideHeader.value = true
-  } else {
-    isHideHeader.value = false
-  }
-  lastScroll = e.changedTouches[0].clientY
-
-  // scroll to top
-  if (currentScroll !== 0) {
-    isShowScrollToTop.value = true
-  } else {
-    isShowScrollToTop.value = false
-  }
+  // boardStore.clearPosts()
+  loadPosts(boardType.value)
 }
 
 const scrollToTop = () => {
@@ -132,6 +115,30 @@ const scrollToTop = () => {
     behavior: 'smooth'
   })
 }
+
+const goToPrevPage = () => {
+  if (pageInform.value.first) {
+    instance?.proxy?.$toast.info('첫 페이지입니다.')
+    return
+  }
+  routerTo(instance.proxy.$router, `/board/list/${boardType.value}?page=${(pageInform.value.number + 1) - 1}`)
+  // nowPage.value -= 1
+  // loadPosts(boardType.value)
+}
+
+const goToNextPage = () => {
+  if (pageInform.value.last) {
+    instance?.proxy?.$toast.info('마지막 페이지입니다.')
+    return
+  }
+  routerTo(instance.proxy.$router, `/board/list/${boardType.value}?page=${(pageInform.value.number + 1) + 1}`)
+  // nowPage.value += 1
+  // loadPosts(boardType.value)
+}
+
+onMounted(() => {
+  loadPosts(boardType.value)
+})
 
 </script>
 
@@ -144,7 +151,7 @@ const scrollToTop = () => {
           <div>
             <MenuButton
               class="inline-flex w-full justify-center rounded-md bg-white dark:bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-black dark:text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-              {{ boardNames[$route.params.menu] }}
+              {{ boardNames[$route.params.menu.toUpperCase()] }}
               <ChevronDownIcon class="ml-2 -mr-1 h-5 w-5 text-violet-200 hover:text-violet-100" aria-hidden="true" />
             </MenuButton>
           </div>
@@ -184,12 +191,16 @@ const scrollToTop = () => {
       </div>
     </header>
     <div class="mt-8 scroll-smooth" ref="scrollComponent">
-      <router-link :to="`/board/post/${post.id}/`" v-for="post in boardStore.posts" :key="post.id">
-        <PostCard class="flex flex-col" :post="post" :menu="instance.proxy.$route.params.menu as string" />
+      <!-- <router-link :to="`/board/post/${post.id}/`" v-for="post in boardStore.posts" :key="post.id">
+        <PostCard :post="post" :menu="instance.proxy.$route.params.menu" />
+      </router-link> -->
+      <router-link :to="`/board/post/${post.id}/`" v-for="post in posts" :key="post.id">
+        <PostCard :post="post" :menu="instance.proxy.$route.params.menu" />
       </router-link>
-      <div v-if="moreLoading" class="flex justify-center items-center mt-4">
-        <SpinnerIcon class="w-16 h-16 animate-spin" />
-      </div>
+    </div>
+    <div v-if="pageInform != null" class="grid grid-cols-2 place-content-between">
+      <ButtonBox v-if="!pageInform.first" @click="goToPrevPage"> &lt;- 이전 페이지 </ButtonBox>
+      <ButtonBox v-if="!pageInform.last" @click="goToNextPage"> 다음 페이지 -> </ButtonBox>
     </div>
     <div :class="{ 'showToTop': isShowScrollToTop }"
       class="fixed right-8 bottom-20 w-10 h-10 rounded-lg bg-gray-300 dark:bg-gray-500 opacity-0 transition duration-300 transform cursor-pointer">

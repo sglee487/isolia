@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getCurrentInstance, ref, onMounted, onUnmounted } from 'vue'
+import { getCurrentInstance, ref } from 'vue'
 import {
   ArrowSmallLeftIcon,
   UserIcon
@@ -78,22 +78,39 @@ const saveComment = async () => {
       </div>
     </div>
   </header>
-  <div class="p-4 w-[62rem] mb-8" @touchmove="handleScroll">
+  <div v-if="Object.keys(postData).length === 0" class="p-4 w-[62rem] mb-8 animate-pulse" @touchmove="handleScroll">
     <div class="mt-6 md:mt-0 px-2 py-1 flex flex-col space-y-4 divide-gray-200 dark:divide-gray-700">
       <div class="space-y-2">
-        <small class="p-1 rounded-md bg-slate-300 dark:bg-slate-600 w-fit text-app-600 dark:text-app-300">
-          {{ boardNames[postData.board_type] }}
+        <div class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-12 mb-4"></div>
+        <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-20 mb-2.5"></div>
+      </div>
+      <hr />
+      <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[330px] mb-2.5"></div>
+    <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[300px] mb-2.5"></div>
+    <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px]"></div>
+      <hr />
+      <div class="space-y-4">
+        <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[330px]"></div>
+    <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px]"></div>
+      </div>
+    </div>
+  </div>
+  <div v-else class="p-4 w-[62rem] mb-8" @touchmove="handleScroll">
+    <div class="mt-6 md:mt-0 px-2 py-1 flex flex-col space-y-4 divide-gray-200 dark:divide-gray-700">
+      <div class="space-y-2">
+        <small v-if="postData?.boardType != undefined" class="p-1 rounded-md bg-slate-300 dark:bg-slate-600 w-fit text-app-600 dark:text-app-300">
+          {{ boardNames[(postData?.boardType).toUpperCase()] }}
         </small>
         <div class="font-extrabold my-1">
           {{ postData.title }}
         </div>
         <small class="self-end text-gray-600 dark:text-gray-400">
-          {{ dayjs(postData.created_at).tz('Asia/Seoul').format('YY.MM.DD HH:mm:ss ddd') }} | 조회수 {{ postData.hits }}
+          {{ dayjs(postData.createdAt).tz('Asia/Seoul').format('YY.MM.DD HH:mm:ss ddd') }} | 조회수 {{ postData.hits }}
         </small>
         <div class="flex space-x-2 items-center">
-          <img class="w-10 h-10 inline-block mb-1 rounded-full shadow-lg" :src="postData.picture_96" alt="pic96">
+          <img class="w-10 h-10 inline-block mb-1 rounded-full shadow-lg" :src="postData.userInfo.picture96" alt="pic96">
           <div>
-            {{ postData.display_name }}
+            {{ postData.userInfo.displayName }}
           </div>
         </div>
       </div>
@@ -105,16 +122,16 @@ const saveComment = async () => {
       </div>
       <hr />
       <div class="space-y-8">
-        <div v-for="comment in postData.comments" :key="comment.comment_id"
+        <div v-for="comment in postData.comments" :key="comment.commentId"
           class="space-y-4 divide-gray-300 dark:divide-gray-500">
           <div class="flex space-x-2 items-center">
-            <img class="w-8 h-8 inline-block mb-1 rounded-full shadow-lg" :src="comment.picture_96" alt="pic96">
+            <img class="w-8 h-8 inline-block mb-1 rounded-full shadow-lg" :src="comment.userInfo.picture96" alt="pic96">
             <div class="flex flex-col ">
               <div class="text-sm">
-                {{ comment.display_name }}
+                {{ comment.userInfo.displayName }}
               </div>
               <div class="text-gray-600 dark:text-gray-400 text-xs">
-                {{ dayjs(comment.created_at).tz('Asia/Seoul').format('YY.MM.DD HH:mm:ss ddd') }}
+                {{ dayjs(comment.createdAt).tz('Asia/Seoul').format('YY.MM.DD HH:mm:ss ddd') }}
               </div>
             </div>
           </div>
@@ -135,10 +152,10 @@ const saveComment = async () => {
   <div :class="{ 'hiddenComment': isHideHeader }"
     class="transition duration-300 transform justify-center w-full fixed flex bottom-0 py-1 px-2 border-t border-gray-200 dark:border-gray-700 bg-[#f5f5f5] dark:bg-[#121212] z-10">
     <div v-if="user.isLogined()" class="flex items-center w-[58rem] space-x-2">
-      <img class="flex-none w-8 h-8 inline-block mb-1 rounded-full shadow-lg" :src="user.data.picture_96" alt="pic96">
+      <img class="flex-none w-8 h-8 inline-block mb-1 rounded-full shadow-lg" :src="user.data.picture96" alt="pic96">
       <!-- <InputAreaBox class="grow max-h-[40vh]" v-model="writeCommentText"
-        :placeholder="`${user.data.display_name} (으)로 댓글 입력...`" /> -->
-      <TiptapComment v-model="writeCommentText" class="grow" :placeholder="`${user.data.display_name} (으)로 댓글 입력...`" />
+        :placeholder="`${user.data.displayName} (으)로 댓글 입력...`" /> -->
+      <TiptapComment v-model="writeCommentText" class="grow" :placeholder="`${user.data.displayName} (으)로 댓글 입력...`" />
       <ButtonBox class="flex-none w-18" @click="saveComment" color="app">등록</ButtonBox>
     </div>
     <div v-else :class="{ 'hiddenComment': isHideHeader }" class="flex items-center w-[58rem] space-x-2">

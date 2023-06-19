@@ -50,7 +50,7 @@ const register = async () => {
     return
   }
   try {
-    const response = await registerUser('email', displayName.value, email.value, password.value)
+    const response = await registerUser('EMAIL', displayName.value, email.value, password.value)
     if (response.status === 201) {
       instance?.proxy?.$toast.success('회원가입에 성공하였습니다.')
       instance?.proxy?.$router.push('/settings/login')
@@ -76,7 +76,10 @@ generateRandomName()
       class="text-2xl pt-4 pb-10 font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-400 to-yellow-400">
       회원가입
     </div>
-    <div class="space-y-4">
+    <div>
+      막아놓음.
+    </div>
+    <!-- <div class="space-y-4">
       <div class="relative">
         <InputBox class="w-full" label="별명" v-model="displayName" @keyup.enter="register" />
         <ArrowPathRoundedSquareIcon
@@ -92,10 +95,10 @@ generateRandomName()
       </InputBox>
       <InputBox label="비밀번호 확인" v-model="passwordConfirm" @keyup.enter="register" type="password"
         id="inputPasswordConfirm" />
-    </div>
+    </div> -->
     <div class="py-4 flex space-x-1">
       <ButtonBox class="text-sm w-32" @click="toLogin" color="red">뒤로</ButtonBox>
-      <ButtonBox class="w-full" @click="register" color="app">가입하기</ButtonBox>
+      <!-- <ButtonBox class="w-full" @click="register" color="app">가입하기</ButtonBox> -->
     </div>
   </div>
 </template>

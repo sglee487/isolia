@@ -42,10 +42,10 @@ if (settings.themeLightDark === 'dark' || (settings.themeLightDark === 'default'
 //   console.log(mutation)
 //   console.log(state)
 //   console.log(state.data)
-//   console.log(state.data.display_name)
+//   console.log(state.data.displayName)
 //   console.log(state.data.email)
 //   // if (mutation.storeId === 'user' && mutation.type === 'direct') {
-//   //   userDisplayNameSubscribed.value = state.display_name
+//   //   userDisplayNameSubscribed.value = state.displayName
 //   //   userEmailSubscribed.value = state.email
 //   // }
 // })
@@ -83,37 +83,37 @@ const modalRoutes = [
   }
 ]
 
-onBeforeMount(async () => {
-  if (!user.isLogined()) {
-    return
-  }
-  try {
-    const response = await checkToken(user.data.token)
-  } catch (error) {
-    axiosErrorHandler(instance, error as AxiosError)
-    if (error.response.statusText === 'Unauthorized') {
-      user.logout()
-    }
-  }
+// onBeforeMount(async () => {
+//   if (!user.isLogined()) {
+//     return
+//   }
+//   try {
+//     const response = await checkToken(user.data.token)
+//   } catch (error) {
+//     axiosErrorHandler(instance, error as AxiosError)
+//     if (error.response.statusText === 'Unauthorized') {
+//       user.logout()
+//     }
+//   }
 
-  // user.login(
-  //   response.data.token,
-  //   response.data.exp,
-  //   response.data.login_type,
-  //   response.data.email,
-  //   response.data.picture_32,
-  //   response.data.picture_96,
-  //   response.data.display_name,
-  //   response.data.role === 'admin'
-  // )
-})
+//   // user.login(
+//   //   response.data.token,
+//   //   response.data.exp,
+//   //   response.data.loginType,
+//   //   response.data.email,
+//   //   response.data.picture32,
+//   //   response.data.picture96,
+//   //   response.data.displayName,
+//   //   response.data.role === 'admin'
+//   // )
+// })
 
 const getRemainTime = () => {
   if (!user.isLogined()) {
     return 0
   }
   const now = new Date()
-  const exp = new Date(user.data.exp * 1000)
+  const exp = new Date(user.data.exp)
   const diff = exp.getTime() - now.getTime()
   const remainTime = Math.floor(diff)
   return remainTime
@@ -184,11 +184,11 @@ watch(() => instance.proxy.$route, () => {
             </VueCountdown>
             <div class="flex flex-row h-16 px-4 items-center cursor-pointer hover:bg-app-400 hover:text-white"
               @click="profileModal = true">
-              <img :src="user.data.picture_32" v-if="user.isLogined()" class="w-6 h-6 inline-block mr-2 rounded-full" />
-              <span class="font-semibold">{{ user.data.display_name }}</span>
+              <img :src="user.data.picture32" v-if="user.isLogined()" class="w-6 h-6 inline-block mr-2 rounded-full" />
+              <span class="font-semibold">{{ user.data.displayName }}</span>
             </div>
             <!-- <UserIcon /> -->
-            <!-- <div class="font-bold">{{ user.data.display_name }}</div>
+            <!-- <div class="font-bold">{{ user.data.displayName }}</div>
               <div class="">{{ user.data.email }}</div> -->
             <!-- <ButtonBox color="red" @click="logout">로그아웃</ButtonBox> -->
           </div>
@@ -214,10 +214,10 @@ watch(() => instance.proxy.$route, () => {
     <div
       class="mb-12 w-64 bg-neutral-100 dark:bg-neutral-900 rounded-xl mx-2 divide-y divide-gray-300 dark:divide-gray-400 shadow-md absolute right-3 top-20 max-w-xs">
       <div class="flex flex-row gap-2 p-5 items-start">
-        <img :src="user.data.picture_96" v-if="user.isLogined()"
+        <img :src="user.data.picture96" v-if="user.isLogined()"
           class="w-12 h-12 inline-block mb-1 rounded-full shadow-lg" />
         <div class="flex flex-col">
-          <span class="font-medium text-ellipsis">{{ user.data.display_name }}</span>
+          <span class="font-medium text-ellipsis">{{ user.data.displayName }}</span>
           <span class="text-sm text-ellipsis">{{ user.data.email }}</span>
           <!-- <span class="text-sm py-2">계정관리 링크~</span> -->
         </div>

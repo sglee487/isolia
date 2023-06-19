@@ -1,6 +1,6 @@
 export default {
-  all: '전체',
-  notice: '공지',
-  suggestion: '건의',
-  free: '자유'
+  ALL: '전체',
+  NOTICE: '공지',
+  SUGGESTION: '건의',
+  FREE: '자유'
 }

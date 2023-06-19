@@ -36,8 +36,10 @@
     "prosemirror-state": "^1.4.2",
     "prosemirror-transform": "^1.7.0",
     "prosemirror-view": "^1.29.1",
+    "qs": "^6.11.2",
     "short-uuid": "^4.2.2",
     "socket.io-client": "^4.6.0",
+    "sockjs-client": "^1.6.1",
     "vue": "3",
     "vue-advanced-cropper": "^2.8.6",
     "vue-final-modal": "3",
@@ -45,10 +47,12 @@
     "vue-toast-notification": "3",
     "vue3-google-signin": "^1.2.1",
     "vue3-popper": "^1.5.0",
+    "webstomp-client": "^1.2.6",
     "y-prosemirror": "^1.2.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
+    "@types/socket.io": "^3.0.2",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.44.0",
     "@vitejs/plugin-vue": "^3.2.0",

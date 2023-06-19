@@ -5,10 +5,10 @@ const routes = [
     to: '/more/minesweeper',
     name: '💣 지뢰찾기 멀티'
   },
-  {
-    to: '/more/image_upscaling',
-    name: '🖼️ 이미지 업스케일링'
-  },
+  // {
+  //   to: '/more/image_upscaling',
+  //   name: '🖼️ 이미지 업스케일링'
+  // },
   {
     to: '/more/question',
     name: '❓'

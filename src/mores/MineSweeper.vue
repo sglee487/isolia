@@ -1,15 +1,18 @@
-<!-- eslint-disable camelcase -->
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, onUnmounted, nextTick } from 'vue'
 import {
   FlagIcon
 } from '@heroicons/vue/20/solid'
+import Stomp from 'webstomp-client'
+import SockJS from 'sockjs-client/dist/sockjs'
 
 import ButtonBox from '@/components/ButtonBox.vue'
 
 const SOCKET_URL = `${import.meta.env.VITE_SOCKET_PROTOCOL}://${import.meta.env.VITE_SERVER_ADDRESS}:${import.meta.env.VITE_SERVER_PORT}`
 
-const wsConnect = new WebSocket(`${SOCKET_URL}/ws/mine_connect`)
+const socket = new SockJS(`${SOCKET_URL}/ws-mine-connect`)
+const stompClient = Stomp.over(socket)
+
 interface PlayerInfo {
   sid: string;
   name: string;
@@ -32,7 +35,7 @@ interface Coords {
 }
 
 const myPlayerInfo = ref<PlayerInfo>({ sid: '', name: '', color: '' })
-const players = ref<any[]>([])
+const players = ref<PlayerInfo[]>([])
 const localHistory = ref<History[]>([])
 
 const gameStatus = ref<'playing' | 'complete' | 'fail' | 'miss'>('playing')
@@ -43,22 +46,52 @@ let board = []
 const flags = ref<number>(0)
 const isGameCompleted = ref<boolean>(true)
 
+stompClient.connect({}, (frame) => {
+  const username = frame.headers['user-name']
+  stompClient.subscribe('/subscribe-mine/restart', (data) => {
+    const { size, bombCoords, actionHistory } = JSON.parse(data.body)
+    gameSetting(size, bombCoords, actionHistory)
+  })
+  stompClient.subscribe(`/subscribe-mine/user/${username}/start`, (data) => {
+    const { size, mines, bombCoords, actionHistory } = JSON.parse(data.body)
+    gameSetting(size, bombCoords, actionHistory)
+  })
+  stompClient.subscribe('/subscribe-mine/players', (data) => {
+    const _players = JSON.parse(data.body)
+    players.value = _players
+
+    for (const player of _players) {
+      if (player.sid === username) {
+        myPlayerInfo.value = player
+      }
+    }
+  })
+  stompClient.subscribe('/subscribe-mine/action', (data) => {
+    const { action, x, y, color, history } = JSON.parse(data.body)
+    if (action === 'reveal') {
+      reveal(x, y)
+    } else if (action === 'flag') {
+      placeFlag(x, y, color)
+    }
+    render()
+    localHistory.value = history
+  })
+
+  stompClient.send('/publish-mine/join')
+})
+
 const sendAction = (action: 'reveal' | 'flag', x: number, y: number) => {
   const data = {
-    type: 'action',
     sid: myPlayerInfo.value.sid,
-    action,
+    actionType: action,
     x,
     y
   }
-  wsConnect.send(JSON.stringify(data))
+  stompClient.send('/publish-mine/action', JSON.stringify(data))
 }
 
-const sendReset = async () => {
-  const data = {
-    type: 'reset'
-  }
-  wsConnect.send(JSON.stringify(data))
+const sendRestart = async () => {
+  stompClient.send('/publish-mine/restart')
 }
 
 const gameStart = (sizeServer: number, bombCoords: Array<Coords>) => {
@@ -80,7 +113,7 @@ const gameStart = (sizeServer: number, bombCoords: Array<Coords>) => {
       })
     }
   }
-  for (const i in Object.keys(bombCoords)) {
+  for (let i = 0; i < bombCoords.length; i++) {
     board[bombCoords[i].x][bombCoords[i].y].isBomb = true
   }
   for (let i = 0; i < localSize.value; i++) {
@@ -231,67 +264,21 @@ const followHistory = (history: Array<any>) => {
   }
 }
 
-const gameSetting = (size: number, bombs: number, bombsCoords: Array<Coords>, history: Array<History>) => {
+const gameSetting = (size: number, bombCoords: Array<Coords>, history: Array<History>) => {
   localSize.value = size
-  localBombs.value = bombs
-  localBombs.value = bombsCoords.length
+  localBombs.value = bombCoords.length
   localHistory.value = history
-  const bombCoords = []
-  for (const bomb of bombsCoords) {
-    bombCoords.push({ x: bomb[0], y: bomb[1] })
-  }
   gameStart(size, bombCoords)
   followHistory(history)
   render()
 }
 
-onMounted(() => {
-  wsConnect.onmessage = (event) => {
-    const data = JSON.parse(event.data)
-    switch (data.type) {
-      case 'profile':
-        myPlayerInfo.value = data
-        wsConnect.send(JSON.stringify({ type: 'start' }))
-        wsConnect.send(JSON.stringify({ type: 'players' }))
-        break
-      case 'players':
-        players.value = data.players
-        break
-      case 'start': {
-        const { size, bomb_coords, history } = data
-        const bombCoordsArray = JSON.parse(bomb_coords)
-        gameSetting(size, bombCoordsArray.length, bombCoordsArray, history)
-        break
-      }
-      case 'action': {
-        const { action, x, y, color, history } = data
-        if (action === 'reveal') {
-          reveal(x, y)
-        } else if (action === 'flag') {
-          placeFlag(x, y, color)
-        }
-        render()
-        localHistory.value = history
-        break
-      }
-      case 'disconnect':
-        break
-      case 'restart': {
-        const { size, bomb_coords, history } = data
-        const bombCoordsArray = JSON.parse(bomb_coords)
-        gameSetting(size, bombCoordsArray.length, bombCoordsArray, history)
-        break
-      }
-    }
-  }
-})
-
 onUnmounted(() => {
-  wsConnect?.close()
+  stompClient.disconnect()
 })
 
 const reset = () => {
-  sendReset()
+  sendRestart()
 }
 
 </script>
@@ -322,7 +309,7 @@ const reset = () => {
       </ul>
       히스토리 {{ localHistory.length }}
       <ul class="w-48 h-64 overflow-y-auto bg-neutral-100 dark:bg-neutral-800 rounded-md">
-        <li v-for="history in localHistory" :key="history.name">
+        <li v-for="history in localHistory.slice().reverse()" :key="history.name">
           <svg v-if="history.action === 'reveal'" class="w-6 h-6 inline-block">
             <circle cx="12" cy="12" r="6" stroke="#000000" stroke-width="2" :fill="history.color"></circle>
           </svg>
