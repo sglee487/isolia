@@ -20,6 +20,7 @@ import {
   UserIcon
 } from '@heroicons/vue/24/outline'
 import { AxiosError } from 'axios'
+import moment from 'moment'
 
 import BottomNavBar from './components/BottomNavBar.vue'
 
@@ -112,9 +113,9 @@ const getRemainTime = () => {
   if (!user.isLogined()) {
     return 0
   }
-  const now = new Date()
+  const now = moment().utcOffset("+09:00")
   const exp = new Date(user.data.exp)
-  const diff = exp.getTime() - now.getTime()
+  const diff = exp.getTime() - now.unix() * 1000
   const remainTime = Math.floor(diff)
   return remainTime
 }
