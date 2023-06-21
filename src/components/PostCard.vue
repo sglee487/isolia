@@ -28,9 +28,9 @@ const props = defineProps<{
       <div class="flex justify-between space-x-4 pb-2">
         <div class="w-64">
           <div class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
-        <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-44 mb-2.5"></div>
-        <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-2.5"></div>
-        <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-40 mb-2.5"></div>
+          <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-44 mb-2.5"></div>
+          <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-2.5"></div>
+          <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-40 mb-2.5"></div>
         </div>
         <div class="flex items-center justify-center w-32 h-24 mb-4 bg-gray-300 rounded dark:bg-gray-700">
           <svg class="w-12 h-12 text-gray-200 dark:text-gray-600" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
@@ -75,7 +75,7 @@ const props = defineProps<{
           class="w-32 h-24 object-cover" />
       </div>
       <div class="flex">
-        <img class="w-6 h-6 inline-block mb-1 rounded-full shadow-lg" :src="props.post.boardUserInfo.picture32"
+        <img class="w-6 h-6 mr-2 inline-block mb-1 rounded-full shadow-lg" :src="props.post.boardUserInfo.picture32"
           alt="pic32">
         <div>
           {{ props.post.boardUserInfo.displayName }}
