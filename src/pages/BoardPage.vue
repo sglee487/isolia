@@ -20,7 +20,7 @@ import ButtonBox from '@/components/ButtonBox.vue'
 
 const instance = getCurrentInstance()
 // const boardStore = useBoardStore()
-const posts = ref<any>([])
+const posts = ref<any>(null)
 
 const boardType = ref<any>()
 
@@ -194,9 +194,14 @@ onMounted(() => {
       <!-- <router-link :to="`/board/post/${post.id}/`" v-for="post in boardStore.posts" :key="post.id">
         <PostCard :post="post" :menu="instance.proxy.$route.params.menu" />
       </router-link> -->
-      <router-link :to="`/board/post/${post.id}/`" v-for="post in posts" :key="post.id">
-        <PostCard :post="post" :menu="instance.proxy.$route.params.menu" />
-      </router-link>
+      <template v-if="posts === null">
+        <PostCard :post="null" :menu="instance.proxy.$route.params.menu" v-for="n in 2" :key="n" />
+      </template>
+      <template v-else>
+        <router-link :to="`/board/post/${post.id}/`" v-for="post in posts" :key="post.id">
+          <PostCard :post="post" :menu="instance.proxy.$route.params.menu" />
+        </router-link>
+      </template>
     </div>
     <div v-if="pageInform != null" class="grid grid-cols-2 place-content-between">
       <ButtonBox v-if="!pageInform.first" @click="goToPrevPage"> &lt;- 이전 페이지 </ButtonBox>
